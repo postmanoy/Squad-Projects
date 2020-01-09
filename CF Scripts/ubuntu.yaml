@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "clarkp Test Instance"
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+
+Resources: 
+  jayveevK8sMaster:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0f2b4fc905b0bd1f1
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: clarkp-test-instance
+      UserData:
+        Fn::Base64: 
+          #!/bin/bash -xe
+          sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm 
+          sudo systemctl enable amazon-ssm-agent
+          sudo systemctl start amazon-ssm-agent
+          sudo yum -y install nginx
+          sudo systemctl enable nginx
+          sudo systemctl start nginx

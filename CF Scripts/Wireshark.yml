@@ -1,0 +1,130 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: dsaastraining-kp-ohio
+  AvailabilityZone:
+    Type: String
+    Default: us-east-2
+  NameInstance:
+    Type: String
+    Default: Wireshark-test-instance
+
+Resources: 
+  ec2instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d2c42f22e0567fb7
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}1
+
+  ec2instance2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d2c42f22e0567fb7
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}2
+
+  ec2instance3:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d2c42f22e0567fb7
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}3
+
+  ec2instance4:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d2c42f22e0567fb7
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}4
+
+  ec2instance5:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d2c42f22e0567fb7
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}5
+
+  ec2instance6:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d2c42f22e0567fb7
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}6
+
+  ec2instance7:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d2c42f22e0567fb7
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}7
+ 
+  ec2instance8:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d2c42f22e0567fb7
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}8
+
+  ec2instance9:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d2c42f22e0567fb7
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}9

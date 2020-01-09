@@ -1,0 +1,90 @@
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+  Subnet:
+    Description: Subnet for the Instance
+    Type: "AWS::EC2::Subnet::Id"
+  InstanceType:
+    Description: Instance1 EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+    - t2.nano
+    - t2.micro
+    - t2.small
+    - t2.medium
+    - t2.large    
+    - t2.xlarge
+    - t2.2xlarge
+    - t3.nano
+    - t3.micro
+    - t3.small
+    - t3.medium
+    - t3.large
+    - t3.xlarge
+    - t3.2xlarge
+    - m4.large
+    - m4.xlarge
+    - m4.2xlarge
+    - m4.4xlarge
+    - m4.10xlarge
+    - m4.16xlarge
+    - m5.large
+    - m5.xlarge
+    - m5.2xlarge
+    - m5.4xlarge
+    - m5.8xlarge
+  osType:
+   Description: AMI ID of the instance
+   Type: String
+   AllowedValues:
+   - AMAZONLINUX
+   - AMAZONLINUX2
+   - WindowsServer2016
+   - WindowsServer2012R2
+   - RHEL8
+   - CENTOS7
+   - UBUNTU16
+   - UBUNTU18
+   - SUSE12
+   - SUSE15
+  NameTag:
+    Description: EC2 Instance Name Tags
+    Type: String
+
+
+
+Resources:
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId:
+       Fn::FindInMap:
+       - RegionAndInstanceTypeToAMIID
+       - Ref: AWS::Region
+       - Ref: osType
+      InstanceType: 
+       Ref: InstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref Subnet
+
+      Tags: 
+      - 
+        Key: "Name"
+        Value: !Ref NameTag
+
+Mappings:
+ RegionAndInstanceTypeToAMIID:
+  us-east-2:
+   AMAZONLINUX: ami-0c64dd618a49aeee8
+   AMAZONLINUX2: ami-00c03f7f7f2ec15c3
+   WindowsServer2016: ami-053cea4575d27b5d6
+   WindowsServer2012R2: ami-06d29c77f7ab40cf2
+   RHEL8: ami-0520e698dd500b1d1
+   CENTOS7: ami-0f2b4fc905b0bd1f1
+   UBUNTU16: ami-0d03add87774b12c5
+   UBUNTU18: ami-0d5d9d301c853a04a
+   SUSE12: ami-01a3959899e3dc7c6
+   SUSE15: ami-0e0bae59dc35fe89a
+  

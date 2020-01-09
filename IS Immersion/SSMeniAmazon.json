@@ -1,0 +1,33 @@
+{
+    "schemaVersion": "2.2",
+    "description": "Adding a second elastic ip address to an elastic network interface.",
+
+    "mainSteps": [
+      {
+        "action": "aws:runShellScript",
+        "name": "AddEIPtoENI",
+        "inputs": {
+          "runCommand": [
+                "#!/bin/bash",
+                "MAC=`curl -s http://169.254.169.254/latest/meta-data/mac`",
+                "ADDRESSES=`curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/${MAC}/local-ipv4s`",
+                "arr=($ADDRESSES)",
+                "sudo touch /etc/sysconfig/network-scripts/ifcfg-eth0:1",
+                "sudo echo DEVICE=eth0:1 >> /etc/sysconfig/network-scripts/ifcfg-eth0:1",
+                "sudo echo BOOTPROTO=static >> /etc/sysconfig/network-scripts/ifcfg-eth0:1",
+                "sudo echo NETMASK=255.255.240.0 >> /etc/sysconfig/network-scripts/ifcfg-eth0:1",
+                "sudo echo ONBOOT=yes >> /etc/sysconfig/network-scripts/ifcfg-eth0:1",
+                "sudo echo TYPE=Ethernet >> /etc/sysconfig/network-scripts/ifcfg-eth0:1",
+                "sudo echo IPADDR=${arr[1]} >> /etc/sysconfig/network-scripts/ifcfg-eth0:1",
+                "ls -Z /etc/sysconfig/network-scripts/ifcfg-eth*",
+                "sudo chcon -u system_u /etc/sysconfig/network-scripts/ifcfg-eth0:1",
+                "sudo chcon -t net_conf_t /etc/sysconfig/network-scripts/ifcfg-eth0:1",
+                "ls -Z /etc/sysconfig/network-scripts/ifcfg-eth0*",
+                "sudo ifup eth0:1",
+                "sudo ethtool eth0:1",
+                "reboot"
+            ]
+        }
+      }
+    ]
+  }
