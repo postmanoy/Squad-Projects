@@ -1,4 +1,4 @@
-﻿#Performance Test
+﻿#Performance Testing
 #Windows Platform
 
 echo "Windows CPU Performance test"
