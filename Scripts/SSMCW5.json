@@ -1,0 +1,22 @@
+{
+    "schemaVersion": "2.2",
+    "description": "Install Advanced CloudWatch monitor then send details every 5 minutes.",
+    "mainSteps": [
+      {
+        "action": "aws:runShellScript",
+        "name": "example",
+        "inputs": {
+          "runCommand": [ 
+                          "sudo yum update -y",
+                          "sudo yum install perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA -y",
+                          "sudo yum install zip unzip -y",
+                          "sudo curl https://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.2.zip -O",
+                          "sudo unzip CloudWatchMonitoringScripts-1.2.2.zip -d /",
+                          "sudo rm -rf CloudWatchMonitoringScripts-1.2.2.zip",
+                          "(crontab -l 2>/dev/null; echo '*/5 * * * * /aws-scripts-mon/mon-put-instance-data.pl --mem-used-incl-cache-buff --mem-util --disk-space-util --disk-path=/ --from-cron') | crontab -",
+                          "exit"
+            ]
+        }
+      }
+    ]
+  }

@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "PostManoy CF"
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+    
+
+Resources: 
+  ec2instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-058f27a09d8a3e320
+      InstanceType: t2.medium
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      Tags:
+      - Key: Name
+        Value: Gitlab-PostManoy
+      UserData:
+        Fn::Base64: 
+          #!/bin/bash -xe
+          sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm 
+          sudo systemctl enable amazon-ssm-agent
+          sudo systemctl start amazon-ssm-agent
+  MyEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref ec2instance
+      Tags:
+      - Key: Name
+        Value: PostManoy-Git

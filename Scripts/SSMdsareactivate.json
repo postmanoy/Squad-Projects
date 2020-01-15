@@ -1,0 +1,28 @@
+{
+    "schemaVersion": "2.2",
+    "description": "Reconnect Existing Deep Security Agent to DSaaS",
+    "parameters": {
+      "TenantID": {
+        "type": "String",
+        "description": "Enter TenantID to be found inside your deployment script."
+      },
+      "TokenID": {
+        "type": "String",
+        "description": "Enter Token ID."
+      }
+
+    },
+    
+    "mainSteps": [
+      {
+        "action": "aws:runShellScript",
+        "name": "InstallDSA",
+        "inputs": {
+          "runCommand": [   "#!/bin/bash",
+                            "/opt/ds_agent/dsa_control -r",
+                            "/opt/ds_agent/dsa_control -a $ACTIVATIONURL 'tenantID:{{TenantID}}' 'token:{{TokenID}}'"
+            ]
+        }
+      }
+    ]
+  }
