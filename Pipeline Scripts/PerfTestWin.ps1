@@ -32,7 +32,6 @@ $getDSA_cpu1 = [Math]::Round((((Get-Counter ("\Process(dsa*)\% Processor Time"))
 $getCoreService_cpu1 = [Math]::Round((((Get-Counter ("\Process(coreServiceShell*)\% Processor Time")).CounterSamples.CookedValue) / $cpu_cores), 2)
 $getDsMonitor_cpu1 = [Math]::Round((((Get-Counter ("\Process(ds_monitor*)\% Processor Time")).CounterSamples.CookedValue) / $cpu_cores), 2)
 $getNotifier_cpu1 = [Math]::Round((((Get-Counter ("\Process(Notifier)\% Processor Time")).CounterSamples.CookedValue) / $cpu_cores), 2)
-
 #Test output the CPU Usage
 echo "CPU Usage %"
 echo " "
@@ -43,6 +42,21 @@ echo "Notifier $getDSA_cpu1 %"
 
 }
 
+Function Test-DiskUsage {
+[cmdletbinding()]
+Param()
+$disk = Get-WmiObject -class win32_logicaldisk
+$diskname = $disk.Name
+$filesystem = $disk.FileSystem
+$volumename = $disk.VolumeName
+$size = [math]::Round($disk.Size / 1GB,2)
+$freespace = [math]::Round($disk.freespace / 1GB,2)
+echo "Name            : $diskname"
+echo "FileSystem      : $filesystem"
+echo "VolumeName      : $volumename"
+echo "Size / GB       : $size"
+echo "Free Space / GB : $freespace"
+}
 
 
 #Performance Test
@@ -57,8 +71,11 @@ Test-CpuUsage
 echo ""
 #Memory Usage Test
 echo "Memory Usage"
-echo ""
 Test-MemoryUsage
+echo ""
+echo "Disk Usage"
+echo ""
+Test-DiskUsage
 echo ""
 echo ""
 echo "Starting Manual Scan"
@@ -84,7 +101,12 @@ echo "Status    Used% UsedGB TotalGB"
 echo "--------- ----- ------ -------"
 Test-MemoryUsage
 echo ""
-
+echo "Disk Usage"
+echo ""
+Test-DiskUsage
+echo ""
+echo "Malware Scan is still running"
+echo ""
 Start-Sleep 100
 
 echo "### Second Performance Information while Anti-Malware is Running ###"
@@ -99,7 +121,12 @@ echo "Status    Used% UsedGB TotalGB"
 echo "--------- ----- ------ -------"
 Test-MemoryUsage
 echo ""
-
+echo "Disk Usage"
+echo ""
+Test-DiskUsage
+echo ""
+echo "Malware Scan is still running"
+echo ""
 Start-Sleep 100
 
 echo "Ending Malware Scan"
@@ -134,7 +161,12 @@ echo "Status    Used% UsedGB TotalGB"
 echo "--------- ----- ------ -------"
 Test-MemoryUsage
 echo ""
-
+echo "Disk Usage"
+echo ""
+Test-DiskUsage
+echo ""
+echo "Rebuilding Baseline..."
+echo ""
 Start-Sleep 60
 
 echo "### Second Performance Information while Rebuilding Baseline ###"
@@ -149,7 +181,12 @@ echo "Status    Used% UsedGB TotalGB"
 echo "--------- ----- ------ -------"
 Test-MemoryUsage
 echo ""
-
+echo "Disk Usage"
+echo ""
+Test-DiskUsage
+echo ""
+echo "Rebuilding Baseline..."
+echo ""
 Start-Sleep 100
 
 echo "End of Rebuilding Baseline"
@@ -161,7 +198,7 @@ echo "Starting Recommendation Scan"
 & $Env:ProgramFiles"\Trend Micro\Deep Security Agent\dsa_control" -m RecommendationScan:true
 
 Start-Sleep -s 5
-echo "Running Running Recommendation Scan"
+echo "Running Recommendation Scan"
 echo ""
 Start-Sleep -s 100
 
@@ -177,6 +214,11 @@ echo "Status    Used% UsedGB TotalGB"
 echo "--------- ----- ------ -------"
 Test-MemoryUsage
 echo ""
-
+echo "Disk Usage"
+echo ""
+Test-DiskUsage
+echo ""
+echo "Recommendation Scan is still running"
+echo ""
 Start-Sleep 60
 echo "Ending Test"
