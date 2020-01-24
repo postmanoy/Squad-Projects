@@ -80,7 +80,7 @@
  <target name="lint"
          unless="lint.done"
          description="Perform syntax check of sourcecode files">
-  <apply executable="php" taskname="lint" failonerror="true">
+  <apply executable="php" taskname="lint">
    <arg value="-l" />
 
    <fileset dir="${basedir}">
