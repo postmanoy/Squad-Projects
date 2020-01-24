@@ -6,7 +6,7 @@
  <property name="phpdox"  value="phpdox"/>
  <property name="phploc"  value="phploc"/>
  <property name="phpmd"   value="phpmd"/>
- <property name="phpunit" value="phpunit"/>
+ <!-- <property name="phpunit" value="phpunit"/> -->
 
  <!-- Use this when the tools are located as PHARs in ${basedir}/build/tools
  <property name="pdepend" value="${basedir}/build/tools/pdepend.phar"/>
@@ -27,15 +27,15 @@
  <property name="phpunit" value="${basedir}/vendor/bin/phpunit"/> -->
 
  <target name="full-build"
-         depends="prepare,static-analysis,phpunit,phpdox,-check-failure"
+         depends="prepare,static-analysis,phpdox,-check-failure"
          description="Performs static analysis, runs the tests, and generates project documentation"/>
 
  <target name="full-build-parallel"
-         depends="prepare,static-analysis-parallel,phpunit,phpdox,-check-failure"
+         depends="prepare,static-analysis-parallel,phpdox,-check-failure"
          description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation"/>
 
  <target name="quick-build"
-         depends="prepare,lint,phpunit-no-coverage"
+         depends="prepare,lint"
          description="Performs a lint check and runs the tests (without generating code coverage reports)"/>
 
  <target name="static-analysis"
@@ -208,8 +208,19 @@
 
   <property name="phpcpd.done" value="true"/>
  </target>
+ 
+ <target name="phpdox"
+         unless="phpdox.done"
+         depends="phploc-ci,phpcs-ci,phpmd-ci"
+         description="Generate project documentation using phpDox">
+  <exec executable="${phpdox}" dir="${basedir}/build" taskname="phpdox"/>
 
- <target name="phpunit"
+  <property name="phpdox.done" value="true"/>
+ </target>
+</project>
+
+
+ <!--<target name="phpunit"
          unless="phpunit.done"
          depends="prepare"
          description="Run unit tests with PHPUnit">
@@ -219,9 +230,9 @@
   </exec>
 
   <property name="phpunit.done" value="true"/>
- </target>
+ </target> -->
 
- <target name="phpunit-no-coverage"
+ <!-- <target name="phpunit-no-coverage"
          unless="phpunit.done"
          depends="prepare"
          description="Run unit tests with PHPUnit (without generating code coverage reports)">
@@ -232,18 +243,10 @@
   </exec>
 
   <property name="phpunit.done" value="true"/>
- </target>
+ </target> -->
 
- <target name="phpdox"
-         unless="phpdox.done"
-         depends="phploc-ci,phpcs-ci,phpmd-ci"
-         description="Generate project documentation using phpDox">
-  <exec executable="${phpdox}" dir="${basedir}/build" taskname="phpdox"/>
 
-  <property name="phpdox.done" value="true"/>
- </target>
-
- <target name="-check-failure">
+  <!-- <target name="-check-failure">
   <fail message="PHPUnit did not finish successfully">
    <condition>
     <not>
@@ -251,6 +254,6 @@
     </not>
    </condition>
   </fail>
- </target>
-</project>
+ </target> -->
+
 
