@@ -155,7 +155,7 @@
       <div class="row align-items-center">
         <div class="col-lg-6 order-lg-2">
           <div class="p-5">
-            <img class="img-fluid tool" src="tag.png" alt="" onclick="javascript:window.open('http://ph-ts-dsaas.ph.trendnet.org/CaseTagging/', '_blank')">
+            <img class="img-fluid tool" src="tag.png" alt="" onclick="javascript:window.open('../CaseTagging/index.php', '_blank')">
           </div>
         </div>
         <div class="col-lg-6 order-lg-1">
@@ -173,7 +173,7 @@
       <div class="row align-items-center">
         <div class="col-lg-6">
           <div class="p-5">
-            <img class="img-fluid tool" src="exam.png" alt="" onclick="javascript:window.open('http://ph-ts-dsaas.ph.trendnet.org/dsaasexam/', '_blank')">
+            <img class="img-fluid tool" src="exam.png" alt="" onclick="javascript:window.open('../DSaaSExam/index.php', '_blank')">
           </div>
         </div>
         <div class="col-lg-6">
