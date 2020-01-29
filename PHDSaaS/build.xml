@@ -66,8 +66,10 @@
  <target name="lint"
          unless="lint.done"
          description="Perform syntax check of sourcecode files">
-  <apply executable="php" taskname="lint" resultproperty="result.lint">
+  <apply executable="php" taskname="lint">
+  <if>
    <arg value="-l" />
+   <then>
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
@@ -78,20 +80,17 @@
     <include name="**/*.php" />
     <modified />
    </fileset>
+   </then>
+   <else>
+        <echo message="No changes detected.">
+   </else>
+   </if>
+
   </apply>
 
   <property name="lint.done" value="true"/>
  </target>
-
-  <target name="-check-content">
-  <fail message="No changes detected.">
-   <condition>
-     <equals arg1="${result.lint}" arg2 =" "/>
-   </condition>
-  </fail>
- </target>
 </project>
-
 
  <!--<target name="phpunit"
          unless="phpunit.done"
