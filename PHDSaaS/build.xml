@@ -46,9 +46,7 @@
          unless="clean.done"
          description="Cleanup build artifacts">
   <delete dir="${basedir}/build/api"/>
-  <delete dir="${basedir}/build/coverage"/>
   <delete dir="${basedir}/build/logs"/>
-  <delete dir="${basedir}/build/phpdox"/>
   <property name="clean.done" value="true"/>
  </target>
 
@@ -57,9 +55,7 @@
          depends="clean"
          description="Prepare for build">
   <mkdir dir="${basedir}/build/api"/>
-  <mkdir dir="${basedir}/build/coverage"/>
   <mkdir dir="${basedir}/build/logs"/>
-  <mkdir dir="${basedir}/build/phpdox"/>
   <property name="prepare.done" value="true"/>
  </target>
 
@@ -68,6 +64,7 @@
          description="Perform syntax check of sourcecode files">
   <apply executable="php" taskname="lint">
    <arg value="-l" />
+   <arg path="${basedir}/build/lint.xml"/>
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
@@ -82,7 +79,7 @@
   </apply>
 
   <property name="lint.done" value="true" />
-  <echo message="No changes detected." />
+  <echo message="No changes detected." name="lint.message" />
  </target>
 </project>
 
