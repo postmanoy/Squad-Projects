@@ -27,7 +27,7 @@
  <property name="phpunit" value="${basedir}/vendor/bin/phpunit"/> -->
 
  <target name="quick-build"
-         depends="prepare,lint"
+         depends="lint"
          description="Performs a lint check and runs the tests (without generating code coverage reports)"/>
 
  <target name="static-analysis"
@@ -42,27 +42,6 @@
   </parallel>
  </target>
 
- <target name="clean"
-         unless="clean.done"
-         description="Cleanup build artifacts">
-  <delete dir="${basedir}/build/api"/>
-  <delete dir="${basedir}/build/coverage"/>
-  <delete dir="${basedir}/build/logs"/>
-  <delete dir="${basedir}/build/phpdox"/>
-  <property name="clean.done" value="true"/>
- </target>
-
- <target name="prepare"
-         unless="prepare.done"
-         depends="clean"
-         description="Prepare for build">
-  <mkdir dir="${basedir}/build/api"/>
-  <mkdir dir="${basedir}/build/coverage"/>
-  <mkdir dir="${basedir}/build/logs"/>
-  <mkdir dir="${basedir}/build/phpdox"/>
-  <property name="prepare.done" value="true"/>
- </target>
-
  <target name="lint"
          unless="lint.done"
          description="Perform syntax check of sourcecode files">
@@ -71,12 +50,6 @@
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
-    <modified />
-   </fileset>
-
-   <fileset dir="${basedir}">
-    <include name="**/*.php" />
-    <modified />
    </fileset>
   </apply>
 
