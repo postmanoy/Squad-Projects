@@ -82,7 +82,7 @@
    </fileset>
    </then>
    <else>
-        <echo message="No changes detected.">
+        <echo message="No changes detected." />
    </else>
    </if>
 
