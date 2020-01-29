@@ -67,11 +67,7 @@
          unless="lint.done"
          description="Perform syntax check of sourcecode files">
   <apply executable="php" taskname="lint">
-  <if>
-  <equals>
    <arg value="-l" />
-   </equals>
-   <then>
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
@@ -82,15 +78,12 @@
     <include name="**/*.php" />
     <modified />
    </fileset>
-   </then>
-   <else>
-        <echo message="No changes detected." />
-   </else>
-   </if>
 
   </apply>
 
-  <property name="lint.done" value="true"/>
+  <property name="lint.done" value="true">
+  <echo message="No changes detected." />
+  </property>
  </target>
 </project>
 
