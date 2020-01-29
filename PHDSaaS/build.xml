@@ -84,11 +84,11 @@
  </target>
 
   <target name="-check-content">
-  <success message="No changes detected.">
+  <fail message="No changes detected.">
    <condition>
      <equals arg1=" "/>
    </condition>
-  </success>
+  </fail>
  </target>
 </project>
 
