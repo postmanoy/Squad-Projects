@@ -68,7 +68,9 @@
          description="Perform syntax check of sourcecode files">
   <apply executable="php" taskname="lint">
   <if>
+  <equals>
    <arg value="-l" />
+   </equals>
    <then>
 
    <fileset dir="${basedir}">
