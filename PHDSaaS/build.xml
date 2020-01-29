@@ -66,7 +66,7 @@
  <target name="lint"
          unless="lint.done"
          description="Perform syntax check of sourcecode files">
-  <apply executable="php" taskname="lint">
+  <apply executable="php" taskname="lint" resultproperty="result.lint">
    <arg value="-l" />
 
    <fileset dir="${basedir}">
@@ -86,7 +86,7 @@
   <target name="-check-content">
   <fail message="No changes detected.">
    <condition>
-     <equals arg1=" " arg2 =" "/>
+     <equals arg1="${result.lint}" arg2 =" "/>
    </condition>
   </fail>
  </target>
