@@ -86,7 +86,7 @@
   <target name="-check-content">
   <fail message="No changes detected.">
    <condition>
-     <equals arg1=" "/>
+     <equals arg1=" " arg2 =" "/>
    </condition>
   </fail>
  </target>
