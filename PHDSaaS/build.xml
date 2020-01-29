@@ -63,7 +63,7 @@
          unless="lint.done"
          description="Perform syntax check of sourcecode files">
   <apply executable="php" taskname="lint">
-   <arg value="find . -type f -name '*.php' -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v 'No syntax errors detected' )" />
+   <arg value="-l >> /build/logs/phplint.log" />
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
