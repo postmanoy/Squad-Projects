@@ -27,7 +27,7 @@
  <property name="phpunit" value="${basedir}/vendor/bin/phpunit"/> -->
 
  <target name="quick-build"
-         depends="prepare,lint,-check-content"
+         depends="prepare,lint"
          description="Performs a lint check and runs the tests (without generating code coverage reports)"/>
 
  <target name="static-analysis"
