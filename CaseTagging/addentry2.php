@@ -70,7 +70,7 @@ h2 {
 }
 
 #div1 {
-    padding-top: 60px;
+    padding-top: 62px;
   }
   @media (max-width: 980px) {
     body {

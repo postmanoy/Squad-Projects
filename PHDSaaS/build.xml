@@ -60,7 +60,7 @@
  </target>
 
  <target name="lint"
-         unless="lint.done,lint.message"
+         unless="lint.done"
          description="Perform syntax check of sourcecode files">
   <apply executable="php" taskname="lint">
    <arg value="-l" />
@@ -79,7 +79,7 @@
   </apply>
 
   <property name="lint.done" value="true" />
-  <echo message="No changes detected." name="lint.message" />
+  <echo message="No changes detected." />
  </target>
 </project>
 
