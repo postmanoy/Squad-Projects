@@ -67,18 +67,15 @@
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
-    <modified />
    </fileset>
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
-    <modified />
    </fileset>
 
   </apply>
 
   <property name="lint.done" value="true" />
-  <echo message="No changes detected." />
  </target>
 </project>
 
