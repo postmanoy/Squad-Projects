@@ -1,4 +1,4 @@
 <?php
-$con = mysqli_connect('localhost','root', '');;
+$con = mysqli_connectpak('localhost','root', '');
 mysqli_select_db($con,'quizdb');
 ?>
