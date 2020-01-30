@@ -51,10 +51,11 @@
    <fileset dir="${basedir}">
     <include name="**/*.php" />
    </fileset>
-  </apply>
+
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
+    <modified />
    </fileset>
   </apply>
 

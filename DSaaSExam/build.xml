@@ -55,6 +55,7 @@
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
+    <modified />
    </fileset>
 
   <property name="lint.done" value="true"/>
