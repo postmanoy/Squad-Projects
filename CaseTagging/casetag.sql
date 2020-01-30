@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2019 at 04:06 AM
--- Server version: 10.3.16-MariaDB
--- PHP Version: 7.3.7
+-- Generation Time: Jan 30, 2020 at 03:34 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -135,7 +135,11 @@ INSERT INTO `dsa` (`dsa_id`, `dsa_value`) VALUES
 (95, '12.0.0.481'),
 (96, '12.0.0.563'),
 (97, '12.0.0.682'),
-(98, '11.0.0.1023');
+(98, '11.0.0.1023'),
+(99, '12.0.0.725'),
+(100, '12.0.0.767'),
+(101, '12.0.0.817'),
+(102, '11.0.0.871');
 
 -- --------------------------------------------------------
 
@@ -162,7 +166,8 @@ INSERT INTO `dsc` (`dsc_id`, `dsc_value`) VALUES
 (7, 'DSaaS DSA'),
 (8, 'SmartCheck'),
 (9, 'App Protect'),
-(10, 'AWS WAF');
+(10, 'AWS WAF'),
+(11, 'DSM On Cloud');
 
 -- --------------------------------------------------------
 
@@ -266,7 +271,8 @@ INSERT INTO `dsm` (`dsm_id`, `dsm_value`) VALUES
 (84, '12.0.342'),
 (85, '11.3.192'),
 (86, '12.0.347'),
-(87, '12.0.0.300 (GM)');
+(87, '12.0.0.300 (GM)'),
+(88, '11.0.360');
 
 -- --------------------------------------------------------
 
@@ -285,12 +291,11 @@ CREATE TABLE `ic` (
 
 INSERT INTO `ic` (`ic_id`, `ic_value`) VALUES
 (1, 'Configuration'),
-(2, 'OS_Crash'),
+(2, 'Crash'),
 (3, 'Performance'),
 (4, 'Operations'),
 (5, 'Deployment'),
 (6, 'Integration'),
-(7, 'Inquiry'),
 (8, 'Compatibility'),
 (9, 'License'),
 (10, 'Account Administration');
@@ -370,7 +375,8 @@ INSERT INTO `os` (`os_id`, `os_value`) VALUES
 (57, 'Debian 6'),
 (58, 'Debian 7'),
 (59, 'Debian 8'),
-(60, 'Debian 9');
+(60, 'Debian 9'),
+(61, 'Debian 10');
 
 -- --------------------------------------------------------
 
@@ -408,17 +414,17 @@ CREATE TABLE `prbm` (
 INSERT INTO `prbm` (`prbm_id`, `prbm_value`) VALUES
 (1, 'AMSP'),
 (2, 'DS_AM'),
-(3, 'WRS'),
-(4, 'FW'),
-(5, 'IPS'),
-(6, 'IM'),
-(7, 'LI'),
-(8, 'AC'),
-(9, 'Network Engine'),
-(10, 'Scan for Reco'),
-(11, 'WRS'),
-(12, 'SAP'),
-(13, 'Agent Core');
+(3, 'FW'),
+(4, 'IPS'),
+(5, 'IM'),
+(6, 'LI'),
+(7, 'AC'),
+(8, 'Network Engine'),
+(9, 'SAP'),
+(10, 'Agent Core'),
+(11, 'Package'),
+(12, 'DSM'),
+(13, 'Database');
 
 -- --------------------------------------------------------
 
@@ -438,7 +444,7 @@ CREATE TABLE `sc` (
 
 INSERT INTO `sc` (`sc_id`, `sc_value`, `sc_ic_value`) VALUES
 (1, 'Anti-Malware', 'Configuration'),
-(2, 'AMSP', 'OS_Crash'),
+(2, 'AMSP', 'Crash'),
 (3, 'Web Reputation', 'Configuration'),
 (4, 'Firewall', 'Configuration'),
 (5, 'Intrusion Prevention', 'Configuration'),
@@ -450,59 +456,28 @@ INSERT INTO `sc` (`sc_id`, `sc_value`, `sc_ic_value`) VALUES
 (11, 'Log Inspection Rule', 'Configuration'),
 (12, 'User and Roles', 'Configuration'),
 (13, 'Reports', 'Configuration'),
-(14, 'Policy Tree', 'Configuration'),
-(15, 'Scheduled Task', 'Configuration'),
-(16, 'Event Based Task', 'Configuration'),
-(17, 'IP List', 'Configuration'),
 (18, 'TLS/SSL', 'Configuration'),
-(19, 'SMTP', 'Configuration'),
 (20, 'Scan Exclusions', 'Configuration'),
-(21, 'Smart Folders', 'Configuration'),
-(22, 'AWS Cloud Connector', 'Configuration'),
-(23, 'Azure Cloud Connector', 'Configuration'),
-(24, 'GCP Cloud Connector', 'Configuration'),
-(25, 'AD Connector', 'Configuration'),
-(26, 'Network Engine', 'Configuration'),
-(27, 'vCloud Connector', 'Configuration'),
-(28, 'DSM System Settings', 'Configuration'),
-(29, 'MFA', 'Configuration'),
-(30, 'DSaaS Reset Password', 'Configuration'),
-(31, 'Best Practice Guide', 'Configuration'),
 (32, 'General Questions', 'Configuration'),
-(33, 'DS_AM', 'OS_Crash'),
-(34, 'Network Engine', 'OS_Crash'),
-(35, 'AC', 'OS_Crash'),
-(36, 'OS Patch', 'OS_Crash'),
-(37, 'App Patch', 'OS_Crash'),
+(34, 'Network Engine', 'Crash'),
+(35, 'AC', 'Crash'),
+(36, 'OS Patch', 'Crash'),
+(37, 'App Patch', 'Crash'),
 (38, 'AMSP', 'Performance'),
 (39, 'DS_AM', 'Performance'),
-(40, 'IM', 'Performance'),
 (41, 'AC', 'Performance'),
-(42, 'IPS Rules', 'Performance'),
 (43, 'Network Engine', 'Performance'),
 (44, 'FW&IPS Engine', 'Performance'),
 (45, 'High CPU Usage', 'Performance'),
 (46, 'High Memory Usage', 'Performance'),
 (47, 'High Disk I/O', 'Performance'),
 (48, 'High Network Usage', 'Performance'),
-(49, 'Manager Jobs Related', 'Performance'),
-(50, 'DB - Postgre', 'Performance'),
-(51, 'DB - Oracle', 'Performance'),
-(52, 'DB - MSSQL', 'Performance'),
-(53, 'DB Deadlock', 'Performance'),
-(54, 'DB FULL', 'Performance'),
-(55, 'Cannot access Instance/VM', 'Performance'),
-(56, 'App Crash - 3rd Party', 'Performance'),
-(57, 'App Crash - AMSP/DSAM', 'Performance'),
-(58, 'App Crash - DSA', 'Performance'),
 (59, 'Security Update Fail', 'Operations'),
 (60, 'Software Update Fail', 'Operations'),
 (61, 'Recommendation Scan Fail', 'Operations'),
 (62, 'Activation Fail', 'Operations'),
 (63, 'Alerts', 'Operations'),
-(64, 'DSM Stuck Jobs', 'Operations'),
 (65, 'DSM Web Console', 'Operations'),
-(66, 'DS User Accounts', 'Operations'),
 (67, 'DSaaS Relay (General)', 'Operations'),
 (68, 'DSM AMI(General)', 'Operations'),
 (69, 'DSM VMI(General)', 'Operations'),
@@ -513,30 +488,16 @@ INSERT INTO `sc` (`sc_id`, `sc_value`, `sc_ic_value`) VALUES
 (74, 'Integrity Monitoring', 'Operations'),
 (75, 'Log Inspection', 'Operations'),
 (76, 'Application Control', 'Operations'),
-(77, 'Network Related OnPrem', 'Operations'),
 (78, 'Agent Offline', 'Operations'),
-(79, 'Send Policy Failed', 'Operations'),
-(80, 'Network Related DSaaS', 'Operations'),
 (81, 'Private Cloud/AirGap', 'Deployment'),
 (82, 'DS AMI Deployment', 'Deployment'),
 (83, 'DS VMI Deployment', 'Deployment'),
 (84, 'DS AMI Upgrade', 'Deployment'),
 (85, 'DS VMI Upgrade', 'Deployment'),
-(86, 'Tenant Migration', 'Deployment'),
-(87, 'On-Prem to DSaaS Migration', 'Deployment'),
-(88, 'DSA Migration', 'Deployment'),
 (89, 'DSA Installation', 'Deployment'),
 (90, 'DSA Upgrade', 'Deployment'),
-(91, 'Deployment Script Issue', 'Deployment'),
-(92, 'Issue due to SSL Inspection', 'Deployment'),
-(93, 'TLS/SSL', 'Deployment'),
 (94, 'Multi-Tenant', 'Deployment'),
-(95, 'Uninstall - 3rd Party', 'Deployment'),
-(96, 'Uninstall - DSA', 'Deployment'),
-(97, 'Compatibility Issue', 'Deployment'),
-(98, 'Kernel Support', 'Deployment'),
 (99, 'QuickStart - AWS', 'Deployment'),
-(100, 'AD User Integration', 'Integration'),
 (101, 'SAML', 'Integration'),
 (102, 'Local SPS', 'Integration'),
 (103, 'Load Balancer', 'Integration'),
@@ -549,48 +510,59 @@ INSERT INTO `sc` (`sc_id`, `sc_value`, `sc_ic_value`) VALUES
 (110, 'SMTP', 'Integration'),
 (111, 'SAP', 'Integration'),
 (112, 'Docker', 'Integration'),
-(113, 'Docker Repository', 'Integration'),
-(114, 'DS API', 'Integration'),
-(115, 'DSSC API', 'Integration'),
-(116, 'DSAP API', 'Integration'),
 (117, 'Kubernetes - OnPrem', 'Integration'),
 (118, 'AKS/EKS', 'Integration'),
-(119, 'Architecture and Sizing', 'Inquiry'),
-(120, 'Functionality', 'Inquiry'),
 (121, 'Trend Products', 'Compatibility'),
 (122, 'Third Party Integration', 'Compatibility'),
 (123, 'Standards / RFC Compatibility', 'Compatibility'),
 (124, 'Online Activation Code Update', 'License'),
 (125, 'Offline Activation Code Update', 'License'),
-(126, 'AWS Subscription Issue', 'License'),
-(127, 'License transfer', 'License'),
-(128, 'DSaaS Email Confirmation', 'License'),
 (129, 'Back-end Related DSaaS', 'Operations'),
-(130, 'Migration', 'Inquiry'),
 (131, 'Billing', 'License'),
-(132, 'CLP Account Change Request', 'License'),
-(133, 'Billing', 'Inquiry'),
-(134, 'Alerts', 'Configuration'),
-(135, 'API', 'Inquiry'),
-(136, 'Best Practice', 'Inquiry'),
-(137, 'System Events', 'Operations'),
-(138, 'Smart Protection Server Disconnected', 'Operations'),
 (139, 'Account Details Inquiry', 'Account Administration'),
-(140, 'UI Errors', 'Operations'),
-(141, 'UI Errors', 'Operations'),
 (142, 'Change Information', 'Account Administration'),
-(143, 'Kernel Support', 'Inquiry'),
-(144, 'Proxy', 'Configuration'),
 (145, 'WAF Rules', 'Configuration'),
-(146, 'False Positive', 'Operations'),
-(147, 'Licensing', 'Inquiry'),
-(148, 'Module Installation Failed', 'Deployment'),
-(149, 'Events & Reports', 'Inquiry'),
-(150, 'Rules', 'Configuration'),
-(151, 'Get Events Failed', 'Operations'),
 (152, 'DSA Activation', 'Deployment'),
-(153, 'AM Engine Offline', 'Operations'),
-(154, 'Azure Marketplace Subscription', 'License');
+(160, 'DSR Installation', 'Deployment'),
+(162, 'Certificates', 'Deployment'),
+(164, 'IM', 'Performance'),
+(165, 'IPS', 'Performance'),
+(166, 'LI', 'Performance'),
+(167, 'Uninstallation', 'Deployment'),
+(168, 'Migration', 'Deployment'),
+(169, 'Active Directory', 'Integration'),
+(172, 'Customer Licensing Portal', 'License'),
+(173, 'Transfer', 'License'),
+(174, 'Module Offline', 'Operations'),
+(175, 'Network Communication', 'Operations'),
+(176, 'DSM Job Failed', 'Operations'),
+(177, 'DS User Account', 'Account Administration'),
+(178, 'Kernel Support', 'Integration'),
+(179, 'Cannot access console', 'Operations'),
+(180, 'Email Confirmation Failed', 'Account Administration'),
+(181, 'AWS Subscription', 'License'),
+(182, 'Azure Subscription', 'License'),
+(183, 'DS API', 'Integration'),
+(184, 'DSSC API', 'Integration'),
+(185, 'DSAP API', 'Integration'),
+(186, 'AWS Cloud Connector', 'Integration'),
+(187, 'Azure Cloud Connector', 'Integration'),
+(188, 'GCP Cloud Connector', 'Integration'),
+(189, 'DB - Postgre', 'Performance'),
+(190, 'DB - Oracle', 'Performance'),
+(191, 'DB - Microsoft SQL', 'Performance'),
+(192, 'DB - RDS', 'Performance'),
+(193, 'DB - Deadlock', 'Performance'),
+(194, 'DB - Full', 'Performance'),
+(195, 'Pending DSM Jobs', 'Performance'),
+(196, 'Architecture and Sizing', 'Operations'),
+(197, 'Best Practice Guide', 'Configuration'),
+(198, 'Application Crash - 3rd Party', 'Crash'),
+(199, 'Application Crash - AMSP/ds_am', 'Crash'),
+(200, 'Application Crash - DSA', 'Crash'),
+(201, 'ds_am', 'Crash'),
+(202, 'Policy', 'Configuration'),
+(203, 'MFA', 'Integration');
 
 -- --------------------------------------------------------
 
@@ -679,43 +651,43 @@ ALTER TABLE `seg`
 -- AUTO_INCREMENT for table `dsa`
 --
 ALTER TABLE `dsa`
-  MODIFY `dsa_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `dsa_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `dsc`
 --
 ALTER TABLE `dsc`
-  MODIFY `dsc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `dsc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `dsm`
 --
 ALTER TABLE `dsm`
-  MODIFY `dsm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `dsm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `ic`
 --
 ALTER TABLE `ic`
-  MODIFY `ic_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `ic_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `os`
 --
 ALTER TABLE `os`
-  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `prbm`
 --
 ALTER TABLE `prbm`
-  MODIFY `prbm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `prbm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `sc`
 --
 ALTER TABLE `sc`
-  MODIFY `sc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+  MODIFY `sc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=204;
 
 --
 -- AUTO_INCREMENT for table `seg`
