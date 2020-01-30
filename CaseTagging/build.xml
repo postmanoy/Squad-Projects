@@ -78,6 +78,10 @@
   <apply executable="/usr/lib/cgi-bin/w3c-markup-validator/check" taskname="check" failonerror="true">
    <arg value="uri=${basedir}/*.php" />
 
+   <fileset dir="${basedir}">
+    <include name="**/*.php" />
+   </fileset>
+
   </apply>
 
   <property name="html-validator.done" value="true"/>
