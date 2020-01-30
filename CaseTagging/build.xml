@@ -76,11 +76,7 @@
          unless="html-validator.done"
          description="Perform syntax check of sourcecode files (HTML)">
   <apply executable="/usr/lib/cgi-bin/w3c-markup-validator/check" taskname="check" failonerror="true">
-   <arg value="uri=${basedir}" />
-
-   <fileset dir="${basedir}">
-    <include name="**/*.php" />
-   </fileset>
+   <arg value="uri=${basedir}/*.php" />
 
   </apply>
 
