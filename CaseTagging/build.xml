@@ -27,11 +27,11 @@
  <property name="phpunit" value="${basedir}/vendor/bin/phpunit"/> -->
 
  <target name="quick-build"
-         depends="lint-modified (only checks modified files),lint,html-validator"
+         depends="lint-modified (only checks modified files),lint"
          description="Performs a lint check and runs the tests (without generating code coverage reports)"/>
 
  <target name="static-analysis"
-         depends="lint-modified (only checks modified files),lint,html-validator"
+         depends="lint-modified (only checks modified files),lint"
          description="Performs static analysis" />
 
  <!-- Adjust the threadCount attribute's value to the number of CPUs -->
@@ -70,21 +70,6 @@
   </apply>
 
   <property name="lint.done" value="true"/>
- </target>
-
-  <target name="html-validator"
-         unless="html-validator.done"
-         description="Perform syntax check of sourcecode files (HTML)">
-  <apply executable="/usr/lib/cgi-bin/w3c-markup-validator/check" taskname="check" failonerror="true">
-   <arg value="uri=${basedir}/*.php" />
-
-   <fileset dir="${basedir}">
-    <include name="**/*.php" />
-   </fileset>
-
-  </apply>
-
-  <property name="html-validator.done" value="true"/>
  </target>
 
 </project>
