@@ -38,10 +38,10 @@
             });
           }  // End if
         });
-      });
+      });;
   </script>
 
-</head>>
+</head>
 
 <body>
 
