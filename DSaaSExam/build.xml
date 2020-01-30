@@ -27,11 +27,11 @@
  <property name="phpunit" value="${basedir}/vendor/bin/phpunit"/> -->
 
  <target name="quick-build"
-         depends="lint"
+         depends="lint-modified,lint"
          description="Performs a lint check and runs the tests (without generating code coverage reports)"/>
 
  <target name="static-analysis"
-         depends="lint"
+         depends="lint-modified,lint"
          description="Performs static analysis" />
 
  <!-- Adjust the threadCount attribute's value to the number of CPUs -->
@@ -42,8 +42,8 @@
   </parallel>
  </target>
 
- <target name="lint"
-         unless="lint.done"
+<target name="lint-modified"
+         unless="lint-modified.done"
          description="Perform syntax check of sourcecode files">
   <apply executable="php" taskname="lint">
    <arg value="-l" />
@@ -54,13 +54,23 @@
    </fileset>
   </apply>
 
+  <property name="lint-modified.done" value="true"/>
+ </target>
+
+ <target name="lint"
+         unless="lint.done"
+         description="Perform syntax check of sourcecode files">
+  <apply executable="php" taskname="lint">
+   <arg value="-l" />
+   
    <fileset dir="${basedir}">
     <include name="**/*.php" />
-    <modified />
    </fileset>
+  </apply>
 
   <property name="lint.done" value="true"/>
  </target>
+
 </project>
 
 
