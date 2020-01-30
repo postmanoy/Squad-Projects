@@ -53,6 +53,10 @@
    </fileset>
   </apply>
 
+   <fileset dir="${basedir}">
+    <include name="**/*.php" />
+   </fileset>
+
   <property name="lint.done" value="true"/>
  </target>
 </project>
