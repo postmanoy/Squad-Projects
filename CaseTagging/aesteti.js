@@ -105,6 +105,22 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+  $('#submitIK').on('click',function(e) {
+
+      if($('#inputKey').val() != "Choose an option...") {
+        $('#hiddenOutput').html($('#inputKey').val());
+        $('#hiddenOutput').select();
+        document.execCommand('copy');
+        alert("Copied!");
+        }
+      else{
+        alert("Cannot copy the text.")
+      } 
+
+  });
+});
+
+$(document).ready(function () {
   $('#dsc').focusin(function() {
     $('#dsc').val('');
   });
@@ -191,5 +207,15 @@ $(document).ready(function () {
     }
   });
 
+
+  $('#inputKey').focusin(function() {
+    $('#inputKey').val('');
+  });
+
+  $('#inputKey').focusout(function() {
+    if(!($('#inputKey').val() != '')){
+      $('#inputKey').val('Choose an option...')
+    }
+  });
 
 });

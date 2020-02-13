@@ -197,17 +197,17 @@ $maxvalue++;
 $alterquery ="ALTER TABLE usersession AUTO_INCREMENT = $maxvalue";
 mysqli_query($con, $alterquery);
             
-            $name = $_SESSION['username'];
-            $passw = $_SESSION['password'];
-            $finalresult = " insert into usersession(u_id,name,u_q_id, u_a_id, net_sc, win_sc, lin_sc, clo_sc, vir_sc, dev_sc, db_sc, ot_sc, date, essay_sc1, essay_sc2, essay_sc3, essay_sc4, essay_sc5, q_essay_id1, q_essay_id2, q_essay_id3, q_essay_id4, q_essay_id5 ) values ('$maxvalue','$name','60','$result','$netscore','$winscore','$linscore','$cloudscore','$virscore','$devscore','$dbscore','$otscore', '$date', '$essayans[0]', '$essayans[1]', '$essayans[2]', '$essayans[3]', '$essayans[4]', '$essayid[0]', '$essayid[1]', '$essayid[2]', '$essayid[3]', '$essayid[4]' ) ";
-            //$deletepw = "DELETE FROM passwordtest WHERE password = '$passw'" ;
-            $queryresult= mysqli_query($con,$finalresult);
-            //$dpw= mysqli_query($con,$deletepw);
+$name = $_SESSION['username'];
+$passw = $_SESSION['password'];
+$finalresult = "INSERT INTO usersession(u_id,name,u_q_id, u_a_id, net_sc, win_sc, lin_sc, clo_sc, vir_sc, dev_sc, db_sc, ot_sc, ess_sc , date, essay_sc1, essay_sc2, essay_sc3, essay_sc4, essay_sc5, q_essay_id1, q_essay_id2, q_essay_id3, q_essay_id4, q_essay_id5) values ('$maxvalue','$name','60','$result','$netscore','$winscore','$linscore','$cloudscore','$virscore','$devscore','$dbscore','$otscore', 0, '$date', '$essayans[0]', '$essayans[1]', '$essayans[2]', '$essayans[3]', '$essayans[4]', '$essayid[0]', '$essayid[1]', '$essayid[2]', '$essayid[3]', '$essayid[4]')";
+//$deletepw = "DELETE FROM passwordtest WHERE password = '$passw'" ;
+$queryresult= mysqli_query($con,$finalresult);
+//$dpw= mysqli_query($con,$deletepw);
 
-            // if($queryresult){
-            // 	echo "successssss";
-            // }
-            ?>
+if(!$queryresult){
+  echo("Error description: " . mysqli_error($con));
+}
+?>
 
 
       </table>

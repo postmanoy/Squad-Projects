@@ -232,6 +232,26 @@ $(document).ready(function () {
         ?>
       }
 
+      else if(optvalue == "issk"){
+        <?php
+            $i = 0;
+            $qissk1 = "select * from issk order by issK_value asc";
+            $queryissk1 = mysqli_query($con, $qissk1);
+            ?>
+            $("#tableopt").html(" \
+                          <?php
+                            while($roissk1 = mysqli_fetch_array($queryissk1)){
+                           ?>
+                            <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roissk1['issK_value']; ?>' /><?php echo $roissk1['issK_value']; ?><br> \
+                          <?php
+                            $i++;
+                            } 
+                          ?>
+                    ");
+            <?php   
+        ?>
+      }
+
 
       else if (optvalue == "N/A"){
         $("#tableopt").html("");
@@ -328,6 +348,7 @@ h2 {
                         <option value="ic">Issue Category</option>
                         <option value="sc">Sub Category</option>
                         <option value="seg">Reason for SEG Escalation</option>
+                        <option value="issk">Issue Keyword</option>
                         </select>
                       <div class="form-group">
                                     <label for="exampleFormControlSelect1" id = "issCatL"><b>Issue Sub Category:</b></label>

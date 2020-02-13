@@ -148,6 +148,23 @@ if ($opt == "seg"){
 	}
 }
 
+if ($opt == "issk"){
+
+	//Reset autoincrement for dsc table
+	$issKq = "SELECT MAX(issK_id) AS min FROM issK";
+	$issKq2 = mysqli_query($con, $issKq);
+	$issKq3 = mysqli_fetch_array($issKq2);
+	$issKq4 = $issKq3['min'];
+	$issKq4++;
+	$alterissK ="ALTER TABLE issk AUTO_INCREMENT = $issKq4";
+	mysqli_query($con, $alterissK);
+
+	for ($i = 0; $i < count($str); $i++){
+	$postissK = "INSERT INTO issk (issK_id, issK_value) VALUES (NULL, '$str[$i]')";
+	mysqli_query($con, $postissK);
+	}
+}
+
 header('location:addentry.php');
 
 

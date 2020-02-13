@@ -77,6 +77,8 @@ $(document).ready(function () {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                   <div class="navbar-nav ml-auto">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#IssueKey">Choose Issue Keyword</button>
+                    &nbsp;
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#AddChoice">Add Choices</button>
                     &nbsp;
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#RemoveChoice">Remove Choices</button>
@@ -233,6 +235,39 @@ $(document).ready(function () {
                     </div>
                 </div>
         </div>
+
+<!-- Modal -->
+<div id="IssueKey" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Choose Issue Keyword:</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input class="form-control" id ="inputKey" list="inputKeyl" value = "Choose an option..." autocomplete="off">
+              <datalist id="inputKeyl">
+                  <?php
+                    $qissk = "select * from issk order by issK_value asc";
+                    $queryissk = mysqli_query($con, $qissk);
+                    while($roissk = mysqli_fetch_array($queryissk)){
+                  ?>
+                  <option value="<?php echo $roissk['issK_value']; ?>"><?php echo $roissk['issK_value']; ?></option>
+                  <?php
+                  }
+                ?>            
+          </datalist>
+          <textarea class="form-control text-center" rows="1" placeholder="Output" id = "hiddenOutput" style = "resize:none;" readonly></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type = "button" class="btn btn-success" id = "submitIK">Copy</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
         <!-- Modal -->
 <div id="AddChoice" class="modal fade" role="dialog">

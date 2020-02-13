@@ -36,9 +36,7 @@ else if($ro == 1){
 	header('location:exam.php');
 }
 else{
-	$message = "Invalid Password. Try again.";
-  	echo "<script type='text/javascript'>alert('$message');</script>";
-	header( "refresh:0;url=index-draft.php" );
+	header('location:index.php');
 }
 
 ?>

@@ -149,6 +149,23 @@ if ($opt == "seg"){
 	}
 }
 
+if ($opt == "issk"){
+
+	//Reset autoincrement for seg table
+	$isskq = "SELECT MAX(issK_id) AS min FROM issk";
+	$isskq2 = mysqli_query($con, $isskq);
+	$isskq3 = mysqli_fetch_array($isskq2);
+	$isskq4 = $isskq3['min'];
+	$isskq4++;
+	$alterissk ="ALTER TABLE issk AUTO_INCREMENT = $isskq4";
+	mysqli_query($con, $alterissk);
+
+	foreach ($strvalue as $str){
+	$postissk = "DELETE FROM issk WHERE issK_value='$str'";
+	mysqli_query($con, $postissk);
+	}
+}
+
 header('location:removeentry.php');
 
 

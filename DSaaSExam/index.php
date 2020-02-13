@@ -1,3 +1,13 @@
+<?php 
+include('connect.php');
+if(!isset($_SERVER['HTTP_REFERER'])){
+    // redirect them to your desired location
+    header('location:../PHDSaaS/index.php');
+    exit;
+}
+
+?>
+
 <html>
 <head>
 <link rel="shortcut icon" type="image/png" href="PHDSAAS.png"/>

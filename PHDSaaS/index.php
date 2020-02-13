@@ -265,7 +265,7 @@
       </div>
       <h2 class="font-weight-light text-center">Squadrons</h2>
       <div class="row align-items-center" style="padding-top: 50px; padding-bottom: 50px;">
-          <div class="sqd col-sm-4 text-center"><img src="img\mD.png" class="rounded-circle squad" data-toggle="modal" data-target="#mobydock"></div>
+          <div class="sqd col-sm-4 text-center"><img src="img\md.png" class="rounded-circle squad" data-toggle="modal" data-target="#mobydock"></div>
           <div class="sqd col-sm-4 text-center"><img src="img\RS2.png" class="rounded-circle squad" data-toggle="modal" data-target="#rs2"></div>
           <div class="sqd col-sm-4 text-center"><img src="img\pm.png" class="rounded-circle squad" data-toggle="modal" data-target="#postmanoy"></div>
         </div>
@@ -337,7 +337,7 @@
                     <br><br>Frederick Pagala
                       
                   </div>
-                  <div class="col-sm-3 text-center"><img src="img\sean.jpg" class="rounded-circle" height="200" width="200">
+                  <div class="col-sm-3 text-center"><img src="img\sean.JPG" class="rounded-circle" height="200" width="200">
                     <br><br>Sean Dela Rosa
                       
                   </div>
@@ -408,13 +408,13 @@
       <div class="modal-body">
           <div class="container">
               <div class="row align-items-center" style="padding-top: 50px; padding-bottom: 50px;color:white">
-                  <div class="col-sm-6 text-center"><img src="Windows.png" height="200" width="200">
+                  <div class="col-sm-6 text-center"><img src="windows.png" height="200" width="200">
                     <h2 class="modal-title font-weight-light text-center">Windows</h2><br>
                     <form action = "downloadW.php" method = "post">
                     <button type="submit" class="btn btn-success"><i class="fas fa-download"></i> Download</button>
                   </form>
                   </div>
-                  <div class="col-sm-6 text-center"><img src="Linux.png" height="200" width="200">
+                  <div class="col-sm-6 text-center"><img src="linux.png" height="200" width="200">
                     <h2 class="modal-title font-weight-light text-center">Linux</h2><br>
                     <form action = "downloadL.php" method = "post">
                     <button type="submit" class="btn btn-success"><i class="fas fa-download"></i> Download</button>
@@ -445,10 +445,10 @@
       <div class="modal-body">
           <div class="container">
               <div class="row align-items-center" style="padding-top: 50px; padding-bottom: 50px;color:white">
-                  <div class="col-sm-3 text-center"><img class="img-fluid tool" src="Jenkins.png" height="200" width="200" onclick="javascript:window.open('http://phdsaas-cicdserver01-com.eastus.cloudapp.azure.com:8080/', '_blank')">
+                  <div class="col-sm-3 text-center"><img class="img-fluid tool" src="jenkins.png" height="200" width="200" onclick="javascript:window.open('http://phdsaas-rg-cicdserver01.eastus.cloudapp.azure.com:8080/', '_blank')">
                     <h2 class="modal-title font-weight-light text-center">Jenkins</h2><br>
                   </div>
-                  <div class="col-sm-3 text-center"><img class="img-fluid tool" src="smartcheck.png" height="200" width="200" onclick="javascript:window.open('https://phdsaasdevops.eastus.cloudapp.azure.com:30019', '_blank')">
+                  <div class="col-sm-3 text-center"><img class="img-fluid tool" src="smartcheck.png" height="200" width="200" onclick="javascript:window.open('https://phdsaas-rg-smarcheck01.eastus.cloudapp.azure.com:30019', '_blank')">
                     <h2 class="modal-title font-weight-light text-center">SmartCheck</h2><br>
                   </div>
                   <div class="col-sm-3 text-center"><img class="img-fluid tool" src="appprotect.png" height="200" width="200" onclick="javascript:window.open(' https://dashboard.prod.im7.io', '_blank')">

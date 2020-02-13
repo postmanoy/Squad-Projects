@@ -81,7 +81,7 @@ $(document).ready(function()
       <div>
        <!--   <h1 class="text-center text-white font-weight-bold text-uppercase bg-dark" >  Complete Quiz Website using PHP and MYSQL using Session</h1><br>
       <div class="container "><br> -->
-         <h1 class="text-center text-white text-uppercase bg-dark" style = "font-family: 'Lato', sans-serif;">  Trend Micro Deep Security As A Service Exam </h1><br>
+         <h1 class="text-center text-white font-weight-bold text-uppercase bg-dark" >  Trend Micro Deep Security As A Service Exam </h1><br>
       <div class="container "><br>
         <div class="card-header bg-dark text-white text-center" style="font-weight: bold; position: fixed; right:2%; z-index: 1;" id="quiz-time-left"></div>
          <div class="container">
