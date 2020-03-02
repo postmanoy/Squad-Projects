@@ -164,7 +164,8 @@ h2 {
                         <option value="ic">Issue Category</option>
                         <option value="sc">Sub Category</option>
                         <option value="seg">Reason for SEG Escalation</option>
-                        <option value="issk">Issue Keyword</option>
+                        <option value="ops">SEG-Case Operational Tagging</option>
+                        <!--<option value="issk">Issue Keyword</option>-->
                         </select>
                       <div class="form-group">
                                     <label for="exampleFormControlSelect1" id = "issCatL"><b>Issue Sub Category:</b></label>

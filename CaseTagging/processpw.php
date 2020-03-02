@@ -41,7 +41,7 @@ else if ($AL != ""){
 	$ro = mysqli_num_rows($r);
 
 	if($ro == 1){
-	$file_url = 'D:\\xampp\\apache\\logs\\access.log';
+	$file_url = '/var/log/httpd/access.log';
 	header('Content-Type: application/octet-stream');
 	header("Content-Transfer-Encoding: Binary"); 
 	header("Content-disposition: attachment; filename=\"" . basename($file_url) . "\"");

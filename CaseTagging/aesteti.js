@@ -29,13 +29,14 @@ $(document).ready(function () {
   $icDLV= $('#ic').val();
   $scDLV= $('#sc').val();
   $segDLV= $('#seg').val();
+  $txtDLV = $('#txtarea').val();
   //if no option is found alert the user
   if (($('option[value="'+$dscDLV+'"]').length == 0)){
     alert('Incorrect value for Deep Security Component');
     e.preventDefault();
   }
   else if (($('option[value="'+$prbmDLV+'"]').length == 0)){
-    alert('Incorrect value for Problematic Module');
+    alert('Incorrect value for Concerned Feature');
     e.preventDefault();
   }
   else if (($('option[value="'+$osDLV+'"]').length == 0)){
@@ -62,6 +63,10 @@ $(document).ready(function () {
     alert('Incorrect value for SEG Escalated');
     e.preventDefault();
   }
+  else if ($txtDLV.length >= 1 && $txtDLV.length < 10){
+    alert('Minimum of 10 characters is required for Other Details!');
+    e.preventDefault();
+  }
   else if ($dscDLV == "N/A"){
     alert('Please have input for Deep Security Component');
     e.preventDefault();
@@ -76,6 +81,10 @@ $(document).ready(function () {
   }
   else if ($scDLV == "N/A"){
     alert('Please have input for Sub Category');
+    e.preventDefault();
+  }
+  else if ($txtDLV == ""){
+    alert('Please have input for Other Details');
     e.preventDefault();
   }
    else {
@@ -105,20 +114,44 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-  $('#submitIK').on('click',function(e) {
+  //$('#submitOT').on('click',function(e) {
 
-      if($('#inputKey').val() != "Choose an option...") {
-        $('#hiddenOutput').html($('#inputKey').val());
+      //if($('#inputKey').val() != "Choose an option...") {
+        //$('#hiddenOutput').html($('#inputKey').val());
+      //if($("input[name='inputKey']").is(':checked')) {
+       //$('#hiddenOutput').html($("input[name='inputKey']:checked").val());
+        //$('#hiddenOutput').select();
+        //document.execCommand('copy');
+        //alert("Copied!");
+       // }
+     //else{
+        //alert("Cannot copy the text.");
+        //alert("Please choose a keyword.");
+      //} 
+
+  //});
+
+  $("input[name='inputKey']").on('click',function(e) {
+
+      if($("input[name='inputKey']").is(':checked')) {
+        $('#hiddenOutput').html($("input[name='inputKey']:checked").val());
         $('#hiddenOutput').select();
         document.execCommand('copy');
-        alert("Copied!");
+        setTimeout(function() { alert("Copied!"); }, 50);
         }
       else{
-        alert("Cannot copy the text.")
+        //alert("Cannot copy the text.");
+        alert("Please choose a keyword.");
       } 
 
   });
+
+  $('#closeBtnClr').on('click',function(e) {
+      $("input[name='inputKey']").prop( "checked", false );
+  });
+
 });
+
 
 $(document).ready(function () {
   $('#dsc').focusin(function() {

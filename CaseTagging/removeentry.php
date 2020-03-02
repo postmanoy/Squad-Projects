@@ -252,6 +252,26 @@ $(document).ready(function () {
         ?>
       }
 
+      else if(optvalue == "ops"){
+        <?php
+            $i = 0;
+            $qops1 = "select * from opstag order by ops_val asc";
+            $queryops1 = mysqli_query($con, $qops1);
+            ?>
+            $("#tableopt").html(" \
+                          <?php
+                            while($roops1 = mysqli_fetch_array($queryops1)){
+                           ?>
+                            <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roops1['ops_val']; ?>' /><?php echo $roops1['ops_val']; ?><br> \
+                          <?php
+                            $i++;
+                            } 
+                          ?>
+                    ");
+            <?php   
+        ?>
+      }
+
 
       else if (optvalue == "N/A"){
         $("#tableopt").html("");
@@ -348,7 +368,8 @@ h2 {
                         <option value="ic">Issue Category</option>
                         <option value="sc">Sub Category</option>
                         <option value="seg">Reason for SEG Escalation</option>
-                        <option value="issk">Issue Keyword</option>
+                        <option value="ops">SEG-Case Operational Tagging</option>
+                        <!--<option value="issk">Issue Keyword</option>-->
                         </select>
                       <div class="form-group">
                                     <label for="exampleFormControlSelect1" id = "issCatL"><b>Issue Sub Category:</b></label>

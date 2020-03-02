@@ -77,7 +77,14 @@ $(document).ready(function () {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                   <div class="navbar-nav ml-auto">
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#IssueKey">Choose Issue Keyword</button>
+                    <!--<button type="button" class="btn btn-info" data-toggle="modal" data-target="#IssueKey">Choose Issue Keyword</button>-->
+                    <div class="dropdown">
+                          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style = "width:100%;">Other Tagging</button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" onclick="javascript:window.open('https://wiki.jarvis.trendmicro.com/display/~fergal_dalton/Top+5+Issues+Tracking+-+Deep+Security+issue+keywords', '_blank')" style = "cursor: pointer;">Choose Issue Keyword</a>
+                        <a class="dropdown-item" data-toggle="modal" data-target="#OpsTag" style = "cursor: pointer;">SEG-Case Operational Tagging</a>
+                      </div>
+                  </div>
                     &nbsp;
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#AddChoice">Add Choices</button>
                     &nbsp;
@@ -235,33 +242,35 @@ $(document).ready(function () {
         </div>
 
 <!-- Modal -->
-<div id="IssueKey" class="modal fade" role="dialog">
+<div id="OpsTag" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Choose Issue Keyword:</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" id = "closeBtnClr">&times;</button>
       </div>
       <div class="modal-body">
-        <input class="form-control" id ="inputKey" list="inputKeyl" value = "Choose an option..." autocomplete="off">
-              <datalist id="inputKeyl">
+        <!--<input class="form-control" id ="inputKey" list="inputKeyl" value = "Choose an option..." autocomplete="off">
+              <datalist id="inputKeyl">-->
                   <?php
-                    $qissk = "select * from issk order by issK_value asc";
-                    $queryissk = mysqli_query($con, $qissk);
-                    while($roissk = mysqli_fetch_array($queryissk)){
+                    $qopstag = "select * from opstag order by ops_val asc";
+                    $queryopstag = mysqli_query($con, $qopstag);
+                    while($roopstag = mysqli_fetch_array($queryopstag)){
                   ?>
-                  <option value="<?php echo $roissk['issK_value']; ?>"><?php echo $roissk['issK_value']; ?></option>
+                  <input type="radio" id = "<?php echo $roopstag['ops_val']; ?>" name = "inputKey" value = "<?php echo $roopstag['ops_val']; ?>" style = "cursor: pointer;" />
+                  <label for = "<?php echo $roopstag['ops_val']; ?>" style = "cursor: pointer;"><?php echo $roopstag['ops_val']; ?></label><br>
+                  <!--<option value="<?php #echo $roopstag['ops_val']; ?>"><?php #echo $roopstag['ops_val']; ?></option>-->
                   <?php
                   }
                 ?>            
-          </datalist>
+          <!--</datalist>-->
           <textarea class="form-control text-center" rows="1" placeholder="Output" id = "hiddenOutput" style = "resize:none;" readonly></textarea>
       </div>
-      <div class="modal-footer">
-        <button type = "button" class="btn btn-success" id = "submitIK">Copy</button>
-      </div>
+      <!--<div class="modal-footer">
+        <button type = "button" class="btn btn-success" id = "submitOT">Copy</button>
+      </div>-->
     </div>
 
   </div>

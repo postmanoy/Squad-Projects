@@ -166,6 +166,23 @@ if ($opt == "issk"){
 	}
 }
 
+if ($opt == "ops"){
+
+	//Reset autoincrement for seg table
+	$opsq = "SELECT MAX(ops_id) AS min FROM opstag";
+	$opsq2 = mysqli_query($con, $opsq);
+	$opsq3 = mysqli_fetch_array($opsq2);
+	$opsq4 = $opsq3['min'];
+	$opsq4++;
+	$alterops ="ALTER TABLE opstag AUTO_INCREMENT = $opsq4";
+	mysqli_query($con, $alterops);
+
+	foreach ($strvalue as $str){
+	$postops = "DELETE FROM opstag WHERE ops_val='$str'";
+	mysqli_query($con, $postops);
+	}
+}
+
 header('location:removeentry.php');
 
 

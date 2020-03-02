@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 30, 2020 at 03:34 AM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.1
+-- Generation Time: Feb 21, 2020 at 09:30 AM
+-- Server version: 10.3.16-MariaDB
+-- PHP Version: 7.3.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -167,7 +167,9 @@ INSERT INTO `dsc` (`dsc_id`, `dsc_value`) VALUES
 (8, 'SmartCheck'),
 (9, 'App Protect'),
 (10, 'AWS WAF'),
-(11, 'DSM On Cloud');
+(11, 'DSM On Cloud'),
+(12, 'Cloud One - CC'),
+(13, 'Cloud One - AS');
 
 -- --------------------------------------------------------
 
@@ -303,6 +305,107 @@ INSERT INTO `ic` (`ic_id`, `ic_value`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `issk`
+--
+
+CREATE TABLE `issk` (
+  `issK_id` int(100) NOT NULL,
+  `issK_value` varchar(10000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `issk`
+--
+
+INSERT INTO `issk` (`issK_id`, `issK_value`) VALUES
+(1, 'Module-AMSP-Offline'),
+(2, 'Module-AppPerformance-AMSP'),
+(3, 'Module-AppPerformance-AC'),
+(4, 'Module-AppPerformance-DSAM'),
+(5, 'Module-CPUPerformance-AMSP'),
+(6, 'Module-CPUPerformance-DSAM'),
+(7, 'Module-RAMPerformance-DSAM'),
+(8, 'Module-Functionality-IPS'),
+(9, 'Module-Functionality-DSAM'),
+(10, 'Module-Functionality-BM'),
+(11, 'Module-Functionality-Agentless'),
+(12, 'Module-Functionality-FW'),
+(13, 'Module-Functionality-AppControl'),
+(14, 'Module-Functionality-AMSP'),
+(15, 'Module-Functionality-NetworkEngine'),
+(16, 'Module-Functionality-LI'),
+(17, 'Module-Functionality-WR'),
+(18, 'Module-Functionality-AC'),
+(19, 'Module-IPS-RuleUpdate'),
+(20, 'Module-IM-RuleUpdate'),
+(21, 'Module-LI-RuleUpdate'),
+(22, 'Module-AM-SecurityUpdate'),
+(23, 'Module-Functionality-Agentless'),
+(24, 'Module-Crash-DSAM'),
+(25, 'Module-Crash-AMSP'),
+(26, 'Module-Crash-NetworkEngine'),
+(27, 'Module-Deployment-Failure'),
+(28, 'DSM-Deployment-Upgrade'),
+(29, 'DSM-Performance-RAM'),
+(30, 'DSM-Functionality-DuplicateAgents'),
+(31, 'DSM-Functionality-Console'),
+(32, 'DSM-Functionality-Reports'),
+(33, 'DSM-Functionality-DB'),
+(34, 'DSM-Functionality-SIEM'),
+(35, 'DSM-Functionality-Updates'),
+(36, 'DSM-Functionality-SecurityEvent'),
+(37, 'DSM-Performance-DB'),
+(38, 'DSM-Functionality-EBT'),
+(39, 'DSM-Functionality-Integration'),
+(40, 'DSM-Administration-Users'),
+(41, 'Agent-Deployment-Upgrade'),
+(42, 'Agent-Deployment-Install'),
+(43, 'Agent-Functionality-General'),
+(44, 'Agent-Functionality-SmartProtection'),
+(45, 'Agent-Functionality-Activation'),
+(46, 'Agent-Functionality-Heartbeat'),
+(47, 'Agent-Functionality-Question'),
+(48, 'Agent-Compatiblity-KernelSupport'),
+(49, 'DSM-Connector-AWS'),
+(50, 'DSM-Connector-VMware'),
+(51, 'DSM-Connector-Azure'),
+(52, 'DSM-Connector-GCP'),
+(53, 'Supportability-Troubleshooting-IssueIsolation'),
+(54, 'API-Functionality-Python'),
+(55, 'Account-Administration-BSP'),
+(56, 'Account-Administration-License'),
+(57, 'DSM-Administration-License'),
+(58, 'DSM-Administration-Users'),
+(59, 'Module-Functionality-IM');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `opstag`
+--
+
+CREATE TABLE `opstag` (
+  `ops_id` int(100) NOT NULL,
+  `ops_val` varchar(1000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `opstag`
+--
+
+INSERT INTO `opstag` (`ops_id`, `ops_val`) VALUES
+(1, 'DSaaS-Ops-RST-PSWD'),
+(2, 'DSaaS-Ops-RST-MFA'),
+(3, 'DSaaS-Ops-UNSU-ACCNT'),
+(4, 'DSaaS-Ops-DEL-ACCNT'),
+(5, 'DSaaS-Ops-KSP-REQ'),
+(6, 'DSaaS-Ops-TEN-DBG'),
+(7, 'DSaaS-Ops-RCA-REQ'),
+(8, 'DSaaS-Ops-PP-REQ');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `os`
 --
 
@@ -376,7 +479,9 @@ INSERT INTO `os` (`os_id`, `os_value`) VALUES
 (58, 'Debian 7'),
 (59, 'Debian 8'),
 (60, 'Debian 9'),
-(61, 'Debian 10');
+(61, 'Debian 10'),
+(62, 'Windows 7'),
+(63, 'Windows Server 2000');
 
 -- --------------------------------------------------------
 
@@ -394,7 +499,7 @@ CREATE TABLE `passwordct` (
 --
 
 INSERT INTO `passwordct` (`password_id`, `password`) VALUES
-(1, 'P@$$w0rd!');
+(1, 'P0$tm@n0y');
 
 -- --------------------------------------------------------
 
@@ -424,7 +529,9 @@ INSERT INTO `prbm` (`prbm_id`, `prbm_value`) VALUES
 (10, 'Agent Core'),
 (11, 'Package'),
 (12, 'DSM'),
-(13, 'Database');
+(13, 'Database'),
+(19, 'Support Center'),
+(20, 'WRS');
 
 -- --------------------------------------------------------
 
@@ -562,7 +669,12 @@ INSERT INTO `sc` (`sc_id`, `sc_value`, `sc_ic_value`) VALUES
 (200, 'Application Crash - DSA', 'Crash'),
 (201, 'ds_am', 'Crash'),
 (202, 'Policy', 'Configuration'),
-(203, 'MFA', 'Integration');
+(203, 'MFA', 'Integration'),
+(204, 'MySupport Portal Access', 'Account Administration'),
+(205, 'EDR/MDR/XDR', 'Integration'),
+(206, 'Module Installation Failed', 'Deployment'),
+(207, 'DSM On Cloud Upgrade', 'Deployment'),
+(208, 'Security Updates', 'Configuration');
 
 -- --------------------------------------------------------
 
@@ -614,6 +726,18 @@ ALTER TABLE `ic`
   ADD PRIMARY KEY (`ic_id`);
 
 --
+-- Indexes for table `issk`
+--
+ALTER TABLE `issk`
+  ADD PRIMARY KEY (`issK_id`);
+
+--
+-- Indexes for table `opstag`
+--
+ALTER TABLE `opstag`
+  ADD PRIMARY KEY (`ops_id`);
+
+--
 -- Indexes for table `os`
 --
 ALTER TABLE `os`
@@ -657,7 +781,7 @@ ALTER TABLE `dsa`
 -- AUTO_INCREMENT for table `dsc`
 --
 ALTER TABLE `dsc`
-  MODIFY `dsc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `dsc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `dsm`
@@ -672,22 +796,34 @@ ALTER TABLE `ic`
   MODIFY `ic_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `issk`
+--
+ALTER TABLE `issk`
+  MODIFY `issK_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+
+--
+-- AUTO_INCREMENT for table `opstag`
+--
+ALTER TABLE `opstag`
+  MODIFY `ops_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `os`
 --
 ALTER TABLE `os`
-  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `prbm`
 --
 ALTER TABLE `prbm`
-  MODIFY `prbm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `prbm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `sc`
 --
 ALTER TABLE `sc`
-  MODIFY `sc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=204;
+  MODIFY `sc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
 
 --
 -- AUTO_INCREMENT for table `seg`

@@ -150,7 +150,7 @@ if ($opt == "seg"){
 
 if ($opt == "issk"){
 
-	//Reset autoincrement for dsc table
+	//Reset autoincrement for issK table
 	$issKq = "SELECT MAX(issK_id) AS min FROM issK";
 	$issKq2 = mysqli_query($con, $issKq);
 	$issKq3 = mysqli_fetch_array($issKq2);
@@ -162,6 +162,23 @@ if ($opt == "issk"){
 	for ($i = 0; $i < count($str); $i++){
 	$postissK = "INSERT INTO issk (issK_id, issK_value) VALUES (NULL, '$str[$i]')";
 	mysqli_query($con, $postissK);
+	}
+}
+
+if ($opt == "ops"){
+
+	//Reset autoincrement for opstag table
+	$opsq = "SELECT MAX(ops_id) AS min FROM opstag";
+	$opsq2 = mysqli_query($con, $opsq);
+	$opsq3 = mysqli_fetch_array($opsq2);
+	$opsq4 = $opsq3['min'];
+	$opsq4++;
+	$alterops ="ALTER TABLE opstag AUTO_INCREMENT = $opsq4";
+	mysqli_query($con, $alterops);
+
+	for ($i = 0; $i < count($str); $i++){
+	$postops = "INSERT INTO opstag (ops_id, ops_val) VALUES (NULL, '$str[$i]')";
+	mysqli_query($con, $postops);
 	}
 }
 

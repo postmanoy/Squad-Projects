@@ -460,7 +460,7 @@
                   <div class="col-sm-3 text-center"><img class="img-fluid tool" src="repository.png" height="200" width="200" onclick="alert('docker pull phdsaasdevops/cicd')">
                     <h2 class="modal-title font-weight-light text-center">Public Repository</h2><br>
                   </div>
-                  <div class="col-sm-3 text-center"><img class="img-fluid tool" src="github.png" height="200" width="200" onclick="javascript:window.open('https://github.com/phdsaasdevops/cicd.git', '_blank')">
+                  <div class="col-sm-3 text-center"><img class="img-fluid tool" src="github.png" height="200" width="200" onclick="javascript:window.open('https://github.com/phdsaasdevops/', '_blank')">
                     <h2 class="modal-title font-weight-light text-center">GitHub</h2><br>
                   </div>  
                   <div class="col-sm-3 text-center"><img class="img-fluid tool" src="slack.png" height="200" width="200" onclick="javascript:window.open('https://phdsaassupport.slack.com', '_blank')">
