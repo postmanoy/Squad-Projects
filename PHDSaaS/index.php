@@ -12,8 +12,25 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <meta http-Equiv="Cache-Control" Content="no-cache">
+  <meta http-Equiv="Pragma" Content="no-cache">
+  <meta http-Equiv="Expires" Content="0">
+  <!--MyLiveChat-->
+ <!-- <script type="text/javascript">
+    function add_chatinline(){
+      var hccid=54209281;var nt=document.createElement("script");
+      nt.async=true;
+      nt.src="https://mylivechat.com/chatinline.aspx?hccid="+hccid;
+      var ct=document.getElementsByTagName("script")[0];
+      ct.parentNode.insertBefore(nt,ct);
+    }
+      add_chatinline(); 
+    </script> -->
+  <!--MyLiveChat-->
+
   <script>
       $(document).ready(function(){
+        $("#closeChat").hide();
         // Add scrollspy to <body>
         $('body').scrollspy({target: ".navbar", offset: 50});   
       
@@ -44,11 +61,27 @@
   if (document.location.search.match(/type=embed/gi)) {
     window.parent.postMessage("resize", "*");
   }
+  function adjustPopover(popover, iframe) {
+    var height = iframe.contentWindow.document.body.scrollHeight + 'px',
+        popoverContent = $(popover).next('.popover-content');
+    iframe.style.height = height;
+    popoverContent.css('height', height);
+}
   $(document).ready(function()
       { 
              $(document).bind("contextmenu",function(e){
                     return false;
              });
+             $('#openChatB').on('click',function(e) {
+                $('#openChatB').hide();
+             });
+
+             $('.closeChat').on('click',function(e) {
+              $('#openChatB').show();
+              
+             });
+
+        $("#bodyPage").html("<object data='https://jarvis.trendmicro.com/' width='100%' style = 'height:80vh;' />");
       });
   </script>
   <style>
@@ -95,10 +128,28 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+/* Overlay Button for Chat */
+
+#mybutton {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 2;
+}
+
+
+/* Overlay Button for Chat */
   </style>
 </head>
 
 <body>
+
+<!-- Overlay Button for Chat -->
+<div id="mybutton">
+<button class="btn btn-danger btn-lg" data-toggle="modal" id = "openChatB" data-target="#openChat" style ="border-radius: 30px;"><img src="img\chaticon.png" height="30" width="30"> Chat Now </button>
+</div>
+<!-- Overlay Button for Chat -->
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow fixed-top">
@@ -427,7 +478,30 @@
   </div>
 </div>
 
+
 <!--end of PWETT Modal-->
+
+<!-- Chat Modal -->
+<div class="modal fade modal-chat" id="openChat" data-backdrop = "false">
+  <div class="modal-dialog" style = "width:100%;max-width:90%;">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header" style="background-color: grey; color: white">
+        <h4 class="modal-title font-weight-bolder">Jarvis Chat</h2>
+        <button type="button" class="close closeChat"data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body" id = "bodyPage">
+              <!--<iframe src = "https://jarvis.trendmicro.com/" height="600" width="100%"></iframe>-->
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End of Chat Modal -->
 
 <!--Devops Modal-->
 
