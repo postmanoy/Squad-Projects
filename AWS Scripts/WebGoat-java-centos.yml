@@ -42,7 +42,7 @@ Resources:
           java -version
           cd /home/centos
           sudo mkdir WebGoat
-          wget -P /home/centos/ https://github.com/WebGoat/WebGoat/releases/download/v8.0.0.M26/webgoat-server-8.0.0.M26.jar
+          wget -P /home/centos/ https://github.com/WebGoat/WebGoat/releases/download/v8.0.0.M25/webgoat-server-8.0.0.M25.jar
           web_name="$(ls /home/centos | grep webgoat-server)"
           sudo cp /home/centos/$web_name /home/centos/WebGoat/webgoat-server.jar
           wget -P /home/centos/ ${JavaAgent}

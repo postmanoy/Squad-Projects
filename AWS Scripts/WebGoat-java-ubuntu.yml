@@ -56,7 +56,7 @@ Resources:
           java -version
           cd /home/ubuntu
           sudo mkdir WebGoat
-          wget -P /home/ubuntu/ https://github.com/WebGoat/WebGoat/releases/download/v8.0.0.M26/webgoat-server-8.0.0.M26.jar
+          wget -P /home/ubuntu/ https://github.com/WebGoat/WebGoat/releases/download/v8.0.0.M25/webgoat-server-8.0.0.M25.jar
           web_name="$(ls /home/ubuntu | grep webgoat-server)"
           sudo cp /home/ubuntu/$web_name /home/ubuntu/WebGoat/webgoat-server.jar
           wget -P /home/ubuntu/ ${JavaAgent}
@@ -68,4 +68,4 @@ Resources:
           secret = ${SecretKey}
           debugMode = true
           EOF
-          java -Dcom.trend.app_protect.config.file=trend_app_protect.properties -javaagent:/home/ubuntu/WebGoat/trend_app_protect.jar -jar webgoat-server.jar --server.address=0.0.0.0
+          java -Dcom.trend_app_protect.config.file=trend_app_protect.properties -javaagent:/home/ubuntu/WebGoat/trend_app_protect.jar -jar webgoat-server.jar --server.address=0.0.0.0
