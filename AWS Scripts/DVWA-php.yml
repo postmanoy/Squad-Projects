@@ -1,0 +1,256 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "clarkp Test Instance"
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+  AccessKey:
+    Description: Group access key of C1-AS
+    Type: String
+    Default: 1f2f8e66-28cf-4854-9670-c0d2a86e238b
+  SecretKey:
+    Description: Group secret key of C1-AS
+    Type: String
+    Default: 46c2ef80-8626-4cfe-91f8-84fbb1971d47
+  CaptchaPublicKey:
+    Description: Captcha Public Key for DVWA authentication
+    Type: String
+    Default: 6Le8ab8UAAAAAL4tM3H0vU_ne0jR9nw8EAdmQR7-
+  CaptchaPrivateKey:
+    Description: Captcha Private Key for DVWA authentication
+    Type: String
+    Default: 6Le8ab8UAAAAALyWS3tPEpXrsYQ-53AVIoJb3HZS
+
+Resources: 
+  C1ASPipelinePHP70:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: DVWAphp7p0_GNU-C1AS-Pipeline
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt update
+          sudo snap install amazon-ssm-agent --classic
+          sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo systemctl status snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo apt -y install software-properties-common
+          sudo add-apt-repository ppa:ondrej/php
+          sudo apt -y install apache2 mariadb-server php7.0 php7.0-mysql php7.0-gd
+          sudo phpenmod pdo_mysql
+          cd /var/www/html
+          git clone https://github.com/ethicalhack3r/DVWA.git
+          sudo sed -i 's/allow_url_include = Off/allow_url_include = On/g' /etc/php/7.0/apache2/php.ini
+          sudo sed -i 's/;extension=pdo_mysql/extension=pdo_mysql/g' /etc/php/7.0/apache2/php.ini
+          sudo service apache2 restart
+          cd DVWA/
+          sudo cp config/config.inc.php.dist config/config.inc.php
+          mysql <<EOF
+          CREATE DATABASE dvwa;
+          USE dvwa;
+          CREATE USER 'dvwa'@'%' IDENTIFIED BY 'p@ssw0rd';
+          grant all on dvwa.* to 'dvwa'@'%' identified by 'p@ssw0rd';
+          flush privileges;
+          EOF
+          sudo sed -i 's/root/dvwa/g' config/config.inc.php
+          sudo chgrp www-data hackable/uploads
+          sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+          sudo chgrp www-data /var/www/html/DVWA/config
+          sudo chmod g+w hackable/uploads
+          sudo chmod g+w /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+          sudo chmod g+w /var/www/html/DVWA/config
+          sudo service apache2 stop
+          wget -P /home/ubuntu/ https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0/trend_app_protect-x86_64-Linux-gnu-4.1.5-20151012.so
+          file_name="$(ls /home/ubuntu | grep trend_app_protect-x)"
+          sudo mv /home/ubuntu/$file_name /home/ubuntu/trend_app_protect.so
+          sudo mv /home/ubuntu/trend_app_protect.so "$(php -r 'echo ini_get("extension_dir");')"/trend_app_protect.so
+          sudo sed -i "944 a ;" /etc/php/7.0/apache2/php.ini
+          sudo sed -i "945 a ; Enable the extension" /etc/php/7.0/apache2/php.ini
+          sudo sed -i "946 a extension=trend_app_protect.so" /etc/php/7.0/apache2/php.ini
+          sudo sed -i "947 a ;" /etc/php/7.0/apache2/php.ini
+          sudo sed -i "948 a ; Add key and secret from the Application Protection dashboard" /etc/php/7.0/apache2/php.ini
+          sudo sed -i "949 a trend_app_protect.key = ${AccessKey}" /etc/php/7.0/apache2/php.ini
+          sudo sed -i "950 a trend_app_protect.secret = ${SecretKey}" /etc/php/7.0/apache2/php.ini
+          sudo service apache2 start
+  
+  C1ASPipelinePHP71:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: DVWAphp7p1_GNU-C1AS-Pipeline
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt update
+          sudo snap install amazon-ssm-agent --classic
+          sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo systemctl status snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo apt -y install software-properties-common
+          sudo add-apt-repository ppa:ondrej/php
+          sudo apt -y install apache2 mariadb-server php7.1 php7.1-mysql php7.1-gd
+          sudo phpenmod pdo_mysql
+          cd /var/www/html
+          git clone https://github.com/ethicalhack3r/DVWA.git
+          sudo sed -i 's/allow_url_include = Off/allow_url_include = On/g' /etc/php/7.1/apache2/php.ini
+          sudo sed -i 's/;extension=pdo_mysql/extension=pdo_mysql/g' /etc/php/7.1/apache2/php.ini
+          sudo service apache2 restart
+          cd DVWA/
+          sudo cp config/config.inc.php.dist config/config.inc.php
+          mysql <<EOF
+          CREATE DATABASE dvwa;
+          USE dvwa;
+          CREATE USER 'dvwa'@'%' IDENTIFIED BY 'p@ssw0rd';
+          grant all on dvwa.* to 'dvwa'@'%' identified by 'p@ssw0rd';
+          flush privileges;
+          EOF
+          sudo sed -i 's/root/dvwa/g' config/config.inc.php
+          sudo chgrp www-data hackable/uploads
+          sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+          sudo chgrp www-data /var/www/html/DVWA/config
+          sudo chmod g+w hackable/uploads
+          sudo chmod g+w /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+          sudo chmod g+w /var/www/html/DVWA/config
+          sudo service apache2 stop
+          wget -P /home/ubuntu/ https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0/trend_app_protect-x86_64-Linux-gnu-4.1.5-20160303.so
+          file_name="$(ls /home/ubuntu | grep trend_app_protect-x)"
+          sudo mv /home/ubuntu/$file_name /home/ubuntu/trend_app_protect.so
+          sudo mv /home/ubuntu/trend_app_protect.so "$(php -r 'echo ini_get("extension_dir");')"/trend_app_protect.so
+          sudo sed -i "944 a ;" /etc/php/7.1/apache2/php.ini
+          sudo sed -i "945 a ; Enable the extension" /etc/php/7.1/apache2/php.ini
+          sudo sed -i "946 a extension=trend_app_protect.so" /etc/php/7.1/apache2/php.ini
+          sudo sed -i "947 a ;" /etc/php/7.1/apache2/php.ini
+          sudo sed -i "948 a ; Add key and secret from the Application Protection dashboard" /etc/php/7.1/apache2/php.ini
+          sudo sed -i "949 a trend_app_protect.key = ${AccessKey}" /etc/php/7.1/apache2/php.ini
+          sudo sed -i "950 a trend_app_protect.secret = ${SecretKey}" /etc/php/7.1/apache2/php.ini
+          sudo service apache2 start
+
+  C1ASPipelinePHP72:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: DVWAphp7p2_GNU-C1AS-Pipeline
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt update
+          sudo snap install amazon-ssm-agent --classic
+          sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo systemctl status snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo apt -y install software-properties-common
+          sudo add-apt-repository ppa:ondrej/php
+          sudo apt -y install apache2 mariadb-server php7.2 php7.2-mysql php7.2-gd
+          sudo phpenmod pdo_mysql
+          cd /var/www/html
+          git clone https://github.com/ethicalhack3r/DVWA.git
+          sudo sed -i 's/allow_url_include = Off/allow_url_include = On/g' /etc/php/7.2/apache2/php.ini
+          sudo sed -i 's/;extension=pdo_mysql/extension=pdo_mysql/g' /etc/php/7.2/apache2/php.ini
+          sudo service apache2 restart
+          cd DVWA/
+          sudo cp config/config.inc.php.dist config/config.inc.php
+          mysql <<EOF
+          CREATE DATABASE dvwa;
+          USE dvwa;
+          CREATE USER 'dvwa'@'%' IDENTIFIED BY 'p@ssw0rd';
+          grant all on dvwa.* to 'dvwa'@'%' identified by 'p@ssw0rd';
+          flush privileges;
+          EOF
+          sudo sed -i 's/root/dvwa/g' config/config.inc.php
+          sudo chgrp www-data hackable/uploads
+          sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+          sudo chgrp www-data /var/www/html/DVWA/config
+          sudo chmod g+w hackable/uploads
+          sudo chmod g+w /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+          sudo chmod g+w /var/www/html/DVWA/config
+          sudo service apache2 stop
+          wget -P /home/ubuntu/ https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0/trend_app_protect-x86_64-Linux-gnu-4.1.5-20170718.so
+          file_name="$(ls /home/ubuntu | grep trend_app_protect-x)"
+          sudo mv /home/ubuntu/$file_name /home/ubuntu/trend_app_protect.so
+          sudo mv /home/ubuntu/trend_app_protect.so "$(php -r 'echo ini_get("extension_dir");')"/trend_app_protect.so
+          sudo sed -i "944 a ;" /etc/php/7.2/apache2/php.ini
+          sudo sed -i "945 a ; Enable the extension" /etc/php/7.2/apache2/php.ini
+          sudo sed -i "946 a extension=trend_app_protect.so" /etc/php/7.2/apache2/php.ini
+          sudo sed -i "947 a ;" /etc/php/7.2/apache2/php.ini
+          sudo sed -i "948 a ; Add key and secret from the Application Protection dashboard" /etc/php/7.2/apache2/php.ini
+          sudo sed -i "949 a trend_app_protect.key = ${AccessKey}" /etc/php/7.2/apache2/php.ini
+          sudo sed -i "950 a trend_app_protect.secret = ${SecretKey}" /etc/php/7.2/apache2/php.ini
+          sudo service apache2 start
+  
+  C1ASPipelinePHP73:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: DVWAphp7p3_GNU-C1AS-Pipeline
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt update
+          sudo snap install amazon-ssm-agent --classic
+          sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo systemctl status snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo apt -y install software-properties-common
+          sudo add-apt-repository ppa:ondrej/php
+          sudo apt -y install apache2 mariadb-server php7.3 php7.3-mysql php7.3-gd
+          sudo phpenmod pdo_mysql
+          cd /var/www/html
+          git clone https://github.com/ethicalhack3r/DVWA.git
+          sudo sed -i 's/allow_url_include = Off/allow_url_include = On/g' /etc/php/7.3/apache2/php.ini
+          sudo sed -i 's/;extension=pdo_mysql/extension=pdo_mysql/g' /etc/php/7.3/apache2/php.ini
+          sudo service apache2 restart
+          cd DVWA/
+          sudo cp config/config.inc.php.dist config/config.inc.php
+          mysql <<EOF
+          CREATE DATABASE dvwa;
+          USE dvwa;
+          CREATE USER 'dvwa'@'%' IDENTIFIED BY 'p@ssw0rd';
+          grant all on dvwa.* to 'dvwa'@'%' identified by 'p@ssw0rd';
+          flush privileges;
+          EOF
+          sudo sed -i 's/root/dvwa/g' config/config.inc.php
+          sudo chgrp www-data hackable/uploads
+          sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+          sudo chgrp www-data /var/www/html/DVWA/config
+          sudo chmod g+w hackable/uploads
+          sudo chmod g+w /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+          sudo chmod g+w /var/www/html/DVWA/config
+          sudo service apache2 stop
+          wget -P /home/ubuntu/ https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0/trend_app_protect-x86_64-Linux-gnu-4.1.5-20180731.so
+          file_name="$(ls /home/ubuntu | grep trend_app_protect-x)"
+          sudo mv /home/ubuntu/$file_name /home/ubuntu/trend_app_protect.so
+          sudo mv /home/ubuntu/trend_app_protect.so "$(php -r 'echo ini_get("extension_dir");')"/trend_app_protect.so
+          sudo sed -i "944 a ;" /etc/php/7.3/apache2/php.ini
+          sudo sed -i "945 a ; Enable the extension" /etc/php/7.3/apache2/php.ini
+          sudo sed -i "946 a extension=trend_app_protect.so" /etc/php/7.3/apache2/php.ini
+          sudo sed -i "947 a ;" /etc/php/7.3/apache2/php.ini
+          sudo sed -i "948 a ; Add key and secret from the Application Protection dashboard" /etc/php/7.3/apache2/php.ini
+          sudo sed -i "949 a trend_app_protect.key = ${AccessKey}" /etc/php/7.3/apache2/php.ini
+          sudo sed -i "950 a trend_app_protect.secret = ${SecretKey}" /etc/php/7.3/apache2/php.ini
+          sudo service apache2 start
