@@ -54,4 +54,4 @@ Resources:
           secret = ${SecretKey}
           debugMode = true
           EOF
-          java -Dio.immun.config.file=trend_app_protect.properties -javaagent:/home/centos/WebGoat/trend_app_protect.jar -jar webgoat-server.jar --server.address=0.0.0.0
+          java -Dcom.trend.app_protect.config.file=trend_app_protect.properties -javaagent:/home/centos/WebGoat/trend_app_protect.jar -jar webgoat-server.jar --server.address=0.0.0.0
