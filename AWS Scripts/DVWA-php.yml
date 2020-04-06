@@ -61,6 +61,10 @@ Resources:
           flush privileges;
           EOF
           sudo sed -i 's/root/dvwa/g' config/config.inc.php
+          sudo sed -i '29d' config/config.inc.php
+          sudo sed -i "28 a \$_DVWA[ 'recaptcha_public_key' ] = '${CaptchaPublicKey}';" config/config.inc.php
+          sudo sed -i '30d' config/config.inc.php
+          sudo sed -i "29 a \$_DVWA[ 'recaptcha_private_key' ] = '${CaptchaPrivateKey}';" /var/www/html/DVWA/config/config.inc.php
           sudo chgrp www-data hackable/uploads
           sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
           sudo chgrp www-data /var/www/html/DVWA/config
@@ -119,6 +123,10 @@ Resources:
           flush privileges;
           EOF
           sudo sed -i 's/root/dvwa/g' config/config.inc.php
+          sudo sed -i '29d' config/config.inc.php
+          sudo sed -i "28 a \$_DVWA[ 'recaptcha_public_key' ] = '${CaptchaPublicKey}';" config/config.inc.php
+          sudo sed -i '30d' config/config.inc.php
+          sudo sed -i "29 a \$_DVWA[ 'recaptcha_private_key' ] = '${CaptchaPrivateKey}';" /var/www/html/DVWA/config/config.inc.php
           sudo chgrp www-data hackable/uploads
           sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
           sudo chgrp www-data /var/www/html/DVWA/config
@@ -177,6 +185,10 @@ Resources:
           flush privileges;
           EOF
           sudo sed -i 's/root/dvwa/g' config/config.inc.php
+          sudo sed -i '29d' config/config.inc.php
+          sudo sed -i "28 a \$_DVWA[ 'recaptcha_public_key' ] = '${CaptchaPublicKey}';" config/config.inc.php
+          sudo sed -i '30d' config/config.inc.php
+          sudo sed -i "29 a \$_DVWA[ 'recaptcha_private_key' ] = '${CaptchaPrivateKey}';" /var/www/html/DVWA/config/config.inc.php
           sudo chgrp www-data hackable/uploads
           sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
           sudo chgrp www-data /var/www/html/DVWA/config
@@ -235,6 +247,10 @@ Resources:
           flush privileges;
           EOF
           sudo sed -i 's/root/dvwa/g' config/config.inc.php
+          sudo sed -i '29d' config/config.inc.php
+          sudo sed -i "28 a \$_DVWA[ 'recaptcha_public_key' ] = '${CaptchaPublicKey}';" config/config.inc.php
+          sudo sed -i '30d' config/config.inc.php
+          sudo sed -i "29 a \$_DVWA[ 'recaptcha_private_key' ] = '${CaptchaPrivateKey}';" /var/www/html/DVWA/config/config.inc.php
           sudo chgrp www-data hackable/uploads
           sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
           sudo chgrp www-data /var/www/html/DVWA/config
