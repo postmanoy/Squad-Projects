@@ -38,7 +38,7 @@ Resources:
           yum install wget unzip -y
           wget -P /home/ec2-user/ ${DSManager}
           cd /home/ec2-user
-          TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 30000"`
+          TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
           PublicHostname=`curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-hostname`
           cat <<EOF>installdsm.properties
           AddressAndPortsScreen.ManagerAddress=$PublicHostname
@@ -76,6 +76,10 @@ Resources:
           RelayScreen.Install=True
           SmartProtectionNetworkScreen.EnableFeedback=False
           EOF
+          dsm_name="$(ls /home/ec2-user | grep Manager-Linux)"
+          chmod +x $dsm_name
+          sh $dsm_name -q -console -t -Dinstall4j.language=en_US -varfile installdsm.properties
+          sh $dsm_name -q -console -Dinstall4j.language=en_US -varfile installdsm.properties
           systemctl stop dsm_s
           /opt/dsm/dsm_c -action changesetting -name settings.configuration.webserviceAPIEnabled -value true
           /opt/dsm/dsm_c -action changesetting -name settings.configuration.statusMonitoringAPIEnabled -value true
@@ -85,8 +89,4 @@ Resources:
           /opt/dsm/dsm_c -action changesetting -name settings.configuration.allowReactivateClonedVM -value true
           /opt/dsm/dsm_c -action changesetting -name settings.configuration.allowReactivateUnknownVM -value true
           systemctl start dsm_s
-          dsm_name="$(ls /home/ec2-user | grep Manager-Linux)"
-          chmod +x $dsm_name
-          sh $dsm_name -q -console -t -Dinstall4j.language=en_US -varfile installdsm.properties
-          sh $dsm_name -q -console -Dinstall4j.language=en_US -varfile installdsm.properties
 
