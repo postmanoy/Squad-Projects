@@ -8,11 +8,11 @@ Parameters:
   AccessKey:
     Description: Group access key of C1-AS
     Type: String
-    Default: 1f2f8e66-28cf-4854-9670-c0d2a86e238b
+    Default: d2baeea9-9d70-4552-b527-9e300738e9fe
   SecretKey:
     Description: Group secret key of C1-AS
     Type: String
-    Default: 46c2ef80-8626-4cfe-91f8-84fbb1971d47
+    Default: 90039018-7866-4c96-8a60-6000a5f9ec58
   CaptchaPublicKey:
     Description: Captcha Public Key for DVWA authentication
     Type: String
