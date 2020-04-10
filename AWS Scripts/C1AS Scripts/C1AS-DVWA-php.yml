@@ -79,7 +79,7 @@ Resources:
           fclose($myfile2);
           echo "<br><br>";
           ?>
-          <button onclick="javascript:window.open('testor2.php', '_blank')"> Click Me! </button>
+          <button onclick="javascript:window.open('./testor2.php', '_blank')"> Click Me! </button>
           <?php
           echo "</html></body>";
           ?>
@@ -161,7 +161,7 @@ Resources:
           fclose($myfile2);
           echo "<br><br>";
           ?>
-          <button onclick="javascript:window.open('testor2.php', '_blank')"> Click Me! </button>
+          <button onclick="javascript:window.open('./testor2.php', '_blank')"> Click Me! </button>
           <?php
           echo "</html></body>";
           ?>
@@ -243,7 +243,7 @@ Resources:
           fclose($myfile2);
           echo "<br><br>";
           ?>
-          <button onclick="javascript:window.open('testor2.php', '_blank')"> Click Me! </button>
+          <button onclick="javascript:window.open('./testor2.php', '_blank')"> Click Me! </button>
           <?php
           echo "</html></body>";
           ?>
@@ -325,7 +325,7 @@ Resources:
           fclose($myfile2);
           echo "<br><br>";
           ?>
-          <button onclick="javascript:window.open('testor2.php', '_blank')"> Click Me! </button>
+          <button onclick="javascript:window.open('./testor2.php', '_blank')"> Click Me! </button>
           <?php
           echo "</html></body>";
           ?>
