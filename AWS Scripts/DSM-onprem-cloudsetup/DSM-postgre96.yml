@@ -7,12 +7,17 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
 
 Resources: 
-  C1ASPipeline:
+  PostgreSQL-DSM:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0f2b4fc905b0bd1f1
       InstanceType: t2.large
       KeyName: !Ref KeyName
+      PrivateIpAddress: String
+      BlockDeviceMappings:
+        Ebs:
+          DeleteOnTermination: true
+          VolumeSize: 100
       SecurityGroupIds:
       - sg-0edbc623dc87e2892
       - sg-0f0b0eb448eeccce1

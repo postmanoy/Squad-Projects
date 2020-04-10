@@ -44,7 +44,7 @@ Resources:
           sudo systemctl status snap.amazon-ssm-agent.amazon-ssm-agent.service
           sudo apt -y install software-properties-common
           sudo add-apt-repository ppa:ondrej/php
-          sudo apt -y install apache2 mariadb-server php7.0 php7.0-mysql php7.0-gd
+          sudo apt -y install apache2 mysql-server php7.0 php7.0-mysql php7.0-gd
           sudo phpenmod pdo_mysql
           cd /var/www/html
           git clone https://github.com/ethicalhack3r/DVWA.git
@@ -65,6 +65,26 @@ Resources:
           sudo sed -i "28 a \$_DVWA[ 'recaptcha_public_key' ] = '${CaptchaPublicKey}';" config/config.inc.php
           sudo sed -i '30d' config/config.inc.php
           sudo sed -i "29 a \$_DVWA[ 'recaptcha_private_key' ] = '${CaptchaPrivateKey}';" /var/www/html/DVWA/config/config.inc.php
+          sudo sed -i '52d' /var/www/html/DVWA/vulnerabilities/xss_s/index.php
+          sudo sed -i '51 a <td><textarea name='mtxMessage' cols='50' rows='3'></textarea></td>' /var/www/html/DVWA/vulnerabilities/xss_s/index.php
+          sudo cat >/var/www/html/DVWA/testor.php <<'EOF'
+          <?php
+          $myfile = fopen("/etc/environment", "r") or die("Unable to open file!");
+          echo "<html><body>";
+          echo "<p>" . fread($myfile,filesize("/etc/environment")) . "</p>";
+          fclose($myfile);
+          $myfile2 = fopen("/etc/resolv.conf", "r") or die("Unable to open file!");
+          echo "<br><br>";
+          echo "<p>" . fread($myfile2,filesize("/etc/resolv.conf")) . "</p>";
+          fclose($myfile2);
+          echo "<br><br>";
+          ?>
+          <button onclick="javascript:window.open('testor2.php', '_blank')"> Click Me! </button>
+          <?php
+          echo "</html></body>";
+          ?>
+          EOF
+          sudo echo "<?php header('Location: http://www.example.com/'); ?>" >> /var/www/html/DVWA/testor2.php
           sudo chgrp www-data hackable/uploads
           sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
           sudo chgrp www-data /var/www/html/DVWA/config
