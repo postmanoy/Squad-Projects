@@ -20,7 +20,7 @@ Parameters:
   
 
 Resources: 
-  DSM-EC2Instance:
+  DSMEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0b49e0985beb75934
@@ -30,9 +30,10 @@ Resources:
       - sg-0edbc623dc87e2892
       - sg-0f0b0eb448eeccce1
       BlockDeviceMappings:
-        Ebs:
-          DeleteOnTermination: true
-          VolumeSize: 50
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 50
+            DeleteOnTermination: True
       Tags:
       - Key: Name
         Value: DSM-OnPrem-Cloud

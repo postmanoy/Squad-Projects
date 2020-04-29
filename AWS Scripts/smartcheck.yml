@@ -1,0 +1,272 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: dsaastraining-kp-ohio
+  AvailabilityZone:
+    Type: String
+    Default: us-east-2
+  NameInstance:
+    Type: String
+    Default: SC-test-instance
+
+Resources: 
+  ec2instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}-master
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          #install docker
+          apt-get update
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install -i /usr/local/aws -b /usr/bin
+          apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          apt-get update
+          apt-get install -y docker-ce
+          cat > /etc/docker/daemon.json <<EOF
+          {
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "100m"
+            },
+            "storage-driver": "overlay2"
+          }
+          EOF
+          systemctl enable docker.service
+          systemctl daemon-reload
+          systemctl restart docker.service
+          docker run hello-world
+          
+          
+          
+          #modify firewall
+          ufw allow 6443/tcp
+          ufw allow 2379-2380/tcp
+          ufw allow 10250/tcp
+          ufw allow 10251/tcp
+          ufw allow 10252/tcp
+          ufw allow 10255/tcp
+          echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+          
+          
+          
+          #install kubernetes
+          curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+          cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+          deb http://apt.kubernetes.io/ kubernetes-xenial main
+          EOF
+          apt-get update
+          apt-get install -y kubeadm kubelet kubernetes-cni
+          systemctl enable kubelet
+          swapoff -a
+          sed -i '/swap/d' /etc/
+          
+          
+          #initialize cluster
+          kubeadm init --pod-network-cidr=10.244.0.0/16
+          
+          
+          
+          #configure kubectl
+          mkdir -p $HOME/.kube
+          cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+          chown $(id -u):$(id -g) $HOME/.kube/config
+          echo 'success'
+          
+          
+          
+          #install Flannel Pod Network
+          kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+          
+          
+          
+          #install helm
+          curl -O https://get.helm.sh/helm-v3.0.1-linux-amd64.tar.gz
+          tar -zxvf helm-v3.0.1-linux-amd64.tar.gz
+          mv linux-amd64/helm /usr/bin/
+
+  ec2instance2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}-worker1
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          #install docker
+          apt-get update
+          apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          apt-get update
+          apt-get install -y docker-ce
+          cat > /etc/docker/daemon.json <<EOF
+          {
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "100m"
+            },
+            "storage-driver": "overlay2"
+          }
+          EOF
+          systemctl enable docker.service
+          systemctl daemon-reload
+          systemctl restart docker.service
+          docker run hello-world
+          
+          
+          
+          #modify firewall
+          ufw allow 6443/tcp
+          ufw allow 2379-2380/tcp
+          ufw allow 10250/tcp
+          ufw allow 10251/tcp
+          ufw allow 10252/tcp
+          ufw allow 10255/tcp
+          echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+          
+          
+          
+          #install kubernetes
+          curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+          cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+          deb http://apt.kubernetes.io/ kubernetes-xenial main
+          EOF
+          apt-get update
+          apt-get install -y kubeadm kubelet kubernetes-cni
+          systemctl enable kubelet
+          swapoff -a
+          sed -i '/swap/d' /etc/
+          echo 'Enter kubeadm join command'
+
+  ec2instance3:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.medium
+      SubnetId: subnet-beb8bbd6
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: !Sub ${NameInstance}-worker2
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          #install docker
+          apt-get update
+          apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          apt-get update
+          apt-get install -y docker-ce
+          cat > /etc/docker/daemon.json <<EOF
+          {
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "100m"
+            },
+            "storage-driver": "overlay2"
+          }
+          EOF
+          systemctl enable docker.service
+          systemctl daemon-reload
+          systemctl restart docker.service
+          docker run hello-world
+          
+          
+          
+          #modify firewall
+          ufw allow 6443/tcp
+          ufw allow 2379-2380/tcp
+          ufw allow 10250/tcp
+          ufw allow 10251/tcp
+          ufw allow 10252/tcp
+          ufw allow 10255/tcp
+          echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+          
+          
+          
+          #install kubernetes
+          curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+          cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+          deb http://apt.kubernetes.io/ kubernetes-xenial main
+          EOF
+          apt-get update
+          apt-get install -y kubeadm kubelet kubernetes-cni
+          systemctl enable kubelet
+          swapoff -a
+          sed -i '/swap/d' /etc/
+          echo 'Enter kubeadm join command'
+          
+
+  PostgreSQLSC:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.large
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: DSM-Postgresql-11
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt get install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm 
+          systemctl enable amazon-ssm-agent
+          systemctl start amazon-ssm-agent
+          cat <<EOF>/etc/apt/sources.list.d/pgdg.list
+          deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main
+          EOF
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          apt-get install -y postgresql-11
+          sudo sed -i "s/local   all             postgres                                     peer/local   all             postgres                                     trust/g" /etc/postgresql/11/main/pg_hba.conf
+          sudo sed -i "s/local   all             all                                     peer/local   all             all                                     trust/g" /etc/postgresql/11/main/pg_hba.conf
+          sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/11/main/postgresql.conf
+          sed -i "92 a host    all         all           172.31.0.0/16        trust" /etc/postgresql/11/main/pg_hba.conf
+          systemctl restart postgresql
+          psql -U postgres <<EOF
+          CREATE DATABASE scpgsql;
+          CREATE USER scpgsql with encrypted password 'N0virus1!';
+          ALTER USER scpgsql WITH SUPERUSER;
+          ALTER USER scpgsql WITH CREATEDB;
+          ALTER USER scpgsql WITH CREATEROLE;
+          ALTER USER scpgsql WITH REPLICATION;
+          ALTER USER scpgsql WITH BYPASSRLS;
+          EOF
+          exit
+          systemctl restart postgresql
+

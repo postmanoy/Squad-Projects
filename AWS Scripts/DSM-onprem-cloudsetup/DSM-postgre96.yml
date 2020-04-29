@@ -5,19 +5,28 @@ Parameters:
   KeyName:
     Description: Name of an existing EC2 key pair for EC2 instance Access.
     Type: AWS::EC2::KeyPair::KeyName
+  DBName:
+    Description: Name of the database.
+    Type: String
+  DBUsername:
+    Description: Database Username.
+    Type: String
+  DBPassword:
+    Description: Database Password.
+    Type: String
 
 Resources: 
-  PostgreSQL-DSM:
+  PostgreSQLDSM:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0f2b4fc905b0bd1f1
       InstanceType: t2.large
       KeyName: !Ref KeyName
-      PrivateIpAddress: String
       BlockDeviceMappings:
-        Ebs:
-          DeleteOnTermination: true
-          VolumeSize: 100
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 50
+            DeleteOnTermination: True
       SecurityGroupIds:
       - sg-0edbc623dc87e2892
       - sg-0f0b0eb448eeccce1
@@ -38,15 +47,15 @@ Resources:
           systemctl start postgresql-9.6
           sudo sed -i "s/local   all             all                                     peer/local   all             all                                     trust/g" /var/lib/pgsql/9.6/data/pg_hba.conf
           sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/9.6/data/postgresql.conf
-          sed -i "82 a host    dsm        all         172.31.0.0/16       trust" /var/lib/pgsql/9.6/data/pg_hba.conf
+          sed -i "82 a host    ${DBName}        all         0.0.0.0/0       trust" /var/lib/pgsql/9.6/data/pg_hba.conf
           systemctl restart postgresql-9.6
           psql -U postgres <<EOF
-          CREATE DATABASE dsm;
-          CREATE USER mydsm with encrypted password 'N0virus1!';
-          GRANT ALL PRIVILEGES ON DATABASE dsm to mydsm;
-          GRANT ALL ON DATABASE dsm to mydsm;
-          GRANT CONNECT ON DATABASE dsm to mydsm;
-          ALTER ROLE mydsm CREATEDB CREATEROLE;
+          CREATE DATABASE ${DBName};
+          CREATE USER ${DBUsername} with encrypted password '${DBPassword}';
+          GRANT ALL PRIVILEGES ON DATABASE ${DBName} to ${DBUsername};
+          GRANT ALL ON DATABASE ${DBName} to ${DBUsername};
+          GRANT CONNECT ON DATABASE ${DBName} to ${DBUsername};
+          ALTER ROLE ${DBUsername} CREATEDB CREATEROLE;
           EOF
           exit
           systemctl restart postgresql-9.6
