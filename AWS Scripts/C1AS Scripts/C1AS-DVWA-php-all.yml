@@ -1,0 +1,149 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "clarkp Test Instance"
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+  AccessKey:
+    Description: Group access key of C1-AS
+    Type: String
+    Default: d2baeea9-9d70-4552-b527-9e300738e9fe
+  SecretKey:
+    Description: Group secret key of C1-AS
+    Type: String
+    Default: 90039018-7866-4c96-8a60-6000a5f9ec58
+  CaptchaPublicKey:
+    Description: Captcha Public Key for DVWA authentication
+    Type: String
+    Default: 6Le8ab8UAAAAAL4tM3H0vU_ne0jR9nw8EAdmQR7-
+  CaptchaPrivateKey:
+    Description: Captcha Private Key for DVWA authentication
+    Type: String
+    Default: 6Le8ab8UAAAAALyWS3tPEpXrsYQ-53AVIoJb3HZS
+  PHPversion:
+    Description: Choose the PHP version of C1-AS agent to be used.
+    Type: String
+    AllowedValues:
+    - v70
+    - v71
+    - v72
+    - v73
+
+
+Mappings:
+  PHPVersions:
+    us-east-2:
+      v70: https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0/trend_app_protect-x86_64-Linux-gnu-4.1.5-20151012.so
+      v71: https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0/trend_app_protect-x86_64-Linux-gnu-4.1.5-20160303.so
+      v72: https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0/trend_app_protect-x86_64-Linux-gnu-4.1.5-20170718.so
+      v73: https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0/trend_app_protect-x86_64-Linux-gnu-4.1.5-20180731.so
+
+Conditions:
+  Ifv70:
+    Fn::Equals:
+      - !Ref PHPversion
+      - 'v70'
+  Ifv71:
+    Fn::Equals:
+      - !Ref PHPversion
+      - 'v71'
+  Ifv72:
+    Fn::Equals:
+      - !Ref PHPversion
+      - 'v72'
+  Ifv73:
+    Fn::Equals:
+      - !Ref PHPversion
+      - 'v73'
+
+Resources: 
+  C1ASPipeline:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: DVWAphp-C1AS-Pipeline
+      UserData:
+        Fn::Base64:
+          Fn::Sub:
+            - |
+              #!/bin/bash
+              sudo apt update
+              sudo snap install amazon-ssm-agent --classic
+              sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+              sudo systemctl status snap.amazon-ssm-agent.amazon-ssm-agent.service
+              sudo apt -y install software-properties-common
+              sudo add-apt-repository ppa:ondrej/php
+              sudo apt -y install apache2 mysql-server php${PHPv} php${PHPv}-mysql php${PHPv}-gd
+              sudo phpenmod pdo_mysql
+              cd /var/www/html
+              git clone https://github.com/ethicalhack3r/DVWA.git
+              sudo sed -i 's/allow_url_include = Off/allow_url_include = On/g' /etc/php/${PHPv}/apache2/php.ini
+              sudo sed -i 's/;extension=pdo_mysql/extension=pdo_mysql/g' /etc/php/${PHPv}/apache2/php.ini
+              sudo service apache2 restart
+              cd DVWA/
+              sudo cp config/config.inc.php.dist config/config.inc.php
+              mysql <<EOF
+              CREATE DATABASE dvwa;
+              USE dvwa;
+              CREATE USER 'dvwa'@'%' IDENTIFIED BY 'p@ssw0rd';
+              grant all on dvwa.* to 'dvwa'@'%' identified by 'p@ssw0rd';
+              flush privileges;
+              EOF
+              sudo sed -i 's/root/dvwa/g' config/config.inc.php
+              sudo sed -i '29d' config/config.inc.php
+              sudo sed -i "28 a \$_DVWA[ 'recaptcha_public_key' ] = '${CaptchaPublicKey}';" config/config.inc.php
+              sudo sed -i '30d' config/config.inc.php
+              sudo sed -i "29 a \$_DVWA[ 'recaptcha_private_key' ] = '${CaptchaPrivateKey}';" /var/www/html/DVWA/config/config.inc.php
+              sudo sed -i '52d' /var/www/html/DVWA/vulnerabilities/xss_s/index.php
+              sudo sed -i '51 a <td><textarea name='mtxMessage' cols='50' rows='3'></textarea></td>' /var/www/html/DVWA/vulnerabilities/xss_s/index.php
+              sudo cat >/var/www/html/DVWA/testor.php <<'EOF'
+              <?php
+              $myfile = fopen("/etc/environment", "r") or die("Unable to open file!");
+              echo "<html><body>";
+              echo "<p>" . fread($myfile,filesize("/etc/environment")) . "</p>";
+              fclose($myfile);
+              $myfile2 = fopen("/etc/resolv.conf", "r") or die("Unable to open file!");
+              echo "<br><br>";
+              echo "<p>" . fread($myfile2,filesize("/etc/resolv.conf")) . "</p>";
+              fclose($myfile2);
+              echo "<br><br>";
+              ?>
+              <button onclick="javascript:window.open('./testor2.php', '_blank')"> Click Me! </button>
+              <?php
+              echo "</html></body>";
+              ?>
+              EOF
+              sudo echo "<?php header('Location: http://www.example.com/'); ?>" >> /var/www/html/DVWA/testor2.php
+              sudo chgrp www-data hackable/uploads
+              sudo chgrp www-data /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+              sudo chgrp www-data /var/www/html/DVWA/config
+              sudo chmod g+w hackable/uploads
+              sudo chmod g+w /var/www/html/DVWA/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+              sudo chmod g+w /var/www/html/DVWA/config
+              sudo service apache2 stop
+              wget -P /home/ubuntu/ ${PHPAgent}
+              file_name="$(ls /home/ubuntu | grep trend_app_protect-x)"
+              sudo mv /home/ubuntu/$file_name /home/ubuntu/trend_app_protect.so
+              sudo mv /home/ubuntu/trend_app_protect.so "$(php -r 'echo ini_get("extension_dir");')"/trend_app_protect.so
+              sudo sed -i "944 a ;" /etc/php/${PHPv}/apache2/php.ini
+              sudo sed -i "945 a ; Enable the extension" /etc/php/${PHPv}/apache2/php.ini
+              sudo sed -i "946 a extension=trend_app_protect.so" /etc/php/${PHPv}/apache2/php.ini
+              sudo sed -i "947 a ;" /etc/php/${PHPv}/apache2/php.ini
+              sudo sed -i "948 a ; Add key and secret from the Application Protection dashboard" /etc/php/${PHPv}/apache2/php.ini
+              sudo sed -i "949 a trend_app_protect.key = ${AccessKey}" /etc/php/${PHPv}/apache2/php.ini
+              sudo sed -i "950 a trend_app_protect.secret = ${SecretKey}" /etc/php/${PHPv}/apache2/php.ini
+              sudo service apache2 start
+            - {
+              # This is where we keep the complex things we want inserted into the Fn::Sub literal block
+              # You can even use Fn::If statements in this section
+              PHPAgent:    !FindInMap [ PHPVersions,                !Ref "AWS::Region",         !Ref PHPversion ],
+              PHPv: !If [Ifv70, '7.0', !If [Ifv71, '7.1', !If [Ifv72, '7.2', !If [Ifv73, '7.3', '7.4']]]]   
+              }
