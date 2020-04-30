@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "clarkp Test Instance"
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+  AccessKey:
+    Description: Group access key of C1-AS
+    Type: String
+    Default: d2baeea9-9d70-4552-b527-9e300738e9fe
+  SecretKey:
+    Description: Group secret key of C1-AS
+    Type: String
+    Default: 90039018-7866-4c96-8a60-6000a5f9ec58
+
+Resources: 
+  C1ASPipeline:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: TaskManagerPy-C1AS-Pipeline
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt update
+          sudo snap install amazon-ssm-agent --classic
+          sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo systemctl status snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo apt-get -y install python3
+          sudo apt-get -y install python3-pip
+          pip3 install virtualenv
+          cd /home/ubuntu
+          virtualenv -p python3 COAS_test
+          source COAS_test/bin/activate
+          git clone https://github.com/nVisium/django.nV.git
+          cd django.nV/
+          sed -i "1 a trend_app_protect" requirements.txt
+          pip3 install -r requirements.txt
+          cd taskManager/
+          sed -i "10 a import trend_app_protect.start" wsgi.py
+          cd ..
+          cat <<EOF >trend_app_protect.ini
+          [trend_app_protect]
+          key = ${AccessKey}
+          secret = ${SecretKey}
+          EOF
+          sh reset_db.sh
+          sed -i '/runserver/ s/$/ 0.0.0.0:5000/' runapp.sh
+          sh runapp.sh

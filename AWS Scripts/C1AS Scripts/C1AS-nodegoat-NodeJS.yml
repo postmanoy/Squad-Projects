@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "clarkp Test Instance"
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+  AccessKey:
+    Description: Group access key of C1-AS
+    Type: String
+    Default: d2baeea9-9d70-4552-b527-9e300738e9fe
+  SecretKey:
+    Description: Group secret key of C1-AS
+    Type: String
+    Default: 90039018-7866-4c96-8a60-6000a5f9ec58
+
+Resources: 
+  C1ASPipeline:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: NodeGoatNodeJs-C1AS-Pipeline
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt update
+          sudo snap install amazon-ssm-agent --classic
+          sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo systemctl status snap.amazon-ssm-agent.amazon-ssm-agent.service
+          curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+          sudo apt -y install nodejs
+          cd /home/ubuntu
+          git clone https://github.com/OWASP/NodeGoat.git
+          cd NodeGoat/
+          npm install
+          sudo apt -y install mongodb
+          sudo systemctl start mongodb
+          sudo systemctl status mongodb
+          npm run db:seed
+          sudo apt -y install python build-essential
+          npm install --save trend_app_protect
+          cat <<EOF >trend_app_protect.json
+          {
+          "key":"${AccessKey}",
+          "secret":"${SecretKey}"
+          }
+          EOF
+          sed -i "2 a require('trend_app_protect');" server.js
+          npm start

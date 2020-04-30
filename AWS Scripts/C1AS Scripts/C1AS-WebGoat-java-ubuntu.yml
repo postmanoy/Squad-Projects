@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "clarkp Test Instance"
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+  AccessKey:
+    Description: Group access key of C1-AS
+    Type: String
+    Default: d2baeea9-9d70-4552-b527-9e300738e9fe
+  SecretKey:
+    Description: Group secret key of C1-AS
+    Type: String
+    Default: 90039018-7866-4c96-8a60-6000a5f9ec58
+  JDKLink:
+    Description: Download JDK link. Please provide it here.
+    Type: String
+    Default: https://ph-dsaas-config.s3.us-east-2.amazonaws.com/Download_PostManoy/jdk-11.0.6_linux-x64_bin.tar.gz
+  JavaAgent:
+    Description: Download Java C1-AS agent link. Please provide it here.
+    Type: String
+    Default: https://download.immun.io/internal/java/trend_app_protect-4.1.5.jar
+
+Resources: 
+  C1ASPipeline:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+      - sg-0edbc623dc87e2892
+      - sg-0f0b0eb448eeccce1
+      Tags:
+      - Key: Name
+        Value: WebGoatJava-C1AS-Pipeline
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt update
+          sudo snap install amazon-ssm-agent --classic
+          sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo systemctl status snap.amazon-ssm-agent.amazon-ssm-agent.service
+          sudo mkdir -p /var/cache/oracle-jdk11-installer-local/
+          cd /home/ubuntu
+          wget -P /home/ubuntu/ ${JDKLink}
+          sudo cp jdk-11.0.6_linux-x64_bin.tar.gz /var/cache/oracle-jdk11-installer-local/
+          sudo apt purge oracle-java11-installer
+          sudo add-apt-repository ppa:linuxuprising/java
+          sudo apt update
+          echo oracle-java11-installer shared/accepted-oracle-license-v1-2 select true | sudo /usr/bin/debconf-set-selections
+          echo debconf shared/accepted-oracle-license-v1-2 select true | debconf-set-selections
+          echo debconf shared/accepted-oracle-license-v1-2 seen true | debconf-set-selections
+          sudo apt install -y oracle-java11-installer-local
+          java -version
+          cd /home/ubuntu
+          sudo mkdir WebGoat
+          wget -P /home/ubuntu/ https://github.com/WebGoat/WebGoat/releases/download/v8.0.0.M25/webgoat-server-8.0.0.M25.jar
+          web_name="$(ls /home/ubuntu | grep webgoat-server)"
+          sudo cp /home/ubuntu/$web_name /home/ubuntu/WebGoat/webgoat-server.jar
+          wget -P /home/ubuntu/ ${JavaAgent}
+          app_name="$(ls /home/ubuntu | grep trend_app_protect)"
+          sudo cp /home/ubuntu/$app_name /home/ubuntu/WebGoat/trend_app_protect.jar
+          cd WebGoat/
+          cat <<EOF>trend_app_protect.properties
+          key = ${AccessKey}
+          secret = ${SecretKey}
+          debugMode = true
+          EOF
+          java -Dcom.trend_app_protect.config.file=trend_app_protect.properties -javaagent:/home/ubuntu/WebGoat/trend_app_protect.jar -jar webgoat-server.jar --server.address=0.0.0.0
