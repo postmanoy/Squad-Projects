@@ -69,7 +69,7 @@ Resources:
       - sg-0f0b0eb448eeccce1
       Tags:
       - Key: Name
-        Value: DVWAphp-C1AS-Pipeline
+        Value: !Sub DVWAphp${PHPversion}-C1AS-Pipeline
       UserData:
         Fn::Base64:
           Fn::Sub:
