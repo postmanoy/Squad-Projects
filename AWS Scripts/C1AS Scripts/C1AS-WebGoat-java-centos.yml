@@ -16,7 +16,7 @@ Parameters:
   JavaAgent:
     Description: Download Java C1-AS agent link. Please provide it here.
     Type: String
-    Default: https://download.immun.io/internal/java/trend_app_protect-4.1.5.jar
+    Default: https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0.1/agent-java/trend_app_protect-4.1.5.jar
 
 Resources: 
   C1ASPipeline:
