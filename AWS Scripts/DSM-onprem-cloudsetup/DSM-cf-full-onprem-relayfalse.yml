@@ -25,6 +25,13 @@ Parameters:
     Description: Install Agent on setup. Type the URL of the agent that is compatible with the chosen DSM version.
     Type: String
     Default: https://files.trendmicro.com/products/deepsecurity/en/11.3/Agent-RedHat_EL7-11.3.0-376.x86_64.zip
+  ShiftTag:
+    Description: Select your shift
+    Type: String
+    AllowedValues:
+    - ANZ-Shift
+    - IST-Shift
+    - NABU-Shift
 
 Mappings:
   DSMVersion:
@@ -60,6 +67,8 @@ Resources:
         Tags:
         - Key: Name
           Value: !Sub DSM${DSManager}-Postgresql-96
+        - Key: Shift
+          Value: !Ref ShiftTag
         UserData:
           Fn::Base64: !Sub |
             #!/bin/bash
@@ -104,6 +113,8 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub DSM${DSManager}-OnPrem-Cloud
+      - Key: Shift
+        Value: !Ref ShiftTag
       UserData:
         Fn::Base64:
           Fn::Sub:

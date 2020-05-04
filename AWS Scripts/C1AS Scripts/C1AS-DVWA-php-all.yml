@@ -29,6 +29,13 @@ Parameters:
     - v71
     - v72
     - v73
+  ShiftTag:
+    Description: Select your shift
+    Type: String
+    AllowedValues:
+    - ANZ-Shift
+    - IST-Shift
+    - NABU-Shift
 
 
 Mappings:
@@ -70,6 +77,8 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub DVWAphp${PHPversion}-C1AS-Pipeline
+      - Key: Shift
+        Value: !Ref ShiftTag
       UserData:
         Fn::Base64:
           Fn::Sub:

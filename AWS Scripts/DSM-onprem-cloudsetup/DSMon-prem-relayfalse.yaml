@@ -17,6 +17,13 @@ Parameters:
     Description: IP address of the Database. Please provide the IP address.
     Type: String
     Default: "172.16.0.0"
+  ShiftTag:
+    Description: Select your shift
+    Type: String
+    AllowedValues:
+    - ANZ-Shift
+    - IST-Shift
+    - NABU-Shift
   
 
 Resources: 
@@ -37,6 +44,8 @@ Resources:
       Tags:
       - Key: Name
         Value: DSM-OnPrem-Cloud
+      - Key: Shift
+        Value: !Ref ShiftTag
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash

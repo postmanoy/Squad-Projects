@@ -21,6 +21,13 @@ Parameters:
     - v120416
     - v120426
     - v125732
+  ShiftTag:
+    Description: Select your shift
+    Type: String
+    AllowedValues:
+    - ANZ-Shift
+    - IST-Shift
+    - NABU-Shift
   
 Mappings:
   DSMVersion:
@@ -56,6 +63,8 @@ Resources:
         Tags:
         - Key: Name
           Value: !Sub DSM${DSManager}-Postgresql-96
+        - Key: Shift
+          Value: !Ref ShiftTag
         UserData:
           Fn::Base64: !Sub |
             #!/bin/bash
@@ -100,6 +109,8 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub DSM${DSManager}-OnPrem-Cloud
+      - Key: Shift
+        Value: !Ref ShiftTag
       UserData:
         Fn::Base64:
           Fn::Sub:

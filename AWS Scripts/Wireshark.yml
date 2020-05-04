@@ -10,6 +10,13 @@ Parameters:
   NameInstance:
     Type: String
     Default: Wireshark-test-instance
+  ShiftTag:
+    Description: Select your shift
+    Type: String
+    AllowedValues:
+    - ANZ-Shift
+    - IST-Shift
+    - NABU-Shift
 
 Resources: 
   ec2instance1:
@@ -24,3 +31,5 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${NameInstance}1
+      - Key: Shift
+        Value: !Ref ShiftTag

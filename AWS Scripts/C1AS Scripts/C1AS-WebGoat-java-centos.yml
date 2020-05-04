@@ -17,6 +17,13 @@ Parameters:
     Description: Download Java C1-AS agent link. Please provide it here.
     Type: String
     Default: https://files.trendmicro.com/products/CloudOne/ApplicationSecurity/1.0.1/agent-java/trend_app_protect-4.1.5.jar
+  ShiftTag:
+    Description: Select your shift
+    Type: String
+    AllowedValues:
+    - ANZ-Shift
+    - IST-Shift
+    - NABU-Shift  
 
 Resources: 
   C1ASPipeline:
@@ -31,6 +38,8 @@ Resources:
       Tags:
       - Key: Name
         Value: WebGoatJava-C1AS-Pipeline
+      - Key: Shift
+        Value: !Ref ShiftTag
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash

@@ -10,6 +10,13 @@ Parameters:
   NameInstance:
     Type: String
     Default: SC-test-instance
+  ShiftTag:
+    Description: Select your shift
+    Type: String
+    AllowedValues:
+    - ANZ-Shift
+    - IST-Shift
+    - NABU-Shift
 
 Resources: 
   ec2instance1:
@@ -25,6 +32,8 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${NameInstance}-master
+      - Key: Shift
+        Value: !Ref ShiftTag
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -114,6 +123,8 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${NameInstance}-worker1
+      - Key: Shift
+        Value: !Ref ShiftTag
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -177,6 +188,8 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${NameInstance}-worker2
+      - Key: Shift
+        Value: !Ref ShiftTag
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -239,7 +252,9 @@ Resources:
       - sg-0f0b0eb448eeccce1
       Tags:
       - Key: Name
-        Value: DSM-Postgresql-11
+        Value: !Sub ${NameInstance}-Postgresql-11
+      - Key: Shift
+        Value: !Ref ShiftTag
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
