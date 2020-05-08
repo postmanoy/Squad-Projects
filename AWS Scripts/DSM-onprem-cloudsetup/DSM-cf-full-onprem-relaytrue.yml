@@ -14,13 +14,15 @@ Parameters:
     - v113195
     - v120296
     - v120327
-    - v120347    
+    - v120347
     - v120366
     - v120372
     - v120383
     - v120416
     - v120426
+    - v120446
     - v125732
+    - v125855
   ShiftTag:
     Description: Select your shift
     Type: String
@@ -43,7 +45,9 @@ Mappings:
       v120393: https://files.trendmicro.com/products/deepsecurity/en/12.0/Manager-Linux-12.0.393.x64.sh
       v120416: https://files.trendmicro.com/products/deepsecurity/en/12.0/Manager-Linux-12.0.416.x64.sh
       v120426: https://files.trendmicro.com/products/deepsecurity/en/12.0/Manager-Linux-12.0.426.x64.sh
+      v120446: https://files.trendmicro.com/products/deepsecurity/en/12.0/Manager-Linux-12.0.446.x64.sh
       v125732: https://files.trendmicro.com/products/deepsecurity/en/12.5/Manager-Linux-12.5.732.x64.sh
+      v125855: https://files.trendmicro.com/products/deepsecurity/en/12.5/Manager-Linux-12.5.855.x64.sh
 
 Resources:
   PostgreSQLDSM:
@@ -102,12 +106,12 @@ Resources:
       - sg-0edbc623dc87e2892
       - sg-0f0b0eb448eeccce1
       BlockDeviceMappings:
-        - DeviceName: /dev/sda1
+        - DeviceName: /dev/sda2
           Ebs:
             VolumeSize: 50
             DeleteOnTermination: True
       Tags:
-      - Key: Name
+      - Key: Name 
         Value: !Sub DSM${DSManager}-OnPrem-Cloud
       - Key: Shift
         Value: !Ref ShiftTag
