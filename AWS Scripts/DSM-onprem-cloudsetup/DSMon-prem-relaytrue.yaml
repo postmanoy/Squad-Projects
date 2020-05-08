@@ -33,7 +33,7 @@ Resources:
       - sg-0edbc623dc87e2892
       - sg-0f0b0eb448eeccce1
       BlockDeviceMappings:
-        - DeviceName: /dev/sda1
+        - DeviceName: /dev/sda2
           Ebs:
             VolumeSize: 50
             DeleteOnTermination: True
