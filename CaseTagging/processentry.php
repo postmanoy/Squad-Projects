@@ -103,6 +103,23 @@ if($radio == "pcoff"){
 			mysqli_query($con, $postscc);
 			}
 		}
+
+		if ($opt2 == "os"){
+
+			//Reset autoincrement for dsc table
+			$osq = "SELECT MAX(os_id) AS min FROM os";
+			$osq2 = mysqli_query($con, $osq);
+			$osq3 = mysqli_fetch_array($osq2);
+			$osq4 = $osq3['min'];
+			$osq4++;
+			$alteros ="ALTER TABLE os AUTO_INCREMENT = $osq4";
+			mysqli_query($con, $alteros);
+
+			for ($i = 0; $i < count($str); $i++){
+			$postos = "INSERT INTO os (os_id, os_value, os_dsc_value) VALUES (NULL, '$str[$i]','$dsc_value_final')";
+			mysqli_query($con, $postos);
+			}
+		}
 	}
 	else{
 
@@ -124,37 +141,36 @@ if($radio == "pcoff"){
 			}
 		}
 
-		if ($opt2 == "dsm"){
+		if ($opt2 == "os"){
+				//Reset autoincrement for dsc table
+				$osq = "SELECT MAX(os_id) AS min FROM os";
+				$osq2 = mysqli_query($con, $osq);
+				$osq3 = mysqli_fetch_array($osq2);
+				$osq4 = $osq3['min'];
+				$osq4++;
+				$alteros ="ALTER TABLE os AUTO_INCREMENT = $osq4";
+				mysqli_query($con, $alteros);
 
-			//Reset autoincrement for dsc table
-			$dsmq = "SELECT MAX(dsm_id) AS min FROM dsm";
-			$dsmq2 = mysqli_query($con, $dsmq);
-			$dsmq3 = mysqli_fetch_array($dsmq2);
-			$dsmq4 = $dsmq3['min'];
-			$dsmq4++;
-			$alterdsm ="ALTER TABLE dsm AUTO_INCREMENT = $dsmq4";
-			mysqli_query($con, $alterdsm);
-
-			for ($i = 0; $i < count($str); $i++){
-			$postdsm = "INSERT INTO dsm (dsm_id, dsm_value) VALUES (NULL, '$str[$i]')";
-			mysqli_query($con, $postdsm);
+				for ($i = 0; $i < count($str); $i++){
+				$postos = "INSERT INTO os (os_id, os_value, os_dsc_value) VALUES (NULL, '$str[$i]','$opt1')";
+				mysqli_query($con, $postos);
+				}
 			}
-		}
 
-		if ($opt2 == "dsa"){
+		if ($opt2 == "pv"){
 
 			//Reset autoincrement for dsc table
-			$dsaq = "SELECT MAX(dsa_id) AS min FROM dsa";
-			$dsaq2 = mysqli_query($con, $dsaq);
-			$dsaq3 = mysqli_fetch_array($dsaq2);
-			$dsaq4 = $dsaq3['min'];
-			$dsaq4++;
-			$alterdsa ="ALTER TABLE dsa AUTO_INCREMENT = $dsaq4";
-			mysqli_query($con, $alterdsa);
+			$pvq = "SELECT MAX(pv_id) AS min FROM pv";
+			$pvq2 = mysqli_query($con, $pvq);
+			$pvq3 = mysqli_fetch_array($pvq2);
+			$pvq4 = $pvq3['min'];
+			$pvq4++;
+			$alterpv ="ALTER TABLE pv AUTO_INCREMENT = $pvq4";
+			mysqli_query($con, $alterpv);
 
 			for ($i = 0; $i < count($str); $i++){
-			$postdsa = "INSERT INTO dsa (dsa_id, dsa_value) VALUES (NULL, '$str[$i]')";
-			mysqli_query($con, $postdsa);
+			$postpv = "INSERT INTO pv (pv_id, pv_value, pv_dsc_value) VALUES (NULL, '$str[$i]', '$opt1')";
+			mysqli_query($con, $postpv);
 			}
 		}
 
@@ -210,23 +226,6 @@ else{
 			for ($i = 0; $i < count($str); $i++){
 			$postdsc = "INSERT INTO dsc (dsc_id, dsc_value) VALUES (NULL, '$str[$i]')";
 			mysqli_query($con, $postdsc);
-			}
-		}
-
-		if ($opt3 == "os"){
-
-			//Reset autoincrement for dsc table
-			$osq = "SELECT MAX(os_id) AS min FROM os";
-			$osq2 = mysqli_query($con, $osq);
-			$osq3 = mysqli_fetch_array($osq2);
-			$osq4 = $osq3['min'];
-			$osq4++;
-			$alteros ="ALTER TABLE os AUTO_INCREMENT = $osq4";
-			mysqli_query($con, $alteros);
-
-			for ($i = 0; $i < count($str); $i++){
-			$postos = "INSERT INTO os (os_id, os_value) VALUES (NULL, '$str[$i]')";
-			mysqli_query($con, $postos);
 			}
 		}
 

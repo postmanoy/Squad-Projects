@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2020 at 01:43 PM
+-- Generation Time: May 20, 2020 at 11:12 AM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.7
 
@@ -361,78 +361,92 @@ INSERT INTO `opstag` (`ops_id`, `ops_val`) VALUES
 
 CREATE TABLE `os` (
   `os_id` int(100) NOT NULL,
-  `os_value` varchar(1000) NOT NULL
+  `os_value` varchar(1000) NOT NULL,
+  `os_dsc_value` varchar(10000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `os`
 --
 
-INSERT INTO `os` (`os_id`, `os_value`) VALUES
-(1, 'Windows Server 2019'),
-(2, 'Windows Server 2016'),
-(3, 'Windows'),
-(4, 'Windows Server 2012'),
-(5, 'Windows Server 2012 R2'),
-(6, 'Windows Server 2008'),
-(7, 'Windows Server 2008 R2'),
-(8, 'Windows Server 2003'),
-(9, 'Windows 10'),
-(10, 'WIndows 8.1'),
-(11, 'Windows 8'),
-(12, 'Windows Vista'),
-(13, 'Windows XP'),
-(14, 'Red Hat Enterprise Linux'),
-(15, 'Red Hat Enterprise Linux 5'),
-(16, 'Red Hat Enterprise Linux 6'),
-(17, 'Red Hat Enterprise Linux 7'),
-(18, 'Red Hat Enterprise Linux 8'),
-(19, 'CentOS'),
-(20, 'CentOS 5'),
-(21, 'CentOS 6'),
-(22, 'CentOS 7'),
-(23, 'Ubuntu'),
-(24, 'Ubuntu 10.04'),
-(25, 'Ubuntu 12.04'),
-(26, 'Ubuntu 14.04'),
-(27, 'Ubuntu 16'),
-(28, 'Ubuntu 18'),
-(29, 'Solaris'),
-(30, 'Solaris 9'),
-(31, 'Solaris 10_Update7'),
-(32, 'Solaris 10_Update8'),
-(33, 'Solaris 10_Update9'),
-(34, 'Solaris 10_Update10'),
-(35, 'Solaris 10_Update11'),
-(36, 'Solaris 11_Update1'),
-(37, 'Solaris 11_Update2'),
-(38, 'AIX'),
-(39, 'AIX 5.3'),
-(40, 'AIX 6.1'),
-(41, 'AIX 7.1'),
-(42, 'SuSE'),
-(43, 'SuSE 10'),
-(44, 'SuSE 11'),
-(45, 'SuSE 12'),
-(46, 'Oracle Linux'),
-(47, 'Oracle Linux5'),
-(48, 'Oracle Linux6'),
-(49, 'Oracle Linux7'),
-(50, 'Amazon Linux'),
-(51, 'Amazon Linux2'),
-(52, 'Cloud Linux'),
-(53, 'Cloud Linux 5'),
-(54, 'Cloud Linux 6'),
-(55, 'Cloud Linux 7'),
-(56, 'Debian'),
-(57, 'Debian 6'),
-(58, 'Debian 7'),
-(59, 'Debian 8'),
-(60, 'Debian 9'),
-(61, 'Debian 10'),
-(62, 'Windows 7'),
-(63, 'Windows Server 2000'),
-(64, 'SuSE 15');
+INSERT INTO `os` (`os_id`, `os_value`, `os_dsc_value`) VALUES
+(1, 'Windows Server 2019', 'C1WS'),
+(2, 'Windows Server 2016', 'C1WS'),
+(3, 'Windows', 'C1WS'),
+(4, 'Windows Server 2012', 'C1WS'),
+(5, 'Windows Server 2012 R2', 'C1WS'),
+(6, 'Windows Server 2008', 'C1WS'),
+(7, 'Windows Server 2008 R2', 'C1WS'),
+(8, 'Windows Server 2003', 'C1WS'),
+(9, 'Windows 10', 'C1WS'),
+(10, 'WIndows 8.1', 'C1WS'),
+(11, 'Windows 8', 'C1WS'),
+(12, 'Windows Vista', 'C1WS'),
+(13, 'Windows XP', 'C1WS'),
+(14, 'Red Hat Enterprise Linux', 'C1WS'),
+(15, 'Red Hat Enterprise Linux 5', 'C1WS'),
+(16, 'Red Hat Enterprise Linux 6', 'C1WS'),
+(17, 'Red Hat Enterprise Linux 7', 'C1WS'),
+(18, 'Red Hat Enterprise Linux 8', 'C1WS'),
+(19, 'CentOS', 'C1WS'),
+(20, 'CentOS 5', 'C1WS'),
+(21, 'CentOS 6', 'C1WS'),
+(22, 'CentOS 7', 'C1WS'),
+(23, 'Ubuntu', 'C1WS'),
+(24, 'Ubuntu 10.04', 'C1WS'),
+(25, 'Ubuntu 12.04', 'C1WS'),
+(26, 'Ubuntu 14.04', 'C1WS'),
+(27, 'Ubuntu 16', 'C1WS'),
+(28, 'Ubuntu 18', 'C1WS'),
+(29, 'Solaris', 'C1WS'),
+(30, 'Solaris 9', 'C1WS'),
+(31, 'Solaris 10_Update7', 'C1WS'),
+(32, 'Solaris 10_Update8', 'C1WS'),
+(33, 'Solaris 10_Update9', 'C1WS'),
+(34, 'Solaris 10_Update10', 'C1WS'),
+(35, 'Solaris 10_Update11', 'C1WS'),
+(36, 'Solaris 11_Update1', 'C1WS'),
+(37, 'Solaris 11_Update2', 'C1WS'),
+(38, 'AIX', 'C1WS'),
+(39, 'AIX 5.3', 'C1WS'),
+(40, 'AIX 6.1', 'C1WS'),
+(41, 'AIX 7.1', 'C1WS'),
+(42, 'SuSE', 'C1WS'),
+(43, 'SuSE 10', 'C1WS'),
+(44, 'SuSE 11', 'C1WS'),
+(45, 'SuSE 12', 'C1WS'),
+(46, 'Oracle Linux', 'C1WS'),
+(47, 'Oracle Linux5', 'C1WS'),
+(48, 'Oracle Linux6', 'C1WS'),
+(49, 'Oracle Linux7', 'C1WS'),
+(50, 'Amazon Linux', 'C1WS'),
+(51, 'Amazon Linux2', 'C1WS'),
+(52, 'Cloud Linux', 'C1WS'),
+(53, 'Cloud Linux 5', 'C1WS'),
+(54, 'Cloud Linux 6', 'C1WS'),
+(55, 'Cloud Linux 7', 'C1WS'),
+(56, 'Debian', 'C1WS'),
+(57, 'Debian 6', 'C1WS'),
+(58, 'Debian 7', 'C1WS'),
+(59, 'Debian 8', 'C1WS'),
+(60, 'Debian 9', 'C1WS'),
+(61, 'Debian 10', 'C1WS'),
+(62, 'Windows 7', 'C1WS'),
+(63, 'Windows Server 2000', 'C1WS'),
+(64, 'SuSE 15', 'C1WS'),
+(67, 'Database', 'SmartCheck'),
+(68, 'License', 'SmartCheck'),
+(69, 'Proxy', 'SmartCheck'),
+(70, 'Scan', 'SmartCheck'),
+(71, 'Docs', 'SmartCheck'),
+(72, 'Frontend', 'SmartCheck'),
+(73, 'Registry View', 'SmartCheck'),
+(74, 'Content Scan', 'SmartCheck'),
+(75, 'Malware Scan', 'SmartCheck'),
+(76, 'Vulnerability Scan', 'SmartCheck'),
+(77, 'Image Scan', 'SmartCheck'),
+(78, 'Metrics', 'SmartCheck'),
+(79, 'Auth', 'SmartCheck');
 
 -- --------------------------------------------------------
 
@@ -683,7 +697,7 @@ INSERT INTO `sc` (`sc_id`, `sc_value`, `sc_ic_value`, `sc_dsc_value`) VALUES
 (123, 'Standards / RFC Compatibility', 'Compatibility', 'C1WS'),
 (124, 'Online Activation Code Update', 'License', 'C1WS'),
 (125, 'Offline Activation Code Update', 'License', 'C1WS'),
-(129, 'Back-end Related DSaaS', 'Operations', 'C1WS'),
+(129, 'Back-end Related C1WS', 'Operations', 'C1WS'),
 (131, 'Billing', 'License', 'C1WS'),
 (139, 'Account Details Inquiry', 'Account Administration', 'C1WS'),
 (142, 'Change Information', 'Account Administration', 'C1WS'),
@@ -912,7 +926,7 @@ ALTER TABLE `opstag`
 -- AUTO_INCREMENT for table `os`
 --
 ALTER TABLE `os`
-  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `prbm`

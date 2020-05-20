@@ -93,6 +93,7 @@ $("#opt").change(function () {
                 $("#opt2l").html(" \
                     <option value = 'N/A'>N/A</option> \
                     <option value='prbm'>Concerned Feature</option> \
+                    <option value='os'>Affected Operating System</option> \
                     <option value='dsm'>DSM Version</option> \
                     <option value='dsa'>DSA Version</option> \
                     <option value='ic'>Issue Category</option> \
@@ -100,13 +101,25 @@ $("#opt").change(function () {
                   "); 
             }
         else{
+              if(val.includes("SmartCheck")){
               $("#opt2l").html(" \
                     <option value = 'N/A'>N/A</option> \
                     <option value='prbm'>Concerned Feature</option> \
+                    <option value='os'>Affected Pod/Service</option> \
                     <option value='pv'>Product Version</option> \
                     <option value='ic'>Issue Category</option> \
                     <option value='sc'>Sub Category</option> \
                   ");
+            }else{
+              $("#opt2l").html(" \
+                    <option value = 'N/A'>N/A</option> \
+                    <option value='prbm'>Concerned Feature</option> \
+                    <option value='os'>Affected Operating System</option> \
+                    <option value='pv'>Product Version</option> \
+                    <option value='ic'>Issue Category</option> \
+                    <option value='sc'>Sub Category</option> \
+                  ");
+            }
         }
 
         <?php
@@ -258,7 +271,7 @@ h2 {
                       <input type="radio" id="pcoff" name="option1" value="pcoff" required checked />
                       <label for="pcoff">Add values to Other Options</label>&emsp;&emsp;&emsp;
                       <input type="radio" id="pcon" name="option1" value="pcon">
-                      <label for="pcon">Add Product Component/SEG/OpsTag/OS</label><br>
+                      <label for="pcon">Add Product Component/SEG/OpsTag</label><br>
                     </center>
                       <label for="opt" id = "optl" class = "text-center"><b>Product Component:</b></label>
                       <select class="form-control" id="opt" name = "opt">
@@ -278,7 +291,6 @@ h2 {
                                  <select class="form-control" id="opt3l" name = "opt3l"> 
                                   <option value = 'N/A'>N/A</option>
                                   <option value='dsc'>Product Component</option>
-                                  <option value='os'>Affected Operating System</option>
                                   <option value='seg'>Reason for SEG Escalation</option>
                                   <option value='ops'>SEG-Case Operational Tagging</option>
 

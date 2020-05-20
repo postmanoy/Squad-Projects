@@ -96,6 +96,22 @@ $(document).ready(function () {
                   }
                   ?>
                   ");
+
+              $("#osl").html(" \
+                  <option value = 'N/A'>N/A</option> \
+                  <?php
+                    $qos = "select * from os WHERE os_dsc_value = '$temp_val' order by os_value asc";
+                    $queryos = mysqli_query($con, $qos);
+                    while($roos = mysqli_fetch_array($queryos)){
+                  
+                    ?>
+                    <option value='<?php echo $roos['os_value']; ?>'><?php echo $roos['os_value']; ?></option> \
+                    <?php
+                  }
+                  ?>
+                  ");
+
+            $("#oslb").html("<b>Affected Operating System:</b>");
             $("#dsm").show();
             $("#dsa").show();
             $("#dsmlb").show();
@@ -150,6 +166,44 @@ $(document).ready(function () {
                     }
                   ?>
                   ");
+
+
+              if(val.includes("SmartCheck")){
+
+                    $("#osl").html(" \
+                          <option value = 'N/A'>N/A</option> \
+                          <?php
+                            $qos = "select * from os WHERE os_dsc_value = '$valdsc' order by os_value asc";
+                            $queryos = mysqli_query($con, $qos);
+                            while($roos = mysqli_fetch_array($queryos)){
+                          
+                            ?>
+                            <option value='<?php echo $roos['os_value']; ?>'><?php echo $roos['os_value']; ?></option> \
+                            <?php
+                          }
+                          ?>
+                          ");
+
+                    $("#oslb").html("<b>Affected Pod/Service:</b>");
+
+              }else{
+
+                      $("#osl").html(" \
+                          <option value = 'N/A'>N/A</option> \
+                          <?php
+                            $qos = "select * from os WHERE os_dsc_value = '$valdsc' order by os_value asc";
+                            $queryos = mysqli_query($con, $qos);
+                            while($roos = mysqli_fetch_array($queryos)){
+                          
+                            ?>
+                            <option value='<?php echo $roos['os_value']; ?>'><?php echo $roos['os_value']; ?></option> \
+                            <?php
+                          }
+                          ?>
+                          ");
+
+                    $("#oslb").html("<b>Affected Operating System:</b>");
+               }
 
             }
             <?php
@@ -230,19 +284,9 @@ $(document).ready(function () {
                                     </datalist>
                             </div>
                             <div class="form-group">
-                                    <label for="exampleFormControlSelect1"><b>Affected Operating System:</b></label>
+                                    <label for="os" id = "oslb"><b>Affected Operating System:</b></label>
                                     <input class="form-control" id ="os" list="osl" value = "N/A" autocomplete="off">
-                                    <datalist id="osl">
-                                      <option value="N/A">N/A</option>
-                                      <?php
-                                            $qos = "select * from os order by os_value asc";
-                                                  $queryos = mysqli_query($con, $qos);
-                                                  while($roos = mysqli_fetch_array($queryos)){
-                                        ?>
-                                          <option value="<?php echo $roos['os_value']; ?>"><?php echo $roos['os_value']; ?></option>
-                                  <?php
-                                  }
-                                  ?>                  
+                                    <datalist id="osl">                
                                     </datalist>
                             </div>
                             <div class="form-group">

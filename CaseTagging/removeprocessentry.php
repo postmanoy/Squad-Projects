@@ -37,6 +37,23 @@ if($radio == "pcoff"){
 			}
 		}
 
+		if ($opt2 == "os"){
+
+			//Reset autoincrement for os table
+			$osq = "SELECT MAX(os_id) AS min FROM os";
+			$osq2 = mysqli_query($con, $osq);
+			$osq3 = mysqli_fetch_array($osq2);
+			$osq4 = $osq3['min'];
+			$osq4++;
+			$alteros ="ALTER TABLE os AUTO_INCREMENT = $osq4";
+			mysqli_query($con, $alteros);
+
+			foreach ($strvalue as $str){
+			$postos = "DELETE FROM os WHERE os_value='$str' AND os_dsc_value = ''";
+			mysqli_query($con, $postos);
+			}
+		}
+
 		if ($opt2 == "dsm"){
 
 			//Reset autoincrement for dsm table
@@ -125,6 +142,22 @@ if($radio == "pcoff"){
 			}
 		}
 
+		if ($opt2 == "os"){
+					//Reset autoincrement for os table
+					$osq = "SELECT MAX(os_id) AS min FROM os";
+					$osq2 = mysqli_query($con, $osq);
+					$osq3 = mysqli_fetch_array($osq2);
+					$osq4 = $osq3['min'];
+					$osq4++;
+					$alteros ="ALTER TABLE os AUTO_INCREMENT = $osq4";
+					mysqli_query($con, $alteros);
+
+					foreach ($strvalue as $str){
+					$postos = "DELETE FROM os WHERE os_value='$str' AND os_dsc_value = '$opt1'";
+					mysqli_query($con, $postos);
+			}
+		}
+
 		if ($opt2 == "pv"){
 
 			//Reset autoincrement for dsm table
@@ -194,23 +227,6 @@ if($radio == "pcoff"){
 			$alterdsc ="UPDATE dsc SET dsc_id = $dscq4 WHERE dsc_id = $dscq5";
 			mysqli_query($con, $alterdsc);
 			$dscq4++;
-			}
-		}
-
-		if ($opt3 == "os"){
-
-			//Reset autoincrement for os table
-			$osq = "SELECT MAX(os_id) AS min FROM os";
-			$osq2 = mysqli_query($con, $osq);
-			$osq3 = mysqli_fetch_array($osq2);
-			$osq4 = $osq3['min'];
-			$osq4++;
-			$alteros ="ALTER TABLE os AUTO_INCREMENT = $osq4";
-			mysqli_query($con, $alteros);
-
-			foreach ($strvalue as $str){
-			$postos = "DELETE FROM os WHERE os_value='$str'";
-			mysqli_query($con, $postos);
 			}
 		}
 

@@ -73,6 +73,7 @@ $(document).ready(function () {
                 $("#opt2l").html(" \
                     <option value = 'N/A'>N/A</option> \
                     <option value='prbm'>Concerned Feature</option> \
+                    <option value='os'>Affected Operating System</option> \
                     <option value='dsm'>DSM Version</option> \
                     <option value='dsa'>DSA Version</option> \
                     <option value='ic'>Issue Category</option> \
@@ -80,13 +81,25 @@ $(document).ready(function () {
                   "); 
             }
         else{
+              if(val.includes("SmartCheck")){
               $("#opt2l").html(" \
                     <option value = 'N/A'>N/A</option> \
                     <option value='prbm'>Concerned Feature</option> \
+                    <option value='os'>Affected Pod/Service</option> \
                     <option value='pv'>Product Version</option> \
                     <option value='ic'>Issue Category</option> \
                     <option value='sc'>Sub Category</option> \
                   ");
+            }else{
+              $("#opt2l").html(" \
+                    <option value = 'N/A'>N/A</option> \
+                    <option value='prbm'>Concerned Feature</option> \
+                    <option value='os'>Affected Operating System</option> \
+                    <option value='pv'>Product Version</option> \
+                    <option value='ic'>Issue Category</option> \
+                    <option value='sc'>Sub Category</option> \
+                  ");
+            }
         }
 
         <?php
@@ -146,26 +159,6 @@ $(document).ready(function () {
                             while($roopt1 = mysqli_fetch_array($queryopt1)){
                            ?>
                             <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['dsc_value']; ?>' /><?php echo $roopt1['dsc_value']; ?><br> \
-                          <?php
-                            $i++;
-                            } 
-                          ?>
-                    ");
-            <?php   
-        ?>
-      }
-
-      else if(optvalue2 == "os"){
-        <?php
-            $i = 0;
-            $qopt1 = "select * from os order by os_value asc";
-            $queryopt1 = mysqli_query($con, $qopt1);
-            ?>
-            $("#tableopt").html(" \
-                          <?php
-                            while($roopt1 = mysqli_fetch_array($queryopt1)){
-                           ?>
-                            <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['os_value']; ?>' /><?php echo $roopt1['os_value']; ?><br> \
                           <?php
                             $i++;
                             } 
@@ -245,6 +238,26 @@ $(document).ready(function () {
               <?php   
           ?>
         }
+
+        else if(optvalue == "os"){
+        <?php
+            $i = 0;
+            $qopt1 = "select * from os WHERE os_dsc_value = '' order by os_value asc";
+            $queryopt1 = mysqli_query($con, $qopt1);
+            ?>
+            $("#tableopt").html(" \
+                          <?php
+                            while($roopt1 = mysqli_fetch_array($queryopt1)){
+                           ?>
+                            <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['os_value']; ?>' /><?php echo $roopt1['os_value']; ?><br> \
+                          <?php
+                            $i++;
+                            } 
+                          ?>
+                    ");
+            <?php   
+        ?>
+      }
 
         else if(optvalue == "dsm"){
           <?php
@@ -367,6 +380,26 @@ $(document).ready(function () {
                         <?php   
                     ?>
                   }
+
+                  else if(optvalue == "os"){
+                            <?php
+                              $i = 0;
+                              $qopt1 = "select * from os WHERE os_dsc_value = '$valdsc' order by os_value asc";
+                              $queryopt1 = mysqli_query($con, $qopt1);
+                              ?>
+                              $("#tableopt").html(" \
+                                            <?php
+                                              while($roopt1 = mysqli_fetch_array($queryopt1)){
+                                             ?>
+                                              <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['os_value']; ?>' /><?php echo $roopt1['os_value']; ?><br> \
+                                            <?php
+                                              $i++;
+                                              } 
+                                            ?>
+                                      ");
+                              <?php   
+                          ?>
+                }
 
                   else if(optvalue == "pv"){
                     <?php
@@ -555,7 +588,7 @@ h2 {
                       <input type="radio" id="pcoff" name="option1" value="pcoff" required checked />
                       <label for="pcoff">Remove values to Other Options</label>&emsp;&emsp;&emsp;
                       <input type="radio" id="pcon" name="option1" value="pcon">
-                      <label for="pcon">Remove Product Component/SEG/OpsTag/OS</label><br>
+                      <label for="pcon">Remove Product Component/SEG/OpsTag</label><br>
                     </center>
                       <label for="opt" id = "optl" class = "text-center"><b>Product Component:</b></label>
                       <select class="form-control" id="opt" name = "opt">
@@ -575,7 +608,6 @@ h2 {
                                  <select class="form-control" id="opt3l" name = "opt3l"> 
                                   <option value = 'N/A'>N/A</option>
                                   <option value='dsc'>Product Component</option>
-                                  <option value='os'>Affected Operating System</option>
                                   <option value='seg'>Reason for SEG Escalation</option>
                                   <option value='ops'>SEG-Case Operational Tagging</option>
 
