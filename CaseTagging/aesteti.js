@@ -4,6 +4,12 @@ $(document).ready(function()
                     return false;
              });
              $("#seg").hide();
+             $("#dsm").hide();
+             $("#dsa").hide();
+             $("#dsmlb").hide();
+             $("#dsalb").hide();
+             $("#pv").hide();
+             $("#pvlb").hide();
       });
       
       $(document).ready(function()
@@ -32,7 +38,7 @@ $(document).ready(function () {
   $txtDLV = $('#txtarea').val();
   //if no option is found alert the user
   if (($('option[value="'+$dscDLV+'"]').length == 0)){
-    alert('Incorrect value for Deep Security Component');
+    alert('Incorrect value for Product Component');
     e.preventDefault();
   }
   else if (($('option[value="'+$prbmDLV+'"]').length == 0)){
@@ -68,7 +74,7 @@ $(document).ready(function () {
     e.preventDefault();
   }
   else if ($dscDLV == "N/A"){
-    alert('Please have input for Deep Security Component');
+    alert('Please have input for Product Component');
     e.preventDefault();
   }
   else if ($prbmDLV == "N/A"){
@@ -88,7 +94,7 @@ $(document).ready(function () {
     e.preventDefault();
   }
    else {
-
+      if( ($dscDLV.includes("C1WS")) || ($dscDLV.includes("DS")) || ($dscDLV.includes("WS")) ){
         if ($('#customSwitch1').is(":checked")) {
         $('#outputs').html($('#dsc').val() + " | " + $('#prbm').val() + " | " + $('#os').val() + " | " + $('#dsm').val() + " | " + $('#dsa').val() + " | " + $('#ic').val() + " | " + $('#sc').val() + " | SEG Escalated | " + $('#txtarea').val() + " | ");
 
@@ -107,7 +113,28 @@ $(document).ready(function () {
         $("#outputs").select();
           document.execCommand('copy');
           } 
+      }
+        else {
+            if ($('#customSwitch1').is(":checked")) {
+        $('#outputs').html($('#dsc').val() + " | " + $('#prbm').val() + " | " + $('#os').val() + " | " + $('#pv').val() + " | " + $('#ic').val() + " | " + $('#sc').val() + " | SEG Escalated | " + $('#txtarea').val() + " | ");
 
+        $("#outputs").select();
+            document.execCommand('copy');
+          } else {
+            $('#outputs').html($('#dsc').val() + " | " + $('#prbm').val() + " | " + $('#os').val() + " | " + $('#pv').val() + " | " + $('#ic').val() + " | " + $('#sc').val() + " | " + $('#seg').val() + " | " + $('#txtarea').val() + " | ");
+
+        $("#outputs").select();
+          document.execCommand('copy');
+          }
+
+          if($('#seg').val() != "N/A") {
+            $('#outputs').html($('#dsc').val() + " | " + $('#prbm').val() + " | " + $('#os').val() + " | " + $('#pv').val() + " | " + $('#ic').val() + " | " + $('#sc').val() + " | SEG Escalated: " + $('#seg').val() + " | " + $('#txtarea').val() + " | ");
+
+        $("#outputs").select();
+          document.execCommand('copy');
+          } 
+
+      }
    }
 });  
 
@@ -205,6 +232,16 @@ $(document).ready(function () {
   $('#dsa').focusout(function() {
     if(!($('#dsa').val() != '')){
       $('#dsa').val('N/A')
+    }
+  });
+
+  $('#pv').focusin(function() {
+    $('#pv').val('');
+  });
+
+  $('#pv').focusout(function() {
+    if(!($('#pv').val() != '')){
+      $('#pv').val('N/A')
     }
   });
 

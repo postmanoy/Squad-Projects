@@ -30,17 +30,22 @@ include('connect.php');
 $(document).ready(function () {
     $("#ic").change(function () {
         var val = $(this).val();
+        var dsc_val = $("#dsc").val();
         $('#sc').val('');
         <?php
             $qic= "select * from ic";
             $queryic = mysqli_query($con, $qic);
             while($roic = mysqli_fetch_array($queryic)){
               $valic = $roic['ic_value'];
+              $valic_dsc = $roic['ic_dsc_value'];
             ?>
-            if (val == "<?php echo $valic; ?>") {
+            if ( (dsc_val.includes("C1WS")) || (dsc_val.includes("DS")) || (dsc_val.includes("WS")) ){
+              dsc_val = "C1WS";
+            }
+            if ((val == "<?php echo $valic; ?>") && (dsc_val == "<?php echo $valic_dsc; ?>") ) {
                 $("#scl").html(" \
                   <?php
-                    $qsc = "select * from sc WHERE sc_ic_value = '$valic' order by sc_value asc";
+                    $qsc = "select * from sc WHERE sc_ic_value = '$valic' AND sc_dsc_value = '$valic_dsc' order by sc_value asc";
                     $querysc = mysqli_query($con, $qsc);
                     while($rosc = mysqli_fetch_array($querysc)){
                   
@@ -60,6 +65,110 @@ $(document).ready(function () {
         }
     });
 
+    $("#dsc").change(function () {
+        var val = $(this).val();
+        $('#ic').val('');
+        if ( (val.includes("C1WS")) || (val.includes("DS")) || (val.includes("WS")) ){
+              <?php $temp_val = "C1WS"; ?>
+
+              $("#icl").html(" \
+                  <?php
+                    $qic = "select * from ic WHERE ic_dsc_value = '$temp_val' order by ic_value asc";
+                    $queryic = mysqli_query($con, $qic);
+                    while($roic = mysqli_fetch_array($queryic)){
+                  
+                    ?>
+                    <option value='<?php echo $roic['ic_value']; ?>'><?php echo $roic['ic_value']; ?></option> \
+                    <?php
+                  }
+                  ?>
+                  ");
+
+              $("#prbml").html(" \
+                  <?php
+                    $qprbm = "select * from prbm WHERE prbm_dsc_value = '$temp_val' order by prbm_value asc";
+                    $queryprbm = mysqli_query($con, $qprbm);
+                    while($roprbm = mysqli_fetch_array($queryprbm)){
+                  
+                    ?>
+                    <option value='<?php echo $roprbm['prbm_value']; ?>'><?php echo $roprbm['prbm_value']; ?></option> \
+                    <?php
+                  }
+                  ?>
+                  ");
+            $("#dsm").show();
+            $("#dsa").show();
+            $("#dsmlb").show();
+            $("#dsalb").show();
+            $("#pv").hide();
+            $("#pvlb").hide();
+            $('#ic').val('Choose an option...');
+            }
+        else{
+            <?php
+              $qdsc= "select * from dsc";
+              $querydsc = mysqli_query($con, $qdsc);
+              while($rodsc = mysqli_fetch_array($querydsc)){
+                $valdsc = $rodsc['dsc_value'];
+            ?>
+              if(val == "<?php echo $valdsc; ?>"){
+              $("#icl").html(" \
+                  <?php
+                    $qic = "select * from ic WHERE ic_dsc_value = '$valdsc' order by ic_value asc";
+                    $queryic = mysqli_query($con, $qic);
+                    while($roic = mysqli_fetch_array($queryic)){
+                  
+                    ?>
+                    <option value='<?php echo $roic['ic_value']; ?>'><?php echo $roic['ic_value']; ?></option> \
+                    <?php
+                  }
+                  ?>
+                  ");
+
+              $("#prbml").html(" \
+                  <?php
+                    $qprbm = "select * from prbm WHERE prbm_dsc_value = '$valdsc' order by prbm_value asc";
+                    $queryprbm = mysqli_query($con, $qprbm);
+                    while($roprbm = mysqli_fetch_array($queryprbm)){
+                  
+                    ?>
+                    <option value='<?php echo $roprbm['prbm_value']; ?>'><?php echo $roprbm['prbm_value']; ?></option> \
+                    <?php
+                  }
+                  ?>
+                  ");
+
+              $("#pvl").html(" \
+                  <?php
+                      $qpv = "select * from pv WHERE pv_dsc_value = '$valdsc' order by pv_value asc";
+                      $querypv = mysqli_query($con, $qpv);
+                      while($ropv = mysqli_fetch_array($querypv)){
+                    
+                      ?>
+                      <option value='<?php echo $ropv['pv_value']; ?>'><?php echo $ropv['pv_value']; ?></option> \
+                      <?php
+                    }
+                  ?>
+                  ");
+
+            }
+            <?php
+          }
+          ?>
+          $("#dsm").hide();
+          $("#dsa").hide();
+          $("#dsmlb").hide();
+          $("#dsalb").hide();
+          $("#pv").show();
+          $("#pvlb").show();
+          $('#ic').val('Choose an option...');
+          if (val == "N/A") {
+            $("#pvl").html("<option value='N/A'>N/A</option>");
+            $('#pv').val('N/A');
+          }
+        }
+    });
+
 });
 
 
@@ -70,7 +179,7 @@ $(document).ready(function () {
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <a class="navbar-brand" href="index.php" >
                         <img src="ds-logo.png" height="32" width="32" class="d-inline-block align-top" alt="">
-                        | PH DSaaS Case Tagging Tool
+                        | Cloud One Case Tagging Tool
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
@@ -81,7 +190,7 @@ $(document).ready(function () {
                     <div class="dropdown">
                           <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style = "width:100%;">Other Tagging</button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" onclick="javascript:window.open('https://wiki.jarvis.trendmicro.com/display/~fergal_dalton/Top+5+Issues+Tracking+-+Deep+Security+issue+keywords', '_blank')" style = "cursor: pointer;">Choose Issue Keyword</a>
+                        <a class="dropdown-item" onclick="javascript:window.open('https://wiki.jarvis.trendmicro.com/display/~fergal_dalton/Top+5+Issues+Tracking+-+Deep+Security+issue+keywords+-+04.03.2020', '_blank')" style = "cursor: pointer;">Choose Issue Keyword</a>
                         <a class="dropdown-item" data-toggle="modal" data-target="#OpsTag" style = "cursor: pointer;">SEG-Case Operational Tagging</a>
                       </div>
                   </div>
@@ -100,7 +209,7 @@ $(document).ready(function () {
                     <form>
                             <div class="form-group">
                                     <h2>Environment Details</h2>
-                                    <label for="exampleFormControlSelect1"><b>Deep Security Component:</b></label>
+                                    <label for="exampleFormControlSelect1"><b>Product Component:</b></label>
                                     <input class="form-control" id ="dsc" list="dscl" value = "Choose an option..." autocomplete="off">
                                     <datalist id="dscl">
                                       <?php
@@ -117,16 +226,7 @@ $(document).ready(function () {
                             <div class="form-group">
                                     <label for="exampleFormControlSelect1"><b>Concerned Feature:</b></label>
                                    <input class="form-control" id ="prbm" list="prbml" value = "Choose an option..." autocomplete="off">
-                                    <datalist id="prbml">
-                                      <?php
-                                            $qprbm = "select * from prbm order by prbm_value asc";
-                                                  $queryprbm = mysqli_query($con, $qprbm);
-                                                  while($roprbm = mysqli_fetch_array($queryprbm)){
-                                        ?>
-                                          <option value="<?php echo $roprbm['prbm_value']; ?>"><?php echo $roprbm['prbm_value']; ?></option>
-                                  <?php
-                                  }
-                                  ?>              
+                                    <datalist id="prbml">             
                                     </datalist>
                             </div>
                             <div class="form-group">
@@ -146,7 +246,13 @@ $(document).ready(function () {
                                     </datalist>
                             </div>
                             <div class="form-group">
-                                    <label for="exampleFormControlSelect1"><b>DSM Build:</b></label>
+                                    <label for="pv" id = "pvlb"><b>Product Version:</b></label>
+                                    <input class="form-control" id ="pv" list="pvl" value = "N/A" autocomplete="off">
+                                    <datalist id="pvl">         
+                                    </datalist>
+                            </div>
+                            <div class="form-group">
+                                    <label for="dsm" id = "dsmlb"><b>DSM Build:</b></label>
                                     <input class="form-control" id ="dsm" list="dsml" value = "N/A" autocomplete="off">
                                     <datalist id="dsml">
                                       <option value="N/A">N/A</option>
@@ -162,7 +268,7 @@ $(document).ready(function () {
                                     </datalist>
                             </div>
                             <div class="form-group">
-                                    <label for="exampleFormControlSelect1"><b>DSA Build:</b></label>
+                                    <label for="dsa" id = "dsalb"><b>DSA Build:</b></label>
                                     <input class="form-control" id ="dsa" list="dsal" value = "N/A" autocomplete="off">
                                     <datalist id="dsal">
                                       <option value="N/A">N/A</option>
@@ -187,15 +293,6 @@ $(document).ready(function () {
                                         <label for="exampleFormControlSelect1"><b>Issue Category:</b></label>
                                         <input class="form-control" id ="ic" list="icl" value = "Choose an option..." autocomplete="off">
                                         <datalist id="icl">
-                                          <?php
-                                              $qic = "select * from ic order by ic_value asc";
-                                                    $queryic = mysqli_query($con, $qic);
-                                                    while($roic = mysqli_fetch_array($queryic)){
-                                          ?>
-                                            <option value="<?php echo $roic['ic_value']; ?>"><?php echo $roic['ic_value']; ?></option>
-                                    <?php
-                                    }
-                                    ?>
                                         </datalist>
                                 </div>
                                 <div class="form-group">

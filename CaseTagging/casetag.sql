@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2020 at 09:30 AM
+-- Generation Time: May 19, 2020 at 01:43 PM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.7
 
@@ -139,7 +139,11 @@ INSERT INTO `dsa` (`dsa_id`, `dsa_value`) VALUES
 (99, '12.0.0.725'),
 (100, '12.0.0.767'),
 (101, '12.0.0.817'),
-(102, '11.0.0.871');
+(102, '11.0.0.871'),
+(104, '12.0.0.911'),
+(105, '12.0.0.967'),
+(106, '11.2.0.148'),
+(107, '10.0.0.3761');
 
 -- --------------------------------------------------------
 
@@ -160,16 +164,15 @@ INSERT INTO `dsc` (`dsc_id`, `dsc_value`) VALUES
 (1, 'DSM AWS AMI'),
 (2, 'DSM Azure VMI'),
 (3, 'DSR'),
-(4, 'DSaaS DSR'),
+(4, 'C1WS DSR'),
 (5, 'DSA'),
-(6, 'DSaaS'),
-(7, 'DSaaS DSA'),
+(6, 'Cloud One - WS'),
+(7, 'C1WS DSA'),
 (8, 'SmartCheck'),
-(9, 'App Protect'),
-(10, 'AWS WAF'),
-(11, 'DSM On Cloud'),
-(12, 'Cloud One - CC'),
-(13, 'Cloud One - AS');
+(9, 'DSM On Cloud'),
+(10, 'Cloud One - CC'),
+(11, 'Cloud One - AS'),
+(12, 'Cloud One - NS');
 
 -- --------------------------------------------------------
 
@@ -274,7 +277,13 @@ INSERT INTO `dsm` (`dsm_id`, `dsm_value`) VALUES
 (85, '11.3.192'),
 (86, '12.0.347'),
 (87, '12.0.0.300 (GM)'),
-(88, '11.0.360');
+(88, '11.0.360'),
+(89, '12.5.613'),
+(90, '12.5.732'),
+(91, '11.2.225'),
+(92, '12.0.393'),
+(93, '12.0.416'),
+(94, '12.5.855');
 
 -- --------------------------------------------------------
 
@@ -284,99 +293,38 @@ INSERT INTO `dsm` (`dsm_id`, `dsm_value`) VALUES
 
 CREATE TABLE `ic` (
   `ic_id` int(100) NOT NULL,
-  `ic_value` varchar(1000) NOT NULL
+  `ic_value` varchar(1000) NOT NULL,
+  `ic_dsc_value` varchar(10000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `ic`
 --
 
-INSERT INTO `ic` (`ic_id`, `ic_value`) VALUES
-(1, 'Configuration'),
-(2, 'Crash'),
-(3, 'Performance'),
-(4, 'Operations'),
-(5, 'Deployment'),
-(6, 'Integration'),
-(8, 'Compatibility'),
-(9, 'License'),
-(10, 'Account Administration');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `issk`
---
-
-CREATE TABLE `issk` (
-  `issK_id` int(100) NOT NULL,
-  `issK_value` varchar(10000) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `issk`
---
-
-INSERT INTO `issk` (`issK_id`, `issK_value`) VALUES
-(1, 'Module-AMSP-Offline'),
-(2, 'Module-AppPerformance-AMSP'),
-(3, 'Module-AppPerformance-AC'),
-(4, 'Module-AppPerformance-DSAM'),
-(5, 'Module-CPUPerformance-AMSP'),
-(6, 'Module-CPUPerformance-DSAM'),
-(7, 'Module-RAMPerformance-DSAM'),
-(8, 'Module-Functionality-IPS'),
-(9, 'Module-Functionality-DSAM'),
-(10, 'Module-Functionality-BM'),
-(11, 'Module-Functionality-Agentless'),
-(12, 'Module-Functionality-FW'),
-(13, 'Module-Functionality-AppControl'),
-(14, 'Module-Functionality-AMSP'),
-(15, 'Module-Functionality-NetworkEngine'),
-(16, 'Module-Functionality-LI'),
-(17, 'Module-Functionality-WR'),
-(18, 'Module-Functionality-AC'),
-(19, 'Module-IPS-RuleUpdate'),
-(20, 'Module-IM-RuleUpdate'),
-(21, 'Module-LI-RuleUpdate'),
-(22, 'Module-AM-SecurityUpdate'),
-(23, 'Module-Functionality-Agentless'),
-(24, 'Module-Crash-DSAM'),
-(25, 'Module-Crash-AMSP'),
-(26, 'Module-Crash-NetworkEngine'),
-(27, 'Module-Deployment-Failure'),
-(28, 'DSM-Deployment-Upgrade'),
-(29, 'DSM-Performance-RAM'),
-(30, 'DSM-Functionality-DuplicateAgents'),
-(31, 'DSM-Functionality-Console'),
-(32, 'DSM-Functionality-Reports'),
-(33, 'DSM-Functionality-DB'),
-(34, 'DSM-Functionality-SIEM'),
-(35, 'DSM-Functionality-Updates'),
-(36, 'DSM-Functionality-SecurityEvent'),
-(37, 'DSM-Performance-DB'),
-(38, 'DSM-Functionality-EBT'),
-(39, 'DSM-Functionality-Integration'),
-(40, 'DSM-Administration-Users'),
-(41, 'Agent-Deployment-Upgrade'),
-(42, 'Agent-Deployment-Install'),
-(43, 'Agent-Functionality-General'),
-(44, 'Agent-Functionality-SmartProtection'),
-(45, 'Agent-Functionality-Activation'),
-(46, 'Agent-Functionality-Heartbeat'),
-(47, 'Agent-Functionality-Question'),
-(48, 'Agent-Compatiblity-KernelSupport'),
-(49, 'DSM-Connector-AWS'),
-(50, 'DSM-Connector-VMware'),
-(51, 'DSM-Connector-Azure'),
-(52, 'DSM-Connector-GCP'),
-(53, 'Supportability-Troubleshooting-IssueIsolation'),
-(54, 'API-Functionality-Python'),
-(55, 'Account-Administration-BSP'),
-(56, 'Account-Administration-License'),
-(57, 'DSM-Administration-License'),
-(58, 'DSM-Administration-Users'),
-(59, 'Module-Functionality-IM');
+INSERT INTO `ic` (`ic_id`, `ic_value`, `ic_dsc_value`) VALUES
+(1, 'Configuration', 'C1WS'),
+(2, 'Crash', 'C1WS'),
+(3, 'Performance', 'C1WS'),
+(4, 'Operations', 'C1WS'),
+(5, 'Deployment', 'C1WS'),
+(6, 'Integration', 'C1WS'),
+(8, 'Compatibility', 'C1WS'),
+(9, 'License', 'C1WS'),
+(10, 'Account Administration', 'C1WS'),
+(12, 'Deployment', 'Cloud One - AS'),
+(13, 'Configuration', 'Cloud One - AS'),
+(14, 'Operations', 'Cloud One - AS'),
+(15, 'Compatibility', 'Cloud One - AS'),
+(16, 'Crash', 'Cloud One - AS'),
+(17, 'Performance', 'Cloud One - AS'),
+(18, 'Compatibility', 'SmartCheck'),
+(19, 'Configuration', 'SmartCheck'),
+(20, 'Crash', 'SmartCheck'),
+(21, 'Deployment', 'SmartCheck'),
+(22, 'Integration', 'SmartCheck'),
+(23, 'Operations', 'SmartCheck'),
+(24, 'Performance', 'SmartCheck'),
+(25, 'Account Administration', 'SmartCheck');
 
 -- --------------------------------------------------------
 
@@ -394,14 +342,16 @@ CREATE TABLE `opstag` (
 --
 
 INSERT INTO `opstag` (`ops_id`, `ops_val`) VALUES
-(1, 'DSaaS-Ops-RST-PSWD'),
-(2, 'DSaaS-Ops-RST-MFA'),
-(3, 'DSaaS-Ops-UNSU-ACCNT'),
-(4, 'DSaaS-Ops-DEL-ACCNT'),
-(5, 'DSaaS-Ops-KSP-REQ'),
-(6, 'DSaaS-Ops-TEN-DBG'),
-(7, 'DSaaS-Ops-RCA-REQ'),
-(8, 'DSaaS-Ops-PP-REQ');
+(1, '[C1WS-Ops-RST-PSWD]'),
+(2, '[C1WS-Ops-RST-MFA]'),
+(3, '[C1WS-Ops-UNSU-ACCNT]'),
+(4, '[C1WS-Ops-DEL-ACCNT]'),
+(5, '[C1WS-Ops-KSP-REQ]'),
+(6, '[C1WS-Ops-TEN-DBG]'),
+(7, '[C1WS-Ops-RCA-REQ]'),
+(8, '[C1WS-Ops-PP-REQ]'),
+(9, '[C1WS-Ops-INT-REQ]'),
+(10, '[C1WS-Ops-DSRU-REQ]');
 
 -- --------------------------------------------------------
 
@@ -481,7 +431,8 @@ INSERT INTO `os` (`os_id`, `os_value`) VALUES
 (60, 'Debian 9'),
 (61, 'Debian 10'),
 (62, 'Windows 7'),
-(63, 'Windows Server 2000');
+(63, 'Windows Server 2000'),
+(64, 'SuSE 15');
 
 -- --------------------------------------------------------
 
@@ -509,29 +460,136 @@ INSERT INTO `passwordct` (`password_id`, `password`) VALUES
 
 CREATE TABLE `prbm` (
   `prbm_id` int(100) NOT NULL,
-  `prbm_value` varchar(1000) NOT NULL
+  `prbm_value` varchar(1000) NOT NULL,
+  `prbm_dsc_value` varchar(10000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `prbm`
 --
 
-INSERT INTO `prbm` (`prbm_id`, `prbm_value`) VALUES
-(1, 'AMSP'),
-(2, 'DS_AM'),
-(3, 'FW'),
-(4, 'IPS'),
-(5, 'IM'),
-(6, 'LI'),
-(7, 'AC'),
-(8, 'Network Engine'),
-(9, 'SAP'),
-(10, 'Agent Core'),
-(11, 'Package'),
-(12, 'DSM'),
-(13, 'Database'),
-(19, 'Support Center'),
-(20, 'WRS');
+INSERT INTO `prbm` (`prbm_id`, `prbm_value`, `prbm_dsc_value`) VALUES
+(1, 'AMSP', 'C1WS'),
+(2, 'DS_AM', 'C1WS'),
+(3, 'FW', 'C1WS'),
+(4, 'IPS', 'C1WS'),
+(5, 'IM', 'C1WS'),
+(6, 'LI', 'C1WS'),
+(7, 'AC', 'C1WS'),
+(8, 'Network Engine', 'C1WS'),
+(9, 'SAP', 'C1WS'),
+(10, 'Agent Core', 'C1WS'),
+(11, 'Package', 'C1WS'),
+(12, 'DSM', 'C1WS'),
+(13, 'Database', 'C1WS'),
+(14, 'Support Center', 'C1WS'),
+(15, 'WRS', 'C1WS'),
+(16, 'Malicious Payload', 'Cloud One - AS'),
+(17, 'SQL injection', 'Cloud One - AS'),
+(18, 'Illegal File Access', 'Cloud One - AS'),
+(19, 'Remote Command Execution', 'Cloud One - AS'),
+(20, 'Open Redirect', 'Cloud One - AS'),
+(21, 'Malicious File Upload', 'Cloud One - AS'),
+(22, 'Agent Core', 'Cloud One - AS'),
+(23, 'Dashboard', 'Cloud One - AS'),
+(24, 'Package', 'Cloud One - AS'),
+(32, 'Kubernetes', 'SmartCheck'),
+(33, 'Container Runtime', 'SmartCheck'),
+(34, 'Database', 'SmartCheck'),
+(35, 'Helm', 'SmartCheck'),
+(36, 'Pods', 'SmartCheck'),
+(37, 'Kubernetes Services', 'SmartCheck');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pv`
+--
+
+CREATE TABLE `pv` (
+  `pv_id` int(100) NOT NULL,
+  `pv_value` varchar(10000) NOT NULL,
+  `pv_dsc_value` varchar(10000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pv`
+--
+
+INSERT INTO `pv` (`pv_id`, `pv_value`, `pv_dsc_value`) VALUES
+(1, '4.1.5 (Java)', 'Cloud One - AS'),
+(2, '1.2.44', 'SmartCheck'),
+(3, '1.2.43', 'SmartCheck'),
+(4, '1.2.42', 'SmartCheck'),
+(5, '1.2.41', 'SmartCheck'),
+(6, '1.2.40', 'SmartCheck'),
+(7, '1.2.39', 'SmartCheck'),
+(8, '1.2.38', 'SmartCheck'),
+(9, '1.2.37', 'SmartCheck'),
+(10, '1.2.36', 'SmartCheck'),
+(11, '1.2.35', 'SmartCheck'),
+(12, '1.2.34', 'SmartCheck'),
+(13, '1.2.33', 'SmartCheck'),
+(14, '1.2.32', 'SmartCheck'),
+(15, '1.2.31', 'SmartCheck'),
+(16, '1.2.30', 'SmartCheck'),
+(17, '1.2.29', 'SmartCheck'),
+(18, '1.2.28', 'SmartCheck'),
+(19, '1.2.27', 'SmartCheck'),
+(20, '1.2.26', 'SmartCheck'),
+(21, '1.2.25', 'SmartCheck'),
+(22, '1.2.24', 'SmartCheck'),
+(23, '1.2.23', 'SmartCheck'),
+(24, '1.2.22', 'SmartCheck'),
+(25, '1.2.21', 'SmartCheck'),
+(26, '1.2.20', 'SmartCheck'),
+(27, '1.2.19', 'SmartCheck'),
+(28, '1.2.18', 'SmartCheck'),
+(29, '1.2.17', 'SmartCheck'),
+(30, '1.2.16', 'SmartCheck'),
+(31, '1.2.15', 'SmartCheck'),
+(92, '1.2.14', 'SmartCheck'),
+(93, '1.2.13', 'SmartCheck'),
+(94, '1.2.12', 'SmartCheck'),
+(95, '1.2.11', 'SmartCheck'),
+(96, '1.2.10', 'SmartCheck'),
+(97, '1.2.9', 'SmartCheck'),
+(98, '1.2.8', 'SmartCheck'),
+(99, '1.2.7', 'SmartCheck'),
+(100, '1.2.6', 'SmartCheck'),
+(101, '1.2.5', 'SmartCheck'),
+(102, '1.2.4', 'SmartCheck'),
+(103, '1.2.3', 'SmartCheck'),
+(104, '1.2.2', 'SmartCheck'),
+(105, '1.2.1', 'SmartCheck'),
+(106, '1.2.0', 'SmartCheck'),
+(107, '1.1.9', 'SmartCheck'),
+(108, '1.1.8', 'SmartCheck'),
+(109, '1.1.7', 'SmartCheck'),
+(110, '1.1.6', 'SmartCheck'),
+(111, '1.1.5', 'SmartCheck'),
+(112, '1.1.4', 'SmartCheck'),
+(113, '1.1.3', 'SmartCheck'),
+(114, '1.1.2', 'SmartCheck'),
+(115, '1.1.1', 'SmartCheck'),
+(116, '1.0.8-aws-container-marketplace', 'SmartCheck'),
+(117, '1.1.0', 'SmartCheck'),
+(118, '1.0.9', 'SmartCheck'),
+(119, '1.0.8', 'SmartCheck'),
+(120, '1.0.7', 'SmartCheck'),
+(121, '1.0.6', 'SmartCheck'),
+(122, '1.0.5', 'SmartCheck'),
+(123, '1.0.4', 'SmartCheck'),
+(124, '1.0.3', 'SmartCheck'),
+(125, '1.0.2', 'SmartCheck'),
+(126, '4.1.1 (Java)', 'Cloud One - AS'),
+(127, '4.1.5 (PHP)', 'Cloud One - AS'),
+(128, '4.1.6 (PHP)', 'Cloud One - AS'),
+(129, '4.1.8 (PHP)', 'Cloud One - AS'),
+(130, '4.1.4 (NodeJS)', 'Cloud One - AS'),
+(131, '4.1.5 (PHP)', 'Cloud One - AS'),
+(132, '4.1.6 (Python)', 'Cloud One - AS'),
+(133, '4.4.2 (Python)', 'Cloud One - AS');
 
 -- --------------------------------------------------------
 
@@ -542,139 +600,188 @@ INSERT INTO `prbm` (`prbm_id`, `prbm_value`) VALUES
 CREATE TABLE `sc` (
   `sc_id` int(100) NOT NULL,
   `sc_value` varchar(1000) NOT NULL,
-  `sc_ic_value` varchar(1000) NOT NULL
+  `sc_ic_value` varchar(1000) NOT NULL,
+  `sc_dsc_value` varchar(10000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sc`
 --
 
-INSERT INTO `sc` (`sc_id`, `sc_value`, `sc_ic_value`) VALUES
-(1, 'Anti-Malware', 'Configuration'),
-(2, 'AMSP', 'Crash'),
-(3, 'Web Reputation', 'Configuration'),
-(4, 'Firewall', 'Configuration'),
-(5, 'Intrusion Prevention', 'Configuration'),
-(6, 'Integrity Monitoring', 'Configuration'),
-(7, 'Log Inspection', 'Configuration'),
-(8, 'Application Control', 'Configuration'),
-(9, 'Intrusion Prevention Rule', 'Configuration'),
-(10, 'Integrity Monitoring Rule', 'Configuration'),
-(11, 'Log Inspection Rule', 'Configuration'),
-(12, 'User and Roles', 'Configuration'),
-(13, 'Reports', 'Configuration'),
-(18, 'TLS/SSL', 'Configuration'),
-(20, 'Scan Exclusions', 'Configuration'),
-(32, 'General Questions', 'Configuration'),
-(34, 'Network Engine', 'Crash'),
-(35, 'AC', 'Crash'),
-(36, 'OS Patch', 'Crash'),
-(37, 'App Patch', 'Crash'),
-(38, 'AMSP', 'Performance'),
-(39, 'DS_AM', 'Performance'),
-(41, 'AC', 'Performance'),
-(43, 'Network Engine', 'Performance'),
-(44, 'FW&IPS Engine', 'Performance'),
-(45, 'High CPU Usage', 'Performance'),
-(46, 'High Memory Usage', 'Performance'),
-(47, 'High Disk I/O', 'Performance'),
-(48, 'High Network Usage', 'Performance'),
-(59, 'Security Update Fail', 'Operations'),
-(60, 'Software Update Fail', 'Operations'),
-(61, 'Recommendation Scan Fail', 'Operations'),
-(62, 'Activation Fail', 'Operations'),
-(63, 'Alerts', 'Operations'),
-(65, 'DSM Web Console', 'Operations'),
-(67, 'DSaaS Relay (General)', 'Operations'),
-(68, 'DSM AMI(General)', 'Operations'),
-(69, 'DSM VMI(General)', 'Operations'),
-(70, 'Anti-Malware', 'Operations'),
-(71, 'Web Reputation', 'Operations'),
-(72, 'Firewall', 'Operations'),
-(73, 'Intrusion Prevention', 'Operations'),
-(74, 'Integrity Monitoring', 'Operations'),
-(75, 'Log Inspection', 'Operations'),
-(76, 'Application Control', 'Operations'),
-(78, 'Agent Offline', 'Operations'),
-(81, 'Private Cloud/AirGap', 'Deployment'),
-(82, 'DS AMI Deployment', 'Deployment'),
-(83, 'DS VMI Deployment', 'Deployment'),
-(84, 'DS AMI Upgrade', 'Deployment'),
-(85, 'DS VMI Upgrade', 'Deployment'),
-(89, 'DSA Installation', 'Deployment'),
-(90, 'DSA Upgrade', 'Deployment'),
-(94, 'Multi-Tenant', 'Deployment'),
-(99, 'QuickStart - AWS', 'Deployment'),
-(101, 'SAML', 'Integration'),
-(102, 'Local SPS', 'Integration'),
-(103, 'Load Balancer', 'Integration'),
-(104, 'Proxy', 'Integration'),
-(105, 'SIEM', 'Integration'),
-(106, 'Splunk', 'Integration'),
-(107, 'Rapid7/Qualys', 'Integration'),
-(108, 'DDAN', 'Integration'),
-(109, 'Control Manager/ApexCentral', 'Integration'),
-(110, 'SMTP', 'Integration'),
-(111, 'SAP', 'Integration'),
-(112, 'Docker', 'Integration'),
-(117, 'Kubernetes - OnPrem', 'Integration'),
-(118, 'AKS/EKS', 'Integration'),
-(121, 'Trend Products', 'Compatibility'),
-(122, 'Third Party Integration', 'Compatibility'),
-(123, 'Standards / RFC Compatibility', 'Compatibility'),
-(124, 'Online Activation Code Update', 'License'),
-(125, 'Offline Activation Code Update', 'License'),
-(129, 'Back-end Related DSaaS', 'Operations'),
-(131, 'Billing', 'License'),
-(139, 'Account Details Inquiry', 'Account Administration'),
-(142, 'Change Information', 'Account Administration'),
-(145, 'WAF Rules', 'Configuration'),
-(152, 'DSA Activation', 'Deployment'),
-(160, 'DSR Installation', 'Deployment'),
-(162, 'Certificates', 'Deployment'),
-(164, 'IM', 'Performance'),
-(165, 'IPS', 'Performance'),
-(166, 'LI', 'Performance'),
-(167, 'Uninstallation', 'Deployment'),
-(168, 'Migration', 'Deployment'),
-(169, 'Active Directory', 'Integration'),
-(172, 'Customer Licensing Portal', 'License'),
-(173, 'Transfer', 'License'),
-(174, 'Module Offline', 'Operations'),
-(175, 'Network Communication', 'Operations'),
-(176, 'DSM Job Failed', 'Operations'),
-(177, 'DS User Account', 'Account Administration'),
-(178, 'Kernel Support', 'Integration'),
-(179, 'Cannot access console', 'Operations'),
-(180, 'Email Confirmation Failed', 'Account Administration'),
-(181, 'AWS Subscription', 'License'),
-(182, 'Azure Subscription', 'License'),
-(183, 'DS API', 'Integration'),
-(184, 'DSSC API', 'Integration'),
-(185, 'DSAP API', 'Integration'),
-(186, 'AWS Cloud Connector', 'Integration'),
-(187, 'Azure Cloud Connector', 'Integration'),
-(188, 'GCP Cloud Connector', 'Integration'),
-(189, 'DB - Postgre', 'Performance'),
-(190, 'DB - Oracle', 'Performance'),
-(191, 'DB - Microsoft SQL', 'Performance'),
-(192, 'DB - RDS', 'Performance'),
-(193, 'DB - Deadlock', 'Performance'),
-(194, 'DB - Full', 'Performance'),
-(195, 'Pending DSM Jobs', 'Performance'),
-(196, 'Architecture and Sizing', 'Operations'),
-(197, 'Best Practice Guide', 'Configuration'),
-(198, 'Application Crash - 3rd Party', 'Crash'),
-(199, 'Application Crash - AMSP/ds_am', 'Crash'),
-(200, 'Application Crash - DSA', 'Crash'),
-(201, 'ds_am', 'Crash'),
-(202, 'Policy', 'Configuration'),
-(203, 'MFA', 'Integration'),
-(204, 'MySupport Portal Access', 'Account Administration'),
-(205, 'EDR/MDR/XDR', 'Integration'),
-(206, 'Module Installation Failed', 'Deployment'),
-(207, 'DSM On Cloud Upgrade', 'Deployment'),
-(208, 'Security Updates', 'Configuration');
+INSERT INTO `sc` (`sc_id`, `sc_value`, `sc_ic_value`, `sc_dsc_value`) VALUES
+(1, 'Anti-Malware', 'Configuration', 'C1WS'),
+(2, 'AMSP', 'Crash', 'C1WS'),
+(3, 'Web Reputation', 'Configuration', 'C1WS'),
+(4, 'Firewall', 'Configuration', 'C1WS'),
+(5, 'Intrusion Prevention', 'Configuration', 'C1WS'),
+(6, 'Integrity Monitoring', 'Configuration', 'C1WS'),
+(7, 'Log Inspection', 'Configuration', 'C1WS'),
+(8, 'Application Control', 'Configuration', 'C1WS'),
+(9, 'Intrusion Prevention Rule', 'Configuration', 'C1WS'),
+(10, 'Integrity Monitoring Rule', 'Configuration', 'C1WS'),
+(11, 'Log Inspection Rule', 'Configuration', 'C1WS'),
+(12, 'User and Roles', 'Configuration', 'C1WS'),
+(13, 'Reports', 'Configuration', 'C1WS'),
+(18, 'TLS/SSL', 'Configuration', 'C1WS'),
+(20, 'Scan Exclusions', 'Configuration', 'C1WS'),
+(32, 'General Questions', 'Configuration', 'C1WS'),
+(34, 'Network Engine', 'Crash', 'C1WS'),
+(35, 'AC', 'Crash', 'C1WS'),
+(36, 'OS Patch', 'Crash', 'C1WS'),
+(37, 'App Patch', 'Crash', 'C1WS'),
+(38, 'AMSP', 'Performance', 'C1WS'),
+(39, 'DS_AM', 'Performance', 'C1WS'),
+(41, 'AC', 'Performance', 'C1WS'),
+(43, 'Network Engine', 'Performance', 'C1WS'),
+(44, 'FW&IPS Engine', 'Performance', 'C1WS'),
+(45, 'High CPU Usage', 'Performance', 'C1WS'),
+(46, 'High Memory Usage', 'Performance', 'C1WS'),
+(47, 'High Disk I/O', 'Performance', 'C1WS'),
+(48, 'High Network Usage', 'Performance', 'C1WS'),
+(59, 'Security Update Fail', 'Operations', 'C1WS'),
+(60, 'Software Update Fail', 'Operations', 'C1WS'),
+(61, 'Recommendation Scan Fail', 'Operations', 'C1WS'),
+(62, 'Activation Fail', 'Operations', 'C1WS'),
+(63, 'Alerts', 'Operations', 'C1WS'),
+(65, 'DSM Web Console', 'Operations', 'C1WS'),
+(67, 'DSA Relay (General)', 'Operations', 'C1WS'),
+(68, 'DSM AMI(General)', 'Operations', 'C1WS'),
+(69, 'DSM VMI(General)', 'Operations', 'C1WS'),
+(70, 'Anti-Malware', 'Operations', 'C1WS'),
+(71, 'Web Reputation', 'Operations', 'C1WS'),
+(72, 'Firewall', 'Operations', 'C1WS'),
+(73, 'Intrusion Prevention', 'Operations', 'C1WS'),
+(74, 'Integrity Monitoring', 'Operations', 'C1WS'),
+(75, 'Log Inspection', 'Operations', 'C1WS'),
+(76, 'Application Control', 'Operations', 'C1WS'),
+(78, 'Agent Offline', 'Operations', 'C1WS'),
+(81, 'Private Cloud/AirGap', 'Deployment', 'C1WS'),
+(82, 'DS AMI Deployment', 'Deployment', 'C1WS'),
+(83, 'DS VMI Deployment', 'Deployment', 'C1WS'),
+(84, 'DS AMI Upgrade', 'Deployment', 'C1WS'),
+(85, 'DS VMI Upgrade', 'Deployment', 'C1WS'),
+(89, 'DSA Installation', 'Deployment', 'C1WS'),
+(90, 'DSA Upgrade', 'Deployment', 'C1WS'),
+(94, 'Multi-Tenant', 'Deployment', 'C1WS'),
+(99, 'QuickStart - AWS', 'Deployment', 'C1WS'),
+(101, 'SAML', 'Integration', 'C1WS'),
+(102, 'Local SPS', 'Integration', 'C1WS'),
+(103, 'Load Balancer', 'Integration', 'C1WS'),
+(104, 'Proxy', 'Integration', 'C1WS'),
+(105, 'SIEM', 'Integration', 'C1WS'),
+(106, 'Splunk', 'Integration', 'C1WS'),
+(107, 'Rapid7/Qualys', 'Integration', 'C1WS'),
+(108, 'DDAN', 'Integration', 'C1WS'),
+(109, 'Control Manager/ApexCentral', 'Integration', 'C1WS'),
+(110, 'SMTP', 'Integration', 'C1WS'),
+(111, 'SAP', 'Integration', 'C1WS'),
+(112, 'Docker', 'Integration', 'C1WS'),
+(117, 'Kubernetes - OnPrem', 'Integration', 'C1WS'),
+(118, 'AKS/EKS', 'Integration', 'C1WS'),
+(121, 'Trend Products', 'Compatibility', 'C1WS'),
+(122, 'Third Party Integration', 'Compatibility', 'C1WS'),
+(123, 'Standards / RFC Compatibility', 'Compatibility', 'C1WS'),
+(124, 'Online Activation Code Update', 'License', 'C1WS'),
+(125, 'Offline Activation Code Update', 'License', 'C1WS'),
+(129, 'Back-end Related DSaaS', 'Operations', 'C1WS'),
+(131, 'Billing', 'License', 'C1WS'),
+(139, 'Account Details Inquiry', 'Account Administration', 'C1WS'),
+(142, 'Change Information', 'Account Administration', 'C1WS'),
+(145, 'WAF Rules', 'Configuration', 'C1WS'),
+(152, 'DSA Activation', 'Deployment', 'C1WS'),
+(160, 'DSR Installation', 'Deployment', 'C1WS'),
+(162, 'Certificates', 'Deployment', 'C1WS'),
+(164, 'IM', 'Performance', 'C1WS'),
+(165, 'IPS', 'Performance', 'C1WS'),
+(166, 'LI', 'Performance', 'C1WS'),
+(167, 'Uninstallation', 'Deployment', 'C1WS'),
+(168, 'Migration', 'Deployment', 'C1WS'),
+(169, 'Active Directory', 'Integration', 'C1WS'),
+(172, 'Customer Licensing Portal', 'License', 'C1WS'),
+(173, 'Transfer', 'License', 'C1WS'),
+(174, 'Module Offline', 'Operations', 'C1WS'),
+(175, 'Network Communication', 'Operations', 'C1WS'),
+(176, 'DSM Job Failed', 'Operations', 'C1WS'),
+(177, 'DS User Account', 'Account Administration', 'C1WS'),
+(178, 'Kernel Support', 'Integration', 'C1WS'),
+(179, 'Cannot access console', 'Operations', 'C1WS'),
+(180, 'Email Confirmation Failed', 'Account Administration', 'C1WS'),
+(181, 'AWS Subscription', 'License', 'C1WS'),
+(182, 'Azure Subscription', 'License', 'C1WS'),
+(183, 'DS API', 'Integration', 'C1WS'),
+(184, 'DSSC API', 'Integration', 'C1WS'),
+(185, 'DSAP API', 'Integration', 'C1WS'),
+(186, 'AWS Cloud Connector', 'Integration', 'C1WS'),
+(187, 'Azure Cloud Connector', 'Integration', 'C1WS'),
+(188, 'GCP Cloud Connector', 'Integration', 'C1WS'),
+(189, 'DB - Postgre', 'Performance', 'C1WS'),
+(190, 'DB - Oracle', 'Performance', 'C1WS'),
+(191, 'DB - Microsoft SQL', 'Performance', 'C1WS'),
+(192, 'DB - RDS', 'Performance', 'C1WS'),
+(193, 'DB - Deadlock', 'Performance', 'C1WS'),
+(194, 'DB - Full', 'Performance', 'C1WS'),
+(195, 'Pending DSM Jobs', 'Performance', 'C1WS'),
+(196, 'Architecture and Sizing', 'Operations', 'C1WS'),
+(197, 'Best Practice Guide', 'Configuration', 'C1WS'),
+(198, 'Application Crash - 3rd Party', 'Crash', 'C1WS'),
+(199, 'Application Crash - AMSP/ds_am', 'Crash', 'C1WS'),
+(200, 'Application Crash - DSA', 'Crash', 'C1WS'),
+(201, 'ds_am', 'Crash', 'C1WS'),
+(202, 'Policy', 'Configuration', 'C1WS'),
+(203, 'MFA', 'Integration', 'C1WS'),
+(204, 'MySupport Portal Access', 'Account Administration', 'C1WS'),
+(205, 'EDR/MDR/XDR', 'Integration', 'C1WS'),
+(206, 'Module Installation Failed', 'Deployment', 'C1WS'),
+(207, 'DSM On Cloud Upgrade', 'Deployment', 'C1WS'),
+(208, 'Security Updates', 'Configuration', 'C1WS'),
+(209, 'Agent Platform Support', 'Compatibility', 'C1WS'),
+(210, 'Tasks', 'Configuration', 'C1WS'),
+(211, 'Java Deployment', 'Deployment', 'Cloud One - AS'),
+(212, 'Python Deployment', 'Deployment', 'Cloud One - AS'),
+(213, 'Node Deployment', 'Deployment', 'Cloud One - AS'),
+(214, 'PHP Deployment', 'Deployment', 'Cloud One - AS'),
+(215, 'Uninstallation', 'Deployment', 'Cloud One - AS'),
+(216, 'Upgrade', 'Deployment', 'Cloud One - AS'),
+(217, 'Malicious Payload', 'Configuration', 'Cloud One - AS'),
+(218, 'SQL injection', 'Configuration', 'Cloud One - AS'),
+(219, 'Illegal File Access', 'Configuration', 'Cloud One - AS'),
+(220, 'Remote Command Execution', 'Configuration', 'Cloud One - AS'),
+(221, 'Open Redirect', 'Configuration', 'Cloud One - AS'),
+(222, 'Malicious File Upload', 'Configuration', 'Cloud One - AS'),
+(223, 'General Questions', 'Configuration', 'Cloud One - AS'),
+(224, 'Groups', 'Configuration', 'Cloud One - AS'),
+(225, 'Reports/Events', 'Configuration', 'Cloud One - AS'),
+(226, 'False Positive', 'Operations', 'Cloud One - AS'),
+(227, 'Connectivity Issues', 'Operations', 'Cloud One - AS'),
+(228, 'Agent Component Support', 'Compatibility', 'Cloud One - AS'),
+(229, 'Third Party Integration', 'Compatibility', 'Cloud One - AS'),
+(230, 'Application Crash - Agent Core', 'Crash', 'Cloud One - AS'),
+(231, 'Application Crash - 3rd Party', 'Crash', 'Cloud One - AS'),
+(232, 'High CPU', 'Performance', 'Cloud One - AS'),
+(233, 'High Memory', 'Performance', 'Cloud One - AS'),
+(234, 'High Disk Usage', 'Performance', 'Cloud One - AS'),
+(235, 'High Network Utilization', 'Performance', 'Cloud One - AS'),
+(236, 'Agent Core', 'Performance', 'Cloud One - AS'),
+(237, 'SmartCheck User', 'Account Administration', 'SmartCheck'),
+(238, 'Registry', 'Compatibility', 'SmartCheck'),
+(239, 'Container Runtime', 'Compatibility', 'SmartCheck'),
+(240, 'Content Rules (YARA)', 'Configuration', 'SmartCheck'),
+(241, 'Manifest (YAML)', 'Configuration', 'SmartCheck'),
+(242, 'Web Hooks', 'Configuration', 'SmartCheck'),
+(243, 'Registry Scan', 'Configuration', 'SmartCheck'),
+(244, 'Pipeline Automation', 'Configuration', 'SmartCheck'),
+(245, 'Pod', 'Crash', 'SmartCheck'),
+(246, 'K8s Node', 'Crash', 'SmartCheck'),
+(247, 'Local K8s Cluster', 'Deployment', 'SmartCheck'),
+(248, 'EKS', 'Deployment', 'SmartCheck'),
+(249, 'GKE', 'Deployment', 'SmartCheck'),
+(250, 'AKS', 'Deployment', 'SmartCheck'),
+(251, 'Slack', 'Integration', 'SmartCheck'),
+(252, 'AWS SNS', 'Integration', 'SmartCheck'),
+(253, 'Jenkins', 'Integration', 'SmartCheck'),
+(254, 'Upgrade', 'Operations', 'SmartCheck'),
+(255, 'Registry', 'Operations', 'SmartCheck'),
+(256, 'Image Scan Time', 'Performance', 'SmartCheck');
 
 -- --------------------------------------------------------
 
@@ -726,12 +833,6 @@ ALTER TABLE `ic`
   ADD PRIMARY KEY (`ic_id`);
 
 --
--- Indexes for table `issk`
---
-ALTER TABLE `issk`
-  ADD PRIMARY KEY (`issK_id`);
-
---
 -- Indexes for table `opstag`
 --
 ALTER TABLE `opstag`
@@ -756,6 +857,12 @@ ALTER TABLE `prbm`
   ADD PRIMARY KEY (`prbm_id`);
 
 --
+-- Indexes for table `pv`
+--
+ALTER TABLE `pv`
+  ADD PRIMARY KEY (`pv_id`);
+
+--
 -- Indexes for table `sc`
 --
 ALTER TABLE `sc`
@@ -775,61 +882,61 @@ ALTER TABLE `seg`
 -- AUTO_INCREMENT for table `dsa`
 --
 ALTER TABLE `dsa`
-  MODIFY `dsa_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
+  MODIFY `dsa_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `dsc`
 --
 ALTER TABLE `dsc`
-  MODIFY `dsc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `dsc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `dsm`
 --
 ALTER TABLE `dsm`
-  MODIFY `dsm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `dsm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `ic`
 --
 ALTER TABLE `ic`
-  MODIFY `ic_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `issk`
---
-ALTER TABLE `issk`
-  MODIFY `issK_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `ic_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `opstag`
 --
 ALTER TABLE `opstag`
-  MODIFY `ops_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ops_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `os`
 --
 ALTER TABLE `os`
-  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT for table `prbm`
 --
 ALTER TABLE `prbm`
-  MODIFY `prbm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `prbm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT for table `pv`
+--
+ALTER TABLE `pv`
+  MODIFY `pv_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `sc`
 --
 ALTER TABLE `sc`
-  MODIFY `sc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
+  MODIFY `sc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=257;
 
 --
 -- AUTO_INCREMENT for table `seg`
 --
 ALTER TABLE `seg`
-  MODIFY `seg_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `seg_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

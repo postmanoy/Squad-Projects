@@ -3,7 +3,11 @@ session_start();
 error_reporting(0);
 
 include('connect.php');
-
+if(!isset($_SERVER['HTTP_REFERER'])){
+    // redirect them to your desired location
+    header('location:../CaseTagging/index.php');
+    exit;
+}
    if(isset($_SESSION['output'])){
     $output = $_SESSION['output'];
    }
@@ -18,7 +22,7 @@ include('connect.php');
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>PH DSaaS Case Tagging Tool</title>
+  <title>Cloud One Case Tagging Tool</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" type="image/png" href="favicon.png"/>
@@ -39,11 +43,13 @@ $(document).ready(function()
              });
              $("#issCat").hide();
              $("#issCatL").hide();
+             $("#opt3l").hide();
+             $("#opt3lb").hide();
       });
       
       $(document).ready(function () 
       {
-              $("#opt").change(function () {
+              $("#opt2l").change(function () {
               var val = $(this).val();
               if (val != "sc") {
                   $("#issCat").hide();
@@ -57,9 +63,79 @@ $(document).ready(function()
 });
 
 $(document).ready(function () {
-    $("#opt").change(function () {
-      var optvalue = $(this).val();
-      if(optvalue == "dsc"){
+  $("#opt").change(function () {
+        var val = $(this).val();
+        $('#opt2l').val('N/A');
+        if ($('#opt2l').val() == "N/A") {
+          $("#tableopt").html('');
+        }
+        if ( (val.includes("C1WS")) || (val.includes("DS")) || (val.includes("WS")) ){
+                $("#opt2l").html(" \
+                    <option value = 'N/A'>N/A</option> \
+                    <option value='prbm'>Concerned Feature</option> \
+                    <option value='dsm'>DSM Version</option> \
+                    <option value='dsa'>DSA Version</option> \
+                    <option value='ic'>Issue Category</option> \
+                    <option value='sc'>Sub Category</option> \
+                  "); 
+            }
+        else{
+              $("#opt2l").html(" \
+                    <option value = 'N/A'>N/A</option> \
+                    <option value='prbm'>Concerned Feature</option> \
+                    <option value='pv'>Product Version</option> \
+                    <option value='ic'>Issue Category</option> \
+                    <option value='sc'>Sub Category</option> \
+                  ");
+        }
+
+        <?php
+              $qdsc= "select * from dsc";
+              $querydsc = mysqli_query($con, $qdsc);
+              while($rodsc = mysqli_fetch_array($querydsc)){
+                $valdsc = $rodsc['dsc_value'];
+            ?>
+              if(val == "<?php echo $valdsc; ?>"){
+                $("#issCat").html(" \
+                    <option value='N/A'>N/A</option> \
+                  <?php
+                    $qic = "select * from ic WHERE ic_dsc_value = '$valdsc' order by ic_value asc";
+                    $queryic = mysqli_query($con, $qic);
+                    while($roic = mysqli_fetch_array($queryic)){
+                  
+                    ?>
+                    <option value='<?php echo $roic['ic_value']; ?>'><?php echo $roic['ic_value']; ?></option> \
+                    <?php
+                  }
+                  ?>
+                  "); 
+                }
+              else if ( (val.includes("C1WS")) || (val.includes("DS")) || (val.includes("WS")) ){
+                  $("#issCat").html(" \
+                    <option value='N/A'>N/A</option> \
+                  <?php
+                    $qic = "select * from ic WHERE ic_dsc_value = 'C1WS' order by ic_value asc";
+                    $queryic = mysqli_query($con, $qic);
+                    while($roic = mysqli_fetch_array($queryic)){
+                  
+                    ?>
+                    <option value='<?php echo $roic['ic_value']; ?>'><?php echo $roic['ic_value']; ?></option> \
+                    <?php
+                  }
+                  ?>
+                  ");
+                } 
+        <?php 
+      } 
+        ?>
+        $("#issCat").hide();
+        $("#issCatL").hide(); 
+    });
+
+    $("#opt3l").change(function () {
+      var optvalue2 = $(this).val();
+
+      if(optvalue2 == "dsc"){
         <?php
             $i = 0;
             $qopt1 = "select * from dsc order by dsc_value asc";
@@ -79,27 +155,7 @@ $(document).ready(function () {
         ?>
       }
 
-      else if(optvalue == "prbm"){
-        <?php
-            $i = 0;
-            $qopt1 = "select * from prbm order by prbm_value asc";
-            $queryopt1 = mysqli_query($con, $qopt1);
-            ?>
-            $("#tableopt").html(" \
-                          <?php
-                            while($roopt1 = mysqli_fetch_array($queryopt1)){
-                           ?>
-                            <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['prbm_value']; ?>' /><?php echo $roopt1['prbm_value']; ?><br> \
-                          <?php
-                            $i++;
-                            } 
-                          ?>
-                    ");
-            <?php   
-        ?>
-      }
-
-      else if(optvalue == "os"){
+      else if(optvalue2 == "os"){
         <?php
             $i = 0;
             $qopt1 = "select * from os order by os_value asc";
@@ -119,100 +175,7 @@ $(document).ready(function () {
         ?>
       }
 
-      else if(optvalue == "dsm"){
-        <?php
-            $i = 0;
-            $qopt1 = "select * from dsm order by (dsm_value * 1.00) asc";
-            $queryopt1 = mysqli_query($con, $qopt1);
-            ?>
-            $("#tableopt").html(" \
-                          <?php
-                            while($roopt1 = mysqli_fetch_array($queryopt1)){
-                           ?>
-                            <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['dsm_value']; ?>' /><?php echo $roopt1['dsm_value']; ?><br> \
-                          <?php
-                            $i++;
-                            } 
-                          ?>
-                    ");
-            <?php   
-        ?>
-      }
-
-      else if(optvalue == "dsa"){
-        <?php
-            $i = 0;
-            $qopt1 = "select * from dsa order by (dsa_value * 1.00) asc";
-            $queryopt1 = mysqli_query($con, $qopt1);
-            ?>
-            $("#tableopt").html(" \
-                          <?php
-                            while($roopt1 = mysqli_fetch_array($queryopt1)){
-                           ?>
-                            <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['dsa_value']; ?>' /><?php echo $roopt1['dsa_value']; ?><br> \
-                          <?php
-                            $i++;
-                            } 
-                          ?>
-                    ");
-            <?php   
-        ?>
-      }
-
-      else if(optvalue == "ic"){
-        <?php
-            $i = 0;
-            $qopt1 = "select * from ic order by ic_value asc";
-            $queryopt1 = mysqli_query($con, $qopt1);
-            ?>
-            $("#tableopt").html(" \
-                          <?php
-                            while($roopt1 = mysqli_fetch_array($queryopt1)){
-                           ?>
-                            <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['ic_value']; ?>' /><?php echo $roopt1['ic_value']; ?><br> \
-                          <?php
-                            $i++;
-                            } 
-                          ?>
-                    ");
-            <?php   
-        ?>
-      }
-
-      else if(optvalue == "sc"){
-        $("#tableopt").html("");
-        $("#issCat").change(function () {
-        var icvalue = $(this).val();
-        <?php
-            $i = 0;
-            $qic= "select * from ic";
-            $queryic = mysqli_query($con, $qic);
-            while($roic = mysqli_fetch_array($queryic)){
-              $valic = $roic['ic_value'];
-            ?>
-            if (icvalue == "<?php echo $valic; ?>") {
-              <?php
-                    $qsc = "select * from sc WHERE sc_ic_value = '$valic' order by sc_value asc";
-                    $querysc = mysqli_query($con, $qsc);
-              ?>
-                $("#tableopt").html(" \
-                    <?php
-                    while($rosc = mysqli_fetch_array($querysc)){
-                    ?>
-                    <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $rosc['sc_value']; ?>' /><?php echo $rosc['sc_value']; ?><br> \
-                    <?php
-                    $i++;
-                  }
-                  ?>
-                  "); 
-            } 
-        <?php 
-          } 
-        ?>
-        });
-      }
-
-      else if(optvalue == "seg"){
+      else if(optvalue2 == "seg"){
         <?php
             $i = 0;
             $qopt1 = "select * from seg order by seg_value asc";
@@ -232,27 +195,7 @@ $(document).ready(function () {
         ?>
       }
 
-      else if(optvalue == "issk"){
-        <?php
-            $i = 0;
-            $qissk1 = "select * from issk order by issK_value asc";
-            $queryissk1 = mysqli_query($con, $qissk1);
-            ?>
-            $("#tableopt").html(" \
-                          <?php
-                            while($roissk1 = mysqli_fetch_array($queryissk1)){
-                           ?>
-                            <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roissk1['issK_value']; ?>' /><?php echo $roissk1['issK_value']; ?><br> \
-                          <?php
-                            $i++;
-                            } 
-                          ?>
-                    ");
-            <?php   
-        ?>
-      }
-
-      else if(optvalue == "ops"){
+      else if(optvalue2 == "ops"){
         <?php
             $i = 0;
             $qops1 = "select * from opstag order by ops_val asc";
@@ -273,11 +216,262 @@ $(document).ready(function () {
       }
 
 
-      else if (optvalue == "N/A"){
+      else if (optvalue2 == "N/A"){
         $("#tableopt").html("");
-      }                
+      }
+
     });
 
+    $("#opt2l").change(function () {
+      var optvalue = $(this).val();
+      var optvaluedsc = $("#opt").val();
+      if ( (optvaluedsc.includes("C1WS")) || (optvaluedsc.includes("DS")) || (optvaluedsc.includes("WS")) ){
+        if(optvalue == "prbm"){
+          <?php
+              $i = 0;
+              $qopt1 = "select * from prbm WHERE prbm_dsc_value = 'C1WS' order by prbm_value asc";
+              $queryopt1 = mysqli_query($con, $qopt1);
+              ?>
+              $("#tableopt").html(" \
+                            <?php
+                              while($roopt1 = mysqli_fetch_array($queryopt1)){
+                             ?>
+                              <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['prbm_value']; ?>' /><?php echo $roopt1['prbm_value']; ?><br> \
+                            <?php
+                              $i++;
+                              } 
+                            ?>
+                      ");
+              <?php   
+          ?>
+        }
+
+        else if(optvalue == "dsm"){
+          <?php
+              $i = 0;
+              $qopt1 = "select * from dsm order by (dsm_value * 1.00) asc";
+              $queryopt1 = mysqli_query($con, $qopt1);
+              ?>
+              $("#tableopt").html(" \
+                            <?php
+                              while($roopt1 = mysqli_fetch_array($queryopt1)){
+                             ?>
+                              <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['dsm_value']; ?>' /><?php echo $roopt1['dsm_value']; ?><br> \
+                            <?php
+                              $i++;
+                              } 
+                            ?>
+                      ");
+              <?php   
+          ?>
+        }
+
+        else if(optvalue == "dsa"){
+          <?php
+              $i = 0;
+              $qopt1 = "select * from dsa order by (dsa_value * 1.00) asc";
+              $queryopt1 = mysqli_query($con, $qopt1);
+              ?>
+              $("#tableopt").html(" \
+                            <?php
+                              while($roopt1 = mysqli_fetch_array($queryopt1)){
+                             ?>
+                              <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['dsa_value']; ?>' /><?php echo $roopt1['dsa_value']; ?><br> \
+                            <?php
+                              $i++;
+                              } 
+                            ?>
+                      ");
+              <?php   
+          ?>
+        }
+
+        else if(optvalue == "ic"){
+          <?php
+              $i = 0;
+              $qopt1 = "select * from ic WHERE ic_dsc_value = 'C1WS' order by ic_value asc";
+              $queryopt1 = mysqli_query($con, $qopt1);
+              ?>
+              $("#tableopt").html(" \
+                            <?php
+                              while($roopt1 = mysqli_fetch_array($queryopt1)){
+                             ?>
+                              <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['ic_value']; ?>' /><?php echo $roopt1['ic_value']; ?><br> \
+                            <?php
+                              $i++;
+                              } 
+                            ?>
+                      ");
+              <?php   
+          ?>
+        }
+
+      else if(optvalue == "sc"){
+        $("#tableopt").html("");
+        $("#issCat").change(function () {
+        var icvalue = $(this).val();
+        <?php
+            $i = 0;
+            $qic= "select * from ic";
+            $queryic = mysqli_query($con, $qic);
+            while($roic = mysqli_fetch_array($queryic)){
+              $valic = $roic['ic_value'];
+            ?>
+            if (icvalue == "<?php echo $valic; ?>") {
+              <?php
+                    $qsc = "select * from sc WHERE sc_ic_value = '$valic' AND sc_dsc_value = 'C1WS' order by sc_value asc";
+                    $querysc = mysqli_query($con, $qsc);
+              ?>
+                $("#tableopt").html(" \
+                    <?php
+                    while($rosc = mysqli_fetch_array($querysc)){
+                    ?>
+                    <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $rosc['sc_value']; ?>' /><?php echo $rosc['sc_value']; ?><br> \
+                    <?php
+                    $i++;
+                  }
+                  ?>
+                  "); 
+            } 
+        <?php 
+          } 
+        ?>
+        });
+      }
+    } else if (optvalue == "N/A"){
+        $("#tableopt").html("");
+      } else {
+          <?php
+              $qdsc= "select * from dsc";
+              $querydsc = mysqli_query($con, $qdsc);
+              while($rodsc = mysqli_fetch_array($querydsc)){
+                $valdsc = $rodsc['dsc_value'];
+            ?>
+            if(optvaluedsc == "<?php echo $valdsc; ?>"){
+                if(optvalue == "prbm"){
+                    <?php
+                        $i = 0;
+                        $qopt1 = "select * from prbm WHERE prbm_dsc_value = '$valdsc' order by prbm_value asc";
+                        $queryopt1 = mysqli_query($con, $qopt1);
+                        ?>
+                        $("#tableopt").html(" \
+                                      <?php
+                                        while($roopt1 = mysqli_fetch_array($queryopt1)){
+                                       ?>
+                                        <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['prbm_value']; ?>' /><?php echo $roopt1['prbm_value']; ?><br> \
+                                      <?php
+                                        $i++;
+                                        } 
+                                      ?>
+                                ");
+                        <?php   
+                    ?>
+                  }
+
+                  else if(optvalue == "pv"){
+                    <?php
+                        $i = 0;
+                        $qopt1 = "select * from pv WHERE pv_dsc_value = '$valdsc' order by pv_value asc";
+                        $queryopt1 = mysqli_query($con, $qopt1);
+                        ?>
+                        $("#tableopt").html(" \
+                                      <?php
+                                        while($roopt1 = mysqli_fetch_array($queryopt1)){
+                                       ?>
+                                        <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['pv_value']; ?>' /><?php echo $roopt1['pv_value']; ?><br> \
+                                      <?php
+                                        $i++;
+                                        } 
+                                      ?>
+                                ");
+                        <?php   
+                    ?>
+                  }
+
+                  else if(optvalue == "ic"){
+                    <?php
+                        $i = 0;
+                        $qopt1 = "select * from ic WHERE ic_dsc_value = '$valdsc' order by ic_value asc";
+                        $queryopt1 = mysqli_query($con, $qopt1);
+                        ?>
+                        $("#tableopt").html(" \
+                                      <?php
+                                        while($roopt1 = mysqli_fetch_array($queryopt1)){
+                                       ?>
+                                        <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $roopt1['ic_value']; ?>' /><?php echo $roopt1['ic_value']; ?><br> \
+                                      <?php
+                                        $i++;
+                                        } 
+                                      ?>
+                                ");
+                        <?php   
+                    ?>
+                  }
+
+                else if(optvalue == "sc"){
+                  $("#tableopt").html("");
+                  $("#issCat").change(function () {
+                  var icvalue = $(this).val();
+                  <?php
+                      $i = 0;
+                      $qic= "select * from ic";
+                      $queryic = mysqli_query($con, $qic);
+                      while($roic = mysqli_fetch_array($queryic)){
+                        $valic = $roic['ic_value'];
+                      ?>
+                      if (icvalue == "<?php echo $valic; ?>") {
+                        <?php
+                              $qsc = "select * from sc WHERE sc_ic_value = '$valic' AND sc_dsc_value = '$valdsc' order by sc_value asc";
+                              $querysc = mysqli_query($con, $qsc);
+                        ?>
+                          $("#tableopt").html(" \
+                              <?php
+                              while($rosc = mysqli_fetch_array($querysc)){
+                              ?>
+                              <input type='checkbox' name='delete[<?php echo $i; ?>]' value='<?php echo $rosc['sc_value']; ?>' /><?php echo $rosc['sc_value']; ?><br> \
+                              <?php
+                              $i++;
+                            }
+                            ?>
+                            "); 
+                      } 
+                  <?php 
+                    } 
+                  ?>
+                  });
+                }
+            }
+        <?php
+        }
+      ?>
+    }
+  });
+    
+  $('input[name=option1]').change(function () {
+      
+           if ($('#pcoff').is(":checked")) {
+                $("#opt").show();
+                $("#opt2l").show();
+                $("#opt").val('N/A');
+                $("#opt2l").val('N/A');
+                $("#optl").show();
+                $("#opt2lb").show();
+                $("#opt3l").hide();
+                $("#opt3lb").hide();
+
+               } else {
+                $("#opt").hide();
+                $("#opt2l").hide();
+                $("#issCat").hide();
+                $("#optl").hide();
+                $("#opt2lb").hide();
+                $("#issCatL").hide();
+                $("#opt3l").show();
+                $("#opt3lb").show();
+                $("#opt3l").val('N/A');
+                $("#tableopt").html("");
+               }
+        });
 
 });
 
@@ -337,7 +531,7 @@ h2 {
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <a class="navbar-brand" href="index.php" >
                         <img src="ds-logo.png" height="32" width="32" class="d-inline-block align-top" alt="">
-                        | PH DSaaS Case Tagging Tool
+                        | Cloud One Case Tagging Tool
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
@@ -357,33 +551,45 @@ h2 {
             <div class="row">
                 <div class="col">
                     <form action="removeprocessentry.php" method = "post" id = "reply">
-                      <label for="exampleFormControlSelect1" class = "text-center"><b>Options available:</b></label>
+                      <center>
+                      <input type="radio" id="pcoff" name="option1" value="pcoff" required checked />
+                      <label for="pcoff">Remove values to Other Options</label>&emsp;&emsp;&emsp;
+                      <input type="radio" id="pcon" name="option1" value="pcon">
+                      <label for="pcon">Remove Product Component/SEG/OpsTag/OS</label><br>
+                    </center>
+                      <label for="opt" id = "optl" class = "text-center"><b>Product Component:</b></label>
                       <select class="form-control" id="opt" name = "opt">
-                        <option value="N/A">Please select an option...</option>
-                        <option value="dsc">Deep Security Component</option>
-                        <option value="prbm">Concerned Feature</option>
-                        <option value="os">Affected Operating System</option>
-                        <option value="dsm">DSM Version</option>
-                        <option value="dsa">DSA Version</option>
-                        <option value="ic">Issue Category</option>
-                        <option value="sc">Sub Category</option>
-                        <option value="seg">Reason for SEG Escalation</option>
-                        <option value="ops">SEG-Case Operational Tagging</option>
-                        <!--<option value="issk">Issue Keyword</option>-->
-                        </select>
-                      <div class="form-group">
-                                    <label for="exampleFormControlSelect1" id = "issCatL"><b>Issue Sub Category:</b></label>
-                                    <select class="form-control" id="issCat" name="icl">
-                                              <option value="N/A">Select Issue Category...</option>
-                                      <?php
-                                                $qic = "select * from ic";
-                                                      $queryic = mysqli_query($con, $qic);
-                                                      while($roic = mysqli_fetch_array($queryic)){
+                        <option value = "N/A">N/A</option>
+                        <?php
+                                      $qdsc = "select * from dsc order by dsc_value asc";
+                                      $querydsc = mysqli_query($con, $qdsc);
+                                      while($rodsc = mysqli_fetch_array($querydsc)){
                                             ?>
-                                              <option value="<?php echo $roic['ic_value']; ?>"><?php echo $roic['ic_value']; ?></option>
+                                              <option value="<?php echo $rodsc['dsc_value']; ?>"><?php echo $rodsc['dsc_value']; ?></option>
                                       <?php
                                       }
                                       ?>
+                        </select>
+                      <div class="form-group">
+                                 <label for="opt3l" id = "opt3lb"><b>Options Available:</b></label>
+                                 <select class="form-control" id="opt3l" name = "opt3l"> 
+                                  <option value = 'N/A'>N/A</option>
+                                  <option value='dsc'>Product Component</option>
+                                  <option value='os'>Affected Operating System</option>
+                                  <option value='seg'>Reason for SEG Escalation</option>
+                                  <option value='ops'>SEG-Case Operational Tagging</option>
+
+                                 </select>         
+                            </div>
+                      <div class="form-group">
+                                 <label for="opt2l" id = "opt2lb"><b>Options Available:</b></label>
+                                 <select class="form-control" id="opt2l" name = "opt2l"> 
+                                  <option value = 'N/A'>N/A</option>
+                                 </select>         
+                            </div>
+                      <div class="form-group">
+                                    <label for="exampleFormControlSelect1" id = "issCatL"><b>Issue Sub Category:</b></label>
+                                    <select class="form-control" id="issCat" name="icl">
                                     </select>
                             </div>
                   <div class="form-group card">
