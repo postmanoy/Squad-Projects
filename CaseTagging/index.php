@@ -98,7 +98,6 @@ $(document).ready(function () {
                   ");
 
               $("#osl").html(" \
-                  <option value = 'N/A'>N/A</option> \
                   <?php
                     $qos = "select * from os WHERE os_dsc_value = '$temp_val' order by os_value asc";
                     $queryos = mysqli_query($con, $qos);
@@ -171,7 +170,6 @@ $(document).ready(function () {
               if(val.includes("SmartCheck")){
 
                     $("#osl").html(" \
-                          <option value = 'N/A'>N/A</option> \
                           <?php
                             $qos = "select * from os WHERE os_dsc_value = '$valdsc' order by os_value asc";
                             $queryos = mysqli_query($con, $qos);
@@ -189,7 +187,6 @@ $(document).ready(function () {
               }else{
 
                       $("#osl").html(" \
-                          <option value = 'N/A'>N/A</option> \
                           <?php
                             $qos = "select * from os WHERE os_dsc_value = '$valdsc' order by os_value asc";
                             $queryos = mysqli_query($con, $qos);

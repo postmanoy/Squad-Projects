@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2020 at 12:39 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.3.14
+-- Generation Time: May 20, 2020 at 11:12 AM
+-- Server version: 10.3.16-MariaDB
+-- PHP Version: 7.3.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -446,27 +446,7 @@ INSERT INTO `os` (`os_id`, `os_value`, `os_dsc_value`) VALUES
 (76, 'Vulnerability Scan', 'SmartCheck'),
 (77, 'Image Scan', 'SmartCheck'),
 (78, 'Metrics', 'SmartCheck'),
-(79, 'Auth', 'SmartCheck'),
-(80, 'CentOS', 'Cloud One - AS'),
-(81, 'CentOS 6', 'Cloud One - AS'),
-(82, 'CentOS 7', 'Cloud One - AS'),
-(83, 'CentOS 8', 'Cloud One - AS'),
-(84, 'Red Hat Enterprise Linux', 'Cloud One - AS'),
-(85, 'Red Hat Enterprise Linux 6', 'Cloud One - AS'),
-(86, 'Red Hat Enterprise Linux 7', 'Cloud One - AS'),
-(87, 'Red Hat Enterprise Linux 8', 'Cloud One - AS'),
-(88, 'Debian 8', 'Cloud One - AS'),
-(89, 'Debian 9', 'Cloud One - AS'),
-(90, 'Debian 10', 'Cloud One - AS'),
-(91, 'Ubuntu 14.04', 'Cloud One - AS'),
-(92, 'Ubuntu 16.04', 'Cloud One - AS'),
-(93, 'Ubuntu 18.04', 'Cloud One - AS'),
-(94, 'Ubuntu 18.10', 'Cloud One - AS'),
-(95, 'Ubuntu 19.04', 'Cloud One - AS'),
-(96, 'Ubuntu', 'Cloud One - AS'),
-(97, 'Alpine', 'Cloud One - AS'),
-(98, 'Alpine 3.10', 'Cloud One - AS'),
-(99, 'Alpine 3.11', 'Cloud One - AS');
+(79, 'Auth', 'SmartCheck');
 
 -- --------------------------------------------------------
 
@@ -946,7 +926,7 @@ ALTER TABLE `opstag`
 -- AUTO_INCREMENT for table `os`
 --
 ALTER TABLE `os`
-  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `os_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `prbm`
