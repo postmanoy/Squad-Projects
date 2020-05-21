@@ -2,7 +2,7 @@
 include('connect.php');
 if(!isset($_SERVER['HTTP_REFERER'])){
     // redirect them to your desired location
-    header('location:../PHDSaaS/index.php');
+    header('location:../PHCloudOne/index.php');
     exit;
 }
 

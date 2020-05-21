@@ -224,7 +224,7 @@
       <div class="row align-items-center">
         <div class="col-lg-6">
           <div class="p-5">
-            <img class="img-fluid tool" src="exam.png" alt="" onclick="javascript:window.open('../DSaaSExam/index.php', '_blank')">
+            <img class="img-fluid tool" src="exam.png" alt="" onclick="javascript:window.open('../C1WSExam/index.php', '_blank')">
           </div>
         </div>
         <div class="col-lg-6">
