@@ -280,9 +280,16 @@ h2 {
                                       $qdsc = "select * from dsc order by dsc_value asc";
                                       $querydsc = mysqli_query($con, $qdsc);
                                       while($rodsc = mysqli_fetch_array($querydsc)){
+                                            if(($rodsc['dsc_value'] != "Cloud One - CS") && ($rodsc['dsc_value'] == "SmartCheck")){
                                             ?>
-                                              <option value="<?php echo $rodsc['dsc_value']; ?>"><?php echo $rodsc['dsc_value']; ?></option>
+                                              <option value="<?php echo $rodsc['dsc_value']; ?>">Cloud One - CS / <?php echo $rodsc['dsc_value']; ?></option>
                                       <?php
+                                        }
+                                          else if($rodsc['dsc_value'] != "Cloud One - CS") {
+                                            ?>
+                                            <option value="<?php echo $rodsc['dsc_value']; ?>"><?php echo $rodsc['dsc_value']; ?></option>
+                                            <?php
+                                          }
                                       }
                                       ?>
                         </select>

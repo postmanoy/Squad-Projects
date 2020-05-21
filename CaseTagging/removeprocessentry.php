@@ -170,8 +170,8 @@ if($radio == "pcoff"){
 			mysqli_query($con, $alterpv);
 
 			foreach ($strvalue as $str){
-			$postpv = "DELETE FROM pv WHERE dsm_value='$str' AND pv_dsc_value = '$opt1'";
-			mysqli_query($con, $postdsm);
+			$postpv = "DELETE FROM pv WHERE pv_value='$str' AND pv_dsc_value = '$opt1'";
+			mysqli_query($con, $postpv);
 			}
 		}
 

@@ -242,7 +242,7 @@ $(document).ready(function () {
         else if(optvalue == "os"){
         <?php
             $i = 0;
-            $qopt1 = "select * from os WHERE os_dsc_value = '' order by os_value asc";
+            $qopt1 = "select * from os WHERE os_dsc_value = 'C1WS' order by os_value asc";
             $queryopt1 = mysqli_query($con, $qopt1);
             ?>
             $("#tableopt").html(" \
@@ -325,7 +325,7 @@ $(document).ready(function () {
         var icvalue = $(this).val();
         <?php
             $i = 0;
-            $qic= "select * from ic";
+            $qic= "select * from ic WHERE ic_dsc_value = 'C1WS'";
             $queryic = mysqli_query($con, $qic);
             while($roic = mysqli_fetch_array($queryic)){
               $valic = $roic['ic_value'];
@@ -447,7 +447,7 @@ $(document).ready(function () {
                   var icvalue = $(this).val();
                   <?php
                       $i = 0;
-                      $qic= "select * from ic";
+                      $qic= "select * from ic WHERE ic_dsc_value = '$valdsc'";
                       $queryic = mysqli_query($con, $qic);
                       while($roic = mysqli_fetch_array($queryic)){
                         $valic = $roic['ic_value'];
@@ -597,9 +597,16 @@ h2 {
                                       $qdsc = "select * from dsc order by dsc_value asc";
                                       $querydsc = mysqli_query($con, $qdsc);
                                       while($rodsc = mysqli_fetch_array($querydsc)){
+                                            if(($rodsc['dsc_value'] != "Cloud One - CS") && ($rodsc['dsc_value'] == "SmartCheck")){
                                             ?>
-                                              <option value="<?php echo $rodsc['dsc_value']; ?>"><?php echo $rodsc['dsc_value']; ?></option>
+                                              <option value="<?php echo $rodsc['dsc_value']; ?>">Cloud One - CS / <?php echo $rodsc['dsc_value']; ?></option>
                                       <?php
+                                        }
+                                          else if($rodsc['dsc_value'] != "Cloud One - CS") {
+                                            ?>
+                                            <option value="<?php echo $rodsc['dsc_value']; ?>"><?php echo $rodsc['dsc_value']; ?></option>
+                                            <?php
+                                          }
                                       }
                                       ?>
                         </select>
