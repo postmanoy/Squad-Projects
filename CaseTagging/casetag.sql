@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2020 at 12:39 PM
+-- Generation Time: May 21, 2020 at 05:07 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.3.14
 
@@ -143,7 +143,29 @@ INSERT INTO `dsa` (`dsa_id`, `dsa_value`) VALUES
 (104, '12.0.0.911'),
 (105, '12.0.0.967'),
 (106, '11.2.0.148'),
-(107, '10.0.0.3761');
+(107, '10.0.0.3761'),
+(108, '10.1.0.203'),
+(109, '10.1.0.356'),
+(110, '10.1.0.357'),
+(111, '10.2.0.339'),
+(112, '10.2.0.340'),
+(113, '11.1.0.163'),
+(114, '11.1.0.194'),
+(115, '11.2.0.147'),
+(116, '9.0.0.4000'),
+(117, '9.0.0.4502'),
+(118, '9.0.0.5004'),
+(119, '9.0.0.5505'),
+(120, '9.0.0.5546'),
+(121, '10.3.0.396'),
+(122, '10.0.0.3556'),
+(123, '9.0.0.5627'),
+(124, '9.6.2.9153'),
+(125, '12.5.0.834'),
+(126, '12.0.0.1026'),
+(127, '11.0.0.1388'),
+(128, '10.0.0.3833'),
+(129, '12.5.0.936');
 
 -- --------------------------------------------------------
 
@@ -172,7 +194,9 @@ INSERT INTO `dsc` (`dsc_id`, `dsc_value`) VALUES
 (9, 'DSM On Cloud'),
 (10, 'Cloud One - CC'),
 (11, 'Cloud One - AS'),
-(12, 'Cloud One - NS');
+(12, 'Cloud One - NS'),
+(13, 'Cloud One - CS'),
+(14, 'Cloud One - FSS');
 
 -- --------------------------------------------------------
 
@@ -283,7 +307,36 @@ INSERT INTO `dsm` (`dsm_id`, `dsm_value`) VALUES
 (91, '11.2.225'),
 (92, '12.0.393'),
 (93, '12.0.416'),
-(94, '12.5.855');
+(94, '12.5.855'),
+(95, '10.1.406'),
+(96, '10.2.306'),
+(97, '10.3.109'),
+(98, '11.1.230'),
+(99, '9.0.7007'),
+(100, '12.0.296'),
+(101, '11.3.195'),
+(102, '11.0.374'),
+(103, '10.0.3456'),
+(104, '9.6.4212'),
+(105, '11.0.381'),
+(106, '12.5.349'),
+(107, '10.0.3458'),
+(108, '12.0.366'),
+(109, '11.0.389'),
+(110, '12.0.372'),
+(111, '12.5.494'),
+(112, '12.0.383'),
+(113, '11.0.399'),
+(114, '10.0.3461'),
+(115, '12.5.579'),
+(116, '9.6.4214'),
+(117, '11.0.408'),
+(118, '10.0.3466'),
+(119, '9.6.4218'),
+(120, '11.0.415'),
+(121, '12.0.426'),
+(122, '12.0.446'),
+(123, '10.0.3475');
 
 -- --------------------------------------------------------
 
@@ -552,8 +605,6 @@ CREATE TABLE `pv` (
 
 INSERT INTO `pv` (`pv_id`, `pv_value`, `pv_dsc_value`) VALUES
 (1, '4.1.5 (Java)', 'Cloud One - AS'),
-(2, '1.2.44', 'SmartCheck'),
-(3, '1.2.43', 'SmartCheck'),
 (4, '1.2.42', 'SmartCheck'),
 (5, '1.2.41', 'SmartCheck'),
 (6, '1.2.40', 'SmartCheck'),
@@ -623,7 +674,9 @@ INSERT INTO `pv` (`pv_id`, `pv_value`, `pv_dsc_value`) VALUES
 (130, '4.1.4 (NodeJS)', 'Cloud One - AS'),
 (131, '4.1.5 (PHP)', 'Cloud One - AS'),
 (132, '4.1.6 (Python)', 'Cloud One - AS'),
-(133, '4.4.2 (Python)', 'Cloud One - AS');
+(133, '4.4.2 (Python)', 'Cloud One - AS'),
+(134, '1.2.44', 'SmartCheck'),
+(135, '1.2.43', 'SmartCheck');
 
 -- --------------------------------------------------------
 
@@ -815,7 +868,8 @@ INSERT INTO `sc` (`sc_id`, `sc_value`, `sc_ic_value`, `sc_dsc_value`) VALUES
 (253, 'Jenkins', 'Integration', 'SmartCheck'),
 (254, 'Upgrade', 'Operations', 'SmartCheck'),
 (255, 'Registry', 'Operations', 'SmartCheck'),
-(256, 'Image Scan Time', 'Performance', 'SmartCheck');
+(256, 'Image Scan Time', 'Performance', 'SmartCheck'),
+(257, 'DSA (General)', 'Operations', 'C1WS');
 
 -- --------------------------------------------------------
 
@@ -916,19 +970,19 @@ ALTER TABLE `seg`
 -- AUTO_INCREMENT for table `dsa`
 --
 ALTER TABLE `dsa`
-  MODIFY `dsa_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `dsa_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `dsc`
 --
 ALTER TABLE `dsc`
-  MODIFY `dsc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `dsc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `dsm`
 --
 ALTER TABLE `dsm`
-  MODIFY `dsm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `dsm_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 
 --
 -- AUTO_INCREMENT for table `ic`
@@ -958,13 +1012,13 @@ ALTER TABLE `prbm`
 -- AUTO_INCREMENT for table `pv`
 --
 ALTER TABLE `pv`
-  MODIFY `pv_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `pv_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
 
 --
 -- AUTO_INCREMENT for table `sc`
 --
 ALTER TABLE `sc`
-  MODIFY `sc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=257;
+  MODIFY `sc_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=258;
 
 --
 -- AUTO_INCREMENT for table `seg`

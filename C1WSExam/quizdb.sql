@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2020 at 05:51 PM
+-- Generation Time: May 21, 2020 at 05:21 PM
 -- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.1
+-- PHP Version: 7.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -365,19 +365,7 @@ INSERT INTO `answers` (`a_id`, `ans`, `ans_id`) VALUES
 (305, 'Store it on a Syslog server', 77),
 (306, 'Integrate a SAP service on the Database', 77),
 (307, 'Use Full Recovery Model for the Database', 77),
-(308, 'Create a table for transaction logs on the Database', 77),
-(309, '\'docker system df\'', 78),
-(310, '\'docker system prune\'', 78),
-(311, '\'docker system free\'', 78),
-(312, '\'docker system ps\'', 78),
-(313, '\'docker container logs nginx --volumes\'', 79),
-(314, '\'docker container inspect nginx\'', 79),
-(315, '. \'docker volume inspect nginx\'', 79),
-(316, '. \'docker volume logs nginx --containers\'', 79),
-(317, 'Signing and verification of image tags', 80),
-(318, 'Enabling mutual TLS between the Docker client and server', 80),
-(319, 'Docker registry TLS verification and encryption', 80),
-(320, 'Indicating an image on Docker Hub is an official image', 80);
+(308, 'Create a table for transaction logs on the Database', 77);
 
 -- --------------------------------------------------------
 
@@ -485,10 +473,7 @@ INSERT INTO `questions` (`q_id`, `question`, `ans`, `cat_id`, `fin`) VALUES
 (74, 'You are an IT administrator for a small company. Due to internal requirements, you need to restrict the access of removable devices in the company, which of the following is the most practical way to achieve this?', 294, 2, 0),
 (75, 'You need to configure a user to only have the ability to alter and create any role in the Database, what role will you assign that user?', 297, 7, 0),
 (76, 'You are the Database Administrator for Sydney & Friends Incorporated. The company requires you to have backups of the database and the only requirement that they have is that downtime is unacceptable, that means that the restore time of the backups should be short and the space taken by the backups is not an issue, how would you achieve this?', 302, 7, 0),
-(77, 'The company you are working for specifies that you need to retain the transaction log of the Database until a backup is made. What would be the most practical way to achieve this requirement?', 307, 7, 0),
-(78, 'A server is running low on disk space. What command can be used to check the disk usage of images, containers, and volumes for Docker engine?', 309, 6, 0),
-(79, 'Which one of the following commands will show a list of volumes for a specific container?', 314, 6, 0),
-(80, 'What is the purpose of Docker Content Trust?', 317, 6, 0);
+(77, 'The company you are working for specifies that you need to retain the transaction log of the Database until a backup is made. What would be the most practical way to achieve this requirement?', 307, 7, 0);
 
 -- --------------------------------------------------------
 
@@ -531,7 +516,7 @@ INSERT INTO `usersession` (`u_id`, `name`, `u_q_id`, `u_a_id`, `net_sc`, `win_sc
 (1, 'Aaron Joshua Lee', 60, 24, 6, 2, 6, 5, 2, 0, 1, 2, 1, '08/12/2019 05:18:01 pm', '', '', '', 'Check the IP address of the server - make sure you are on the same vlan<br />\r\nTry to ping the server\'s IP address<br />\r\nUse another workstation to check id the server is turned on - see if that other workstation can connect to the server<br />\r\nTry to turn off windows firewall on the workstation', '', 63, 64, 65, 66, 67),
 (2, 'Andre Manatag', 60, 18, 5, 3, 5, 1, 0, 1, 2, 1, 2, '08/13/2019 04:58:05 pm', '', '', '', 'ifconf -a<br />\r\nmore /etc/resolve.conf<br />\r\n<br />\r\n', 'Advantage<br />\r\nAutomatically distribute network load<br />\r\n<br />\r\nDisadvantage<br />\r\n<br />\r\n', 63, 64, 65, 66, 67),
 (3, 'Felix Yang', 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '08/14/2019 10:27:23 am', '', '', '', '', '', 63, 64, 65, 66, 67),
-(4, 'Marjorie Arriola', 60, 17, 3, 1, 3, 3, 1, 3, 2, 1, 2, '01/24/2020 08:16:56 pm', 'it use to communicate between two domains.', '', '', '', 'vSphere Standard Switch works in 1 host while vSphere Distributed allows to different or multiple hosts.', 63, 64, 65, 66, 67);
+(4, 'clark-test', 60, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, '03/09/2020 02:26:51 pm', '', '', '', '', '', 63, 64, 65, 66, 67);
 
 --
 -- Indexes for dumped tables
@@ -581,7 +566,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `a_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=321;
+  MODIFY `a_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=309;
 
 --
 -- AUTO_INCREMENT for table `passwordtest`
@@ -593,7 +578,7 @@ ALTER TABLE `passwordtest`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `q_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `q_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `usersession`

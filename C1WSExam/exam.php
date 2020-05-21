@@ -18,7 +18,7 @@ include('connect.php');
 <html>
    <head>
     <link rel="shortcut icon" type="image/png" href="PHDSAAS.png"/>
-      <title>Examination Page - DSaaS Exam</title>
+      <title>Examination Page - C1WS Exam</title>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -81,7 +81,7 @@ $(document).ready(function()
       <div>
        <!--   <h1 class="text-center text-white font-weight-bold text-uppercase bg-dark" >  Complete Quiz Website using PHP and MYSQL using Session</h1><br>
       <div class="container "><br> -->
-         <h1 class="text-center text-white font-weight-bold text-uppercase bg-dark" >  Trend Micro Deep Security As A Service Exam </h1><br>
+         <h1 class="text-center text-white font-weight-bold text-uppercase bg-dark" >  Trend Micro Cloud One - Workload Security Exam </h1><br>
       <div class="container "><br>
         <div class="card-header bg-dark text-white text-center" style="font-weight: bold; position: fixed; right:2%; z-index: 1;" id="quiz-time-left"></div>
          <div class="container">

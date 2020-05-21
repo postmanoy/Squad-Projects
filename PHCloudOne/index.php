@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <link rel="shortcut icon" type="image/png" href="favicon.png"/>
-  <title>PH DSaaS Support Team</title>
+  <title>PH Cloud One Support Team</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -154,7 +154,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow fixed-top">
     <div class="container">
-      <img src="ds-logo.png" height="32" width="32"><a class="navbar-brand" href="#"> &nbsp;| PH DSaaS Support Team</a>
+      <img src="ds-logo.png" height="32" width="32"><a class="navbar-brand" href="#"> &nbsp;| PH Cloud One Support Team</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -181,7 +181,7 @@
           <div class="content">
             <div id="large-header" class="large-header">
             <canvas id="demo-canvas"></canvas>
-            <h1 class="main-title"><span class="font-weight-light"><img src="ds-logo.png" height="250" width="250"><br><br>Deep Security Cloud Customer Support Team</span></h1>
+            <h1 class="main-title"><span class="font-weight-light"><img src="ds-logo.png" height="250" width="250"><br><br>PH Cloud One Customer Support Team</span></h1>
           </div>
         </div>
       </div>
@@ -211,7 +211,7 @@
         </div>
         <div class="col-lg-6 order-lg-1">
           <div class="p-5">
-            <h2 class="display-4">PH DSaaS Case Tagging Tool</h2>
+            <h2 class="display-4">PH Cloud One Case Tagging Tool</h2>
             <p>Tool used to tag PH DSaaS cases and for tracking the number of cases per category. </p>
           </div>
         </div>
@@ -229,7 +229,7 @@
         </div>
         <div class="col-lg-6">
           <div class="p-5">
-            <h2 class="display-4">PH DSaaS Enablement Exam</h2>
+            <h2 class="display-4">PH C1WS Enablement Exam</h2>
             <p>Exam used for assessing the level of knowledge of the engineer in underlying Deep Security technologies</p>
           </div>
         </div>

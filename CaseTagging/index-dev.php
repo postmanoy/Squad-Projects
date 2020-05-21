@@ -13,7 +13,7 @@ include('connect.php');
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>PH DSaaS Case Tagging Tool</title>
+  <title>PH Cloud One Case Tagging Tool</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" type="image/png" href="favicon.png"/>
@@ -165,27 +165,6 @@ $(document).ready(function () {
                     }
                   ?>
                   ");
-
-
-              if(val.includes("SmartCheck")){
-
-                    $("#osl").html(" \
-                          <?php
-                            $qos = "select * from os WHERE os_dsc_value = '$valdsc' order by os_value asc";
-                            $queryos = mysqli_query($con, $qos);
-                            while($roos = mysqli_fetch_array($queryos)){
-                          
-                            ?>
-                            <option value='<?php echo $roos['os_value']; ?>'><?php echo $roos['os_value']; ?></option> \
-                            <?php
-                          }
-                          ?>
-                          ");
-
-                    $("#oslb").html("<b>Affected Pod/Service:</b>");
-
-              }else{
-
                       $("#osl").html(" \
                           <?php
                             $qos = "select * from os WHERE os_dsc_value = '$valdsc' order by os_value asc";
@@ -200,8 +179,75 @@ $(document).ready(function () {
                           ");
 
                     $("#oslb").html("<b>Affected Operating System:</b>");
-               }
+            }
+            else if(val.includes("SmartCheck") || val.includes("Cloud One - CS")){
+                    <?php $temp_vals = "SmartCheck"; ?>
 
+                    $("#icl").html(" \
+                  <?php
+                    $qic = "select * from ic WHERE ic_dsc_value = '$temp_vals' order by ic_value asc";
+                    $queryic = mysqli_query($con, $qic);
+                    while($roic = mysqli_fetch_array($queryic)){
+                  
+                    ?>
+                    <option value='<?php echo $roic['ic_value']; ?>'><?php echo $roic['ic_value']; ?></option> \
+                    <?php
+                  }
+                  ?>
+                  ");
+
+                    $("#prbml").html(" \
+                        <?php
+                          $qprbm = "select * from prbm WHERE prbm_dsc_value = '$temp_vals' order by prbm_value asc";
+                          $queryprbm = mysqli_query($con, $qprbm);
+                          while($roprbm = mysqli_fetch_array($queryprbm)){
+                        
+                          ?>
+                          <option value='<?php echo $roprbm['prbm_value']; ?>'><?php echo $roprbm['prbm_value']; ?></option> \
+                          <?php
+                        }
+                        ?>
+                        ");
+
+                    $("#pvl").html(" \
+                        <?php
+                            $qpv = "select * from pv WHERE pv_dsc_value = '$temp_vals' order by pv_value asc";
+                            $querypv = mysqli_query($con, $qpv);
+                            while($ropv = mysqli_fetch_array($querypv)){
+                          
+                            ?>
+                            <option value='<?php echo $ropv['pv_value']; ?>'><?php echo $ropv['pv_value']; ?></option> \
+                            <?php
+                          }
+                        ?>
+                        ");
+                            $("#osl").html(" \
+                                <?php
+                                  $qos = "select * from os WHERE os_dsc_value = '$temp_vals' order by os_value asc";
+                                  $queryos = mysqli_query($con, $qos);
+                                  while($roos = mysqli_fetch_array($queryos)){
+                                
+                                  ?>
+                                  <option value='<?php echo $roos['os_value']; ?>'><?php echo $roos['os_value']; ?></option> \
+                                  <?php
+                                }
+                                ?>
+                                ");
+
+                      $("#osl").html(" \
+                            <?php
+                              $qos = "select * from os WHERE os_dsc_value = '$temp_vals' order by os_value asc";
+                              $queryos = mysqli_query($con, $qos);
+                              while($roos = mysqli_fetch_array($queryos)){
+                            
+                              ?>
+                              <option value='<?php echo $roos['os_value']; ?>'><?php echo $roos['os_value']; ?></option> \
+                              <?php
+                            }
+                            ?>
+                            ");
+
+                      $("#oslb").html("<b>Affected Pod/Service:</b>");
             }
             <?php
           }
@@ -230,7 +276,7 @@ $(document).ready(function () {
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <a class="navbar-brand" href="index.php" >
                         <img src="ds-logo.png" height="32" width="32" class="d-inline-block align-top" alt="">
-                        | Cloud One Case Tagging Tool
+                        | PH Cloud One Case Tagging Tool
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>

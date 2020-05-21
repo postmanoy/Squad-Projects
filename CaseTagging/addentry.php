@@ -24,7 +24,7 @@ if(!isset($_SERVER['HTTP_REFERER'])){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Cloud One Case Tagging Tool</title>
+  <title>PH Cloud One Case Tagging Tool</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" type="image/png" href="favicon.png"/>
@@ -247,7 +247,7 @@ h2 {
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <a class="navbar-brand" href="index.php" >
                         <img src="ds-logo.png" height="32" width="32" class="d-inline-block align-top" alt="">
-                        | Cloud One Case Tagging Tool
+                        | PH Cloud One Case Tagging Tool
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>

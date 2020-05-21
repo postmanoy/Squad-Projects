@@ -11,7 +11,7 @@ if(!isset($_SERVER['HTTP_REFERER'])){
 <html>
 <head>
 <link rel="shortcut icon" type="image/png" href="PHDSAAS.png"/>
-<title>Welcome to PH DSaaS Enablement Exam!</title>
+<title>Welcome to PH C1WS Enablement Exam!</title>
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -116,7 +116,7 @@ div.boxx{
           <div class="login-main-text">
           <br><br>
             <img src="ds-logo.png" height="250" width="250"><br>
-            <h2>PH DSaaS Enablement Exam</h2>
+            <h2>PH C1WS Enablement Exam</h2>
          </div></center>
          <center><div class="col-md-4 col-sm-12">
             <div class="login-form w3-container boxx">

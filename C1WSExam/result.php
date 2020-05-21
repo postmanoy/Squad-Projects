@@ -14,7 +14,7 @@ include('connect.php');
 <html>
 <head>
   <link rel="shortcut icon" type="image/png" href="PHDSAAS.png"/>
-	<title>Results - DSaaS Exam</title>
+	<title>Results - C1WS Exam</title>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -35,7 +35,7 @@ $(document).ready(function()
   </script>
 </head>
 <body>
-  <h1 class="text-center text-white font-weight-bold text-uppercase bg-dark" >  Trend Micro Deep Security As A Service Exam </h1><br>
+  <h1 class="text-center text-white font-weight-bold text-uppercase bg-dark" >  Trend Micro Cloud One - Workload Security Exam </h1><br>
 <style>
     .fixed {
   }
