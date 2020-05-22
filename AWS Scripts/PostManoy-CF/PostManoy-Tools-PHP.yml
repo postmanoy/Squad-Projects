@@ -86,7 +86,7 @@ Resources:
           fi
 
           platform_detect
-          if [[ -z "${linuxPlatform}" ]] || [[ -z "$isRPM" ]]; then
+          if [[ -z "$linuxPlatform" ]] || [[ -z "$isRPM" ]]; then
               echo Unsupported platform is detected
               logger -t Unsupported platform is detected
               exit 1
