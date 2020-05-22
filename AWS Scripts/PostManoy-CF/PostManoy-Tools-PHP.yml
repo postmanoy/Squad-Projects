@@ -1,0 +1,149 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "clarkp Test Instance"
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+  GitUsername:
+    Description: GitHub Username
+    Type: String
+    Default: postmanoy
+  GitPassword:
+    Description: GitHub Password
+    Type: String
+  CaseTagging:
+    Description: GitHub URL for CaseTagging tool
+    Type: String
+    Default: github.com/postmanoy/CaseTagging.git
+  PHCloudOne:
+    Description: GitHub URL for PHCloudOne
+    Type: String
+    Default: github.com/postmanoy/PHCloudOne.git
+  C1WSExam:
+    Description: GitHub URL for C1WSExam
+    Type: String
+    Default: github.com/postmanoy/C1WSExam.git
+  SecurityGroups: 
+    Description: Security Group for Instance
+    Type: 'List<AWS::EC2::SecurityGroup::Id>'
+  Subnet:
+    Description: Subnet for the Instance
+    Type: 'AWS::EC2::Subnet::Id'
+  EC2Name:
+    Description: Name of Instance
+    Type: String
+    Default: PostManoy-Tools
+
+Resources: 
+  C1ASPipeline:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0d5d9d301c853a04a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SubnetId: !Ref Subnet
+      SecurityGroupIds: !Ref SecurityGroups
+      Tags:
+      - Key: Name
+        Value: !Ref EC2Name
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt update -y
+          ACTIVATIONURL='dsm://agents.deepsecurity.trendmicro.com:443/'
+          MANAGERURL='https://app.deepsecurity.trendmicro.com:443'
+          CURLOPTIONS='--silent --tlsv1.2'
+          linuxPlatform='';
+          isRPM='';
+
+          if [[ $(/usr/bin/id -u) -ne 0 ]]; then
+              echo You are not running as the root user.  Please try again with root privileges.;
+              logger -t You are not running as the root user.  Please try again with root privileges.;
+              exit 1;
+          fi;
+
+          if ! type curl >/dev/null 2>&1; then
+              echo "Please install CURL before running this script."
+              logger -t Please install CURL before running this script
+              exit 1
+          fi
+
+          CURLOUT=$(eval curl $MANAGERURL/software/deploymentscript/platform/linuxdetectscriptv1/ -o /tmp/PlatformDetection $CURLOPTIONS;)
+          err=$?
+          if [[ $err -eq 60 ]]; then
+              echo "TLS certificate validation for the agent package download has failed. Please check that your Deep Security Manager TLS certificate is signed by a trusted root certificate authority. For more information, search for \"deployment scripts\" in the Deep Security Help Center."
+              logger -t TLS certificate validation for the agent package download has failed. Please check that your Deep Security Manager TLS certificate is signed by a trusted root certificate authority. For more information, search for \"deployment scripts\" in the Deep Security Help Center.
+              exit 1;
+          fi
+
+          if [ -s /tmp/PlatformDetection ]; then
+              . /tmp/PlatformDetection
+          else
+              echo "Failed to download the agent installation support script."
+              logger -t Failed to download the Deep Security Agent installation support script
+              exit 1
+          fi
+
+          platform_detect
+          if [[ -z "${linuxPlatform}" ]] || [[ -z "${isRPM}" ]]; then
+              echo Unsupported platform is detected
+              logger -t Unsupported platform is detected
+              exit 1
+          fi
+
+          echo Downloading agent package...
+          if [[ $isRPM == 1 ]]; then package='agent.rpm'
+              else package='agent.deb'
+          fi
+          curl -H "Agent-Version-Control: on" $MANAGERURL/software/agent/${runningPlatform}${majorVersion}/${archType}/$package?tenantID=73293 -o /tmp/$package $CURLOPTIONS
+
+          echo Installing agent package...
+          rc=1
+          if [[ $isRPM == 1 && -s /tmp/agent.rpm ]]; then
+              rpm -ihv /tmp/agent.rpm
+              rc=$?
+          elif [[ -s /tmp/agent.deb ]]; then
+              dpkg -i /tmp/agent.deb
+              rc=$?
+          else
+              echo Failed to download the agent package. Please make sure the package is imported in the Deep Security Manager
+              logger -t Failed to download the agent package. Please make sure the package is imported in the Deep Security Manager
+              exit 1
+          fi
+          if [[ ${rc} != 0 ]]; then
+              echo Failed to install the agent package
+              logger -t Failed to install the agent package
+              exit 1
+          fi
+
+          echo Install the agent package successfully
+
+          sleep 15
+          /opt/ds_agent/dsa_control -r
+          /opt/ds_agent/dsa_control -a $ACTIVATIONURL "tenantID:207FC65B-590D-9784-8504-DB36F734F163" "token:7B7CB647-1DB3-649B-B67B-27B1D518E4D9" "policyid:34"
+          # /opt/ds_agent/dsa_control -a dsm://agents.deepsecurity.trendmicro.com:443/ "tenantID:207FC65B-590D-9784-8504-DB36F734F163" "token:7B7CB647-1DB3-649B-B67B-27B1D518E4D9" "policyid:34"
+
+          apt -y install software-properties-common
+          add-apt-repository ppa:ondrej/php
+          apt-get update -y
+          apt-get install -y apache2 mysql-server libapache2-mod-php php7.4 php7.4-mysql unzip
+          mysql -u root <<EOF
+          CREATE DATABASE casetag;
+          CREATE DATABASE quizdb;
+          CREATE USER 'postmanoy'@'%' IDENTIFIED BY 'N0virus1!';
+          GRANT ALL PRIVILEGES ON *.* TO 'postmanoy'@'%';
+          FLUSH PRIVILEGES;
+          EOF
+          systemctl restart apache2
+          cd /var/www/html/
+          mkdir PHCloudOne
+          git clone https://${GitUsername}:${GitPassword}@${PHCloudOne} PHCloudOne/
+          mkdir CaseTagging
+          git clone https://${GitUsername}:${GitPassword}@${CaseTagging} CaseTagging/
+          mysql -u root casetag < CaseTagging/casetag.sql
+          mkdir C1WSExam
+          git clone https://${GitUsername}:${GitPassword}@${C1WSExam} C1WSExam/
+          mysql -u root quizdb < C1WSExam/quizdb.sql
+          systemctl restart apache2
+
