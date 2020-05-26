@@ -55,7 +55,7 @@ Resources:
           npm run db:seed
           sudo apt -y install python build-essential
           npm install --save trend_app_protect
-          cat <<EOF >trend_app_protect.json
+          cat >trend_app_protect.json <<EOF
           {
           "key":"${AccessKey}",
           "secret":"${SecretKey}"
