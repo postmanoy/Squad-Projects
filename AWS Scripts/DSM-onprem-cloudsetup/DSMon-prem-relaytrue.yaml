@@ -20,6 +20,9 @@ Parameters:
     - ANZ-Shift
     - IST-Shift
     - NABU-Shift
+  LicenseKey:
+    Description: License key of Deep Security Manager.
+    Type: String
   
 
 Resources: 
@@ -58,7 +61,7 @@ Resources:
           AddressAndPortsScreen.ManagerAddress=$PublicHostname
           AddressAndPortsScreen.NewNode=True
           UpgradeVerificationScreen.Overwrite=False
-          LicenseScreen.License.-1=AP-R9RM-92WHD-B2UR5-BV2YB-HZYM8-HYYVA
+          LicenseScreen.License.-1=${LicenseKey}
           DatabaseScreen.DatabaseType=PostgreSQL
           DatabaseScreen.Hostname=${DBAddress}
           DatabaseScreen.Transport=TCP

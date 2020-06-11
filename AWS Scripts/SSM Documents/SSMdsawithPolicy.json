@@ -4,18 +4,15 @@
     "parameters": {
       "TenantID": {
         "type": "String",
-        "description": "Enter TenantID to be found inside your deployment script.",
-        "default": "79FDEE46-1CC6-91E4-2C0A-6B68F7389DA1"
+        "description": "Enter TenantID to be found inside your deployment script."
       },
       "TokenID": {
         "type": "String",
-        "description": "Enter Token ID.",
-        "default": "D8AE4F1C-F05F-0C50-ABB2-8CFF3F28EF51"
+        "description": "Enter Token ID."
       },
       "PolicyID": {
         "type": "String",
-        "description": "Enter Policy ID.",
-        "default": "1"
+        "description": "Enter Policy ID."
       }
 
     },

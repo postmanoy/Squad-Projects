@@ -8,11 +8,9 @@ Parameters:
   AccessKey:
     Description: Group access key of C1-AS
     Type: String
-    Default: d2baeea9-9d70-4552-b527-9e300738e9fe
   SecretKey:
     Description: Group secret key of C1-AS
     Type: String
-    Default: 90039018-7866-4c96-8a60-6000a5f9ec58
   JavaAgent:
     Description: Download Java C1-AS agent link. Please provide it here.
     Type: String
