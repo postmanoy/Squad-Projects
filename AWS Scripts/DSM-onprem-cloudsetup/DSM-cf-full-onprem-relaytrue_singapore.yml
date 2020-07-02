@@ -23,6 +23,7 @@ Parameters:
     - v120446
     - v125732
     - v125855
+    - v125985
   ShiftTag:
     Description: Select your shift
     Type: String
@@ -51,6 +52,7 @@ Mappings:
       v120446: https://files.trendmicro.com/products/deepsecurity/en/12.0/Manager-Linux-12.0.446.x64.sh
       v125732: https://files.trendmicro.com/products/deepsecurity/en/12.5/Manager-Linux-12.5.732.x64.sh
       v125855: https://files.trendmicro.com/products/deepsecurity/en/12.5/Manager-Linux-12.5.855.x64.sh
+      v125985: https://files.trendmicro.com/products/deepsecurity/en/12.5/Manager-Linux-12.5.985.x64.sh
 
 Resources:
   PostgreSQLDSM:
