@@ -24,6 +24,7 @@ Parameters:
     - v125732
     - v125855
     - v125985
+    - v20060
   ShiftTag:
     Description: Select your shift
     Type: String
@@ -53,6 +54,7 @@ Mappings:
       v125732: https://files.trendmicro.com/products/deepsecurity/en/12.5/Manager-Linux-12.5.732.x64.sh
       v125855: https://files.trendmicro.com/products/deepsecurity/en/12.5/Manager-Linux-12.5.855.x64.sh
       v125985: https://files.trendmicro.com/products/deepsecurity/en/12.5/Manager-Linux-12.5.985.x64.sh
+      v20060: https://files.trendmicro.com/products/deepsecurity/en/20.0/Manager-Linux-20.0.60.x64.sh
 
 Resources:
   PostgreSQLDSM:
@@ -64,7 +66,7 @@ Resources:
         BlockDeviceMappings:
           - DeviceName: /dev/sda1
             Ebs:
-              VolumeSize: 50
+              VolumeSize: 30
               DeleteOnTermination: True
         SecurityGroupIds:
         - sg-02632b1fbdd821f14
@@ -102,6 +104,7 @@ Resources:
 
   DSMEC2instance:
     Type: AWS::EC2::Instance
+    DependsOn: PostgreSQLDSM
     Properties:
       ImageId: ami-941031c6
       InstanceType: m4.large
@@ -111,7 +114,7 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
-            VolumeSize: 50
+            VolumeSize: 30
             DeleteOnTermination: True
       Tags:
       - Key: Name 
