@@ -1,0 +1,161 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "clarkp Test Instance"
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for EC2 instance Access.
+    Type: AWS::EC2::KeyPair::KeyName
+  SecurityGroups:
+    Description: Security groups that can be used to access the EC2 instances
+    Type: 'List<AWS::EC2::SecurityGroup::Id>'
+  DSMmajorVersion:
+    Description: Choose the major version of Deep Security Manager. (x.3.192 / x.0.3445)
+    Type: String
+    Default: 10
+  DSMminorVersion:
+    Description: Choose the minor version of Deep Security Manager. (12.x.985 / 11.x.225)
+    Type: String
+    Default: 0
+  DSMbuildVersion:
+    Description: Choose the build version of Deep Security Manager. (12.0.xxx / 10.0.xxxx)
+    Type: String
+    Default: 3445
+  ShiftTag:
+    Description: Select your shift
+    Type: String
+    AllowedValues:
+    - ANZ-Shift
+    - IST-Shift
+    - NABU-Shift
+  LicenseKey:
+    Description: License key of Deep Security Manager.
+    Type: String
+
+Resources:
+  PostgreSQLDSM:
+      Type: AWS::EC2::Instance
+      Properties:
+        ImageId: ami-0f2b4fc905b0bd1f1
+        InstanceType: t2.large
+        KeyName: !Ref KeyName
+        BlockDeviceMappings:
+          - DeviceName: /dev/sda1
+            Ebs:
+              VolumeSize: 50
+              DeleteOnTermination: True
+        SecurityGroupIds: !Ref SecurityGroups
+        Tags:
+        - Key: Name
+          Value: !Sub DSM${DSManager}-Postgresql-96
+        - Key: Shift
+          Value: !Ref ShiftTag
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            sudo yum update -y
+            sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm 
+            sudo systemctl enable amazon-ssm-agent
+            sudo systemctl start amazon-ssm-agent
+            yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+            yum install postgresql96 postgresql96-server -y
+            /usr/pgsql-9.6/bin/postgresql96-setup initdb
+            systemctl enable postgresql-9.6
+            systemctl start postgresql-9.6
+            sudo sed -i "s/local   all             all                                     peer/local   all             all                                     trust/g" /var/lib/pgsql/9.6/data/pg_hba.conf
+            sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/9.6/data/postgresql.conf
+            sed -i "82 a host    dsm        all         0.0.0.0/0       trust" /var/lib/pgsql/9.6/data/pg_hba.conf
+            systemctl restart postgresql-9.6
+            psql -U postgres <<EOF
+            CREATE DATABASE dsm;
+            CREATE USER mydsm with encrypted password 'N0virus1!';
+            GRANT ALL PRIVILEGES ON DATABASE dsm to mydsm;
+            GRANT ALL ON DATABASE dsm to mydsm;
+            GRANT CONNECT ON DATABASE dsm to mydsm;
+            ALTER ROLE mydsm CREATEDB CREATEROLE;
+            EOF
+            exit
+            systemctl restart postgresql-9.6
+
+  DSMEC2instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0b49e0985beb75934
+      InstanceType: m4.large
+      KeyName: !Ref KeyName
+      SecurityGroupIds: !Ref SecurityGroups
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 50
+            DeleteOnTermination: True
+      Tags:
+      - Key: Name 
+        Value: !Sub DSM${DSManager}-OnPrem-Cloud
+      - Key: Shift
+        Value: !Ref ShiftTag
+      UserData:
+        Fn::Base64:
+          Fn::Sub:
+            # Use a literal | to let us enter a large block of text but with variable replacements
+            # We then use those special variables inside the literal block
+            # We can also use some functions and variables directly inside the literal block
+            - |
+              #!/bin/bash
+              yum update -y
+              yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm 
+              systemctl enable amazon-ssm-agent
+              systemctl start amazon-ssm-agent
+              yum install wget unzip -y
+              wget -P /home/ec2-user/ https://files.trendmicro.com/products/deepsecurity/en/${DSMmajorVersion}.${DSMminorVersion}/Manager-Linux-${DSMmajorVersion}.${DSMminorVersion}.${DSMbuildVersion}.x64.sh
+              cd /home/ec2-user
+              TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
+              PublicHostname=`curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-hostname`
+              cat <<EOF>installdsm.properties
+              AddressAndPortsScreen.ManagerAddress=$PublicHostname
+              AddressAndPortsScreen.NewNode=True
+              UpgradeVerificationScreen.Overwrite=False
+              LicenseScreen.License.-1=${LicenseKey}
+              DatabaseScreen.DatabaseType=PostgreSQL
+              DatabaseScreen.Hostname=${PostgreSQLDSM.PrivateIp}
+              DatabaseScreen.Transport=TCP
+              DatabaseScreen.DatabaseName=dsm
+              DatabaseScreen.Username=mydsm
+              DatabaseScreen.Password=N0virus1!
+              AddressAndPortsScreen.ManagerPort=4119
+              AddressAndPortsScreen.HeartbeatPort=4120
+              CredentialsScreen.Administrator.Username=master
+              CredentialsScreen.Administrator.Password=N0virus1!
+              CredentialsScreen.UseStrongPasswords=False
+              SecurityUpdateScreen.UpdateComponents=True
+              SecurityUpdateScreen.Proxy=False
+              SecurityUpdateScreen.ProxyType=""
+              SecurityUpdateScreen.ProxyAddress=""
+              SecurityUpdateScreen.ProxyPort=""
+              SecurityUpdateScreen.ProxyAuthentication="False"
+              SecurityUpdateScreen.ProxyUsername=""
+              SecurityUpdateScreen.ProxyPassword=""
+              SoftwareUpdateScreen.UpdateSoftware=True
+              SoftwareUpdateScreen.Proxy=False
+              SoftwareUpdateScreen.ProxyType=""
+              SoftwareUpdateScreen.ProxyAddress=""
+              SoftwareUpdateScreen.ProxyPort=""
+              SoftwareUpdateScreen.ProxyAuthentication="False"
+              SoftwareUpdateScreen.ProxyUsername=""
+              SoftwareUpdateScreen.ProxyPassword=""
+              SoftwareUpdateScreen.ProxyAuthentication="False"
+              RelayScreen.Install=True
+              SmartProtectionNetworkScreen.EnableFeedback=False
+              EOF
+              dsm_name="$(ls /home/ec2-user | grep Manager-Linux)"
+              chmod +x $dsm_name
+              sh $dsm_name -q -console -Dinstall4j.language=en_US -varfile installdsm.properties
+              sleep 30
+              systemctl stop dsm_s
+              /opt/dsm/dsm_c -action changesetting -name settings.configuration.webserviceAPIEnabled -value true
+              /opt/dsm/dsm_c -action changesetting -name settings.configuration.statusMonitoringAPIEnabled -value true
+              /opt/dsm/dsm_c -action changesetting -name settings.configuration.agentInitiatedActivation -value 1
+              /opt/dsm/dsm_c -action changesetting -name settings.configuration.agentInitiatedActivationHostname -value true
+              /opt/dsm/dsm_c -action changesetting -name settings.configuration.agentInitiatedActivationActiveHost -value 2
+              /opt/dsm/dsm_c -action changesetting -name settings.configuration.allowReactivateClonedVM -value true
+              /opt/dsm/dsm_c -action changesetting -name settings.configuration.allowReactivateUnknownVM -value true
+              systemctl start dsm_s
