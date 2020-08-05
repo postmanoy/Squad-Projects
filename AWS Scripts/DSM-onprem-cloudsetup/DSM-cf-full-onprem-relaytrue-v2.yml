@@ -46,7 +46,7 @@ Resources:
         SecurityGroupIds: !Ref SecurityGroups
         Tags:
         - Key: Name
-          Value: !Sub DSM${DSManager}-Postgresql-96
+          Value: !Sub "DSM${DSMmajorVersion}.${DSMminorVersion}.${DSMbuildVersion}-Postgresql-96"
         - Key: Shift
           Value: !Ref ShiftTag
         UserData:
@@ -90,7 +90,7 @@ Resources:
             DeleteOnTermination: True
       Tags:
       - Key: Name 
-        Value: !Sub DSM${DSManager}-OnPrem-Cloud
+        Value: !Sub "DSM${DSMmajorVersion}.${DSMminorVersion}.${DSMbuildVersion}-OnPrem-Cloud"
       - Key: Shift
         Value: !Ref ShiftTag
       UserData:
