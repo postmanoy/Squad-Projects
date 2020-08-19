@@ -4,7 +4,8 @@ import deepsecurity
 from deepsecurity.rest import ApiException
 from pprint import pprint
 import requests
-
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 print("Welcome to Cloud One - Workload Security Policy Migration Tool!")
 print()
@@ -13,6 +14,7 @@ url_link = input("Please enter the URL of your DSM (if DSaaS, press ENTER): ")
 tenant1key = input("Input Source Tenant API Key: ")
 tenant2key = input("Input Destination Tenant API Key: ")
 
+cert = False
 
 antimalwareconfig = []
 allofpolicy = []
@@ -78,7 +80,7 @@ def ListAllPolicyAPI():
         "api-version": "v1",
         "Content-Type": "application/json",
     }
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
     describe = str(response.text)
     #describe = describe[:-1]
     #describe = describe[2:]
@@ -132,7 +134,7 @@ def GetPolicy(policyIDs):
             "api-version": "v1",
             "Content-Type": "application/json",
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         
         describe = str(response.text)
         i = i + 1
@@ -179,73 +181,74 @@ def AMconfigtenant1():
     global antimalwareconfig
     print ("Getting Anti-Malware configuration from Tenant 1")
     for amconfig in antimalwareconfig:
-        payload  = {}
-        url = url_link_final + 'api/antimalwareconfigurations/' + str(amconfig)
-        headers = {
-            "api-secret-key": tenant1key,
-            "api-version": "v1",
-            "Content-Type": "application/json",
-        }
-        response = requests.request("GET", url, headers=headers, data=payload)
-        
-        describe = str(response.text)
-        allamconfig.append(describe)
-        print(str(amconfig))
+        if int(amconfig) != 0:
+            payload  = {}
+            url = url_link_final + 'api/antimalwareconfigurations/' + str(amconfig)
+            headers = {
+                "api-secret-key": tenant1key,
+                "api-version": "v1",
+                "Content-Type": "application/json",
+            }
+            response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
+            
+            describe = str(response.text)
+            allamconfig.append(describe)
+            print(str(amconfig))
 
-        index = describe.find('directoryListID')
-        if index != -1:
-            indexpart = describe[index+16:]
-            startIndex = indexpart.find(':')
-            if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find(',', startIndex + 1)
-                if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
-                    directorylist.append(str(indexid))
-        index = describe.find('excludedDirectoryListID')
-        if index != -1:
-            indexpart = describe[index+24:]
-            startIndex = indexpart.find(':')
-            if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find(',', startIndex + 1)
-                if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
-                    directorylist.append(str(indexid))
-        index = describe.find('excludedFileExtensionListID')
-        if index != -1:
-            indexpart = describe[index+28:]
-            startIndex = indexpart.find(':')
-            if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find(',', startIndex + 1)
-                if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
-                    fileextentionlist.append(str(indexid))
-        index = describe.find('fileExtensionListID')
-        if index != -1:
-            indexpart = describe[index+20:]
-            startIndex = indexpart.find(':')
-            if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find(',', startIndex + 1)
-                if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
-                    fileextentionlist.append(str(indexid))
-        index = describe.find('excludedFileListID')
-        if index != -1:
-            indexpart = describe[index+19:]
-            startIndex = indexpart.find(':')
-            if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find(',', startIndex + 1)
-                if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
-                    filelist.append(str(indexid))            
-        index = describe.find('excludedProcessImageFileListID')
-        if index != -1:
-            indexpart = describe[index+31:]
-            startIndex = indexpart.find(':')
-            if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find(',', startIndex + 1)
-                if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
-                    filelist.append(str(indexid)) 
+            index = describe.find('directoryListID')
+            if index != -1:
+                indexpart = describe[index+16:]
+                startIndex = indexpart.find(':')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex]
+                        directorylist.append(str(indexid))
+            index = describe.find('excludedDirectoryListID')
+            if index != -1:
+                indexpart = describe[index+24:]
+                startIndex = indexpart.find(':')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex]
+                        directorylist.append(str(indexid))
+            index = describe.find('excludedFileExtensionListID')
+            if index != -1:
+                indexpart = describe[index+28:]
+                startIndex = indexpart.find(':')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex]
+                        fileextentionlist.append(str(indexid))
+            index = describe.find('fileExtensionListID')
+            if index != -1:
+                indexpart = describe[index+20:]
+                startIndex = indexpart.find(':')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex]
+                        fileextentionlist.append(str(indexid))
+            index = describe.find('excludedFileListID')
+            if index != -1:
+                indexpart = describe[index+19:]
+                startIndex = indexpart.find(':')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex]
+                        filelist.append(str(indexid))            
+            index = describe.find('excludedProcessImageFileListID')
+            if index != -1:
+                indexpart = describe[index+31:]
+                startIndex = indexpart.find(':')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex]
+                        filelist.append(str(indexid)) 
     directorylist = list(dict.fromkeys(directorylist))
     fileextentionlist = list(dict.fromkeys(fileextentionlist))
     filelist = list(dict.fromkeys(filelist))
@@ -262,7 +265,7 @@ def DirListTenant1():
             "api-version": "v1",
             "Content-Type": "application/json",
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         #describe = describe[:-1]
         #describe = describe[2:]
@@ -281,7 +284,7 @@ def FileExtensionListTenant1():
             "api-version": "v1",
             "Content-Type": "application/json",
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         #describe = describe[:-1]
         #describe = describe[2:]
@@ -299,7 +302,7 @@ def FileListTenant1():
             "api-version": "v1",
             "Content-Type": "application/json",
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         #describe = describe[:-1]
         #describe = describe[2:]
@@ -367,7 +370,7 @@ def DirListTenant2():
             "api-version": "v1",
             "Content-Type": "application/json",
             }
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
             index = describe.find('name already exists')
             if index != -1:
@@ -418,7 +421,7 @@ def FileExtensionListTenant2():
             "api-version": "v1",
             "Content-Type": "application/json",
             }
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
             index = describe.find('name already exists')
             if index != -1:
@@ -469,7 +472,7 @@ def FileListTenant2():
             "api-version": "v1",
             "Content-Type": "application/json",
             }
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
             index = describe.find('name already exists')
             if index != -1:
@@ -626,54 +629,56 @@ def AmconfigTenant2():
     for count, dirlist in enumerate(allamconfig):
         rename = 1
         namecheck = 1
-        while namecheck != -1:
-            payload = dirlist
-            url = url_link_final_2 + 'api/antimalwareconfigurations'
-            headers = {
-            "api-secret-key": tenant2key,
-            "api-version": "v1",
-            "Content-Type": "application/json",
-            }
-            response = requests.request("POST", url, headers=headers, data=payload)
-            describe = str(response.text)
-            index = describe.find('name already exists')
-            if index != -1:
-                describe1 = allamconfig[count]
-                index = describe1.find('name')
+        if dirlist != 0:
+            while namecheck != -1:
+                payload = dirlist
+                url = url_link_final_2 + 'api/antimalwareconfigurations'
+                headers = {
+                "api-secret-key": tenant2key,
+                "api-version": "v1",
+                "Content-Type": "application/json",
+                }
+                response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+                describe = str(response.text)
+                index = describe.find('name already exists')
                 if index != -1:
-                    indexpart = describe1[index+5:]
-                    startIndex = indexpart.find('\"')
-                    if startIndex != -1: #i.e. if the first quote was found
-                        endIndex = indexpart.find('\"', startIndex + 1)
-                        if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                            indexid = indexpart[startIndex+1:endIndex]
-                            startIndex2 = indexid.find('(')
-                            if startIndex2 != -1:
-                                endIndex2 = indexid.find(')', startIndex2 + 1)
-                                if startIndex2 != -1 and endIndex2 != -1: #i.e. both quotes were found
-                                    indexid = indexid[startIndex2+1:endIndex2]
-                                    dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-1:]
+                    describe1 = allamconfig[count]
+                    index = describe1.find('name')
+                    if index != -1:
+                        indexpart = describe1[index+5:]
+                        startIndex = indexpart.find('\"')
+                        if startIndex != -1: #i.e. if the first quote was found
+                            endIndex = indexpart.find('\"', startIndex + 1)
+                            if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                                indexid = indexpart[startIndex+1:endIndex]
+                                startIndex2 = indexid.find('(')
+                                if startIndex2 != -1:
+                                    endIndex2 = indexid.find(')', startIndex2 + 1)
+                                    if startIndex2 != -1 and endIndex2 != -1: #i.e. both quotes were found
+                                        indexid = indexid[startIndex2+1:endIndex2]
+                                        dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-1:]
+                                        rename = rename + 1
+                                else:
+                                    newname = indexid + " (" + str(rename) + ")"
+                                    dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-1:]
                                     rename = rename + 1
-                            else:
-                                newname = indexid + " (" + str(rename) + ")"
-                                dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-1:]
-                                rename = rename + 1
-            index = describe.find('\"ID\"')
-            if index != -1:
-                indexpart = describe[index+4:]
-                startIndex = indexpart.find(':')
-                if startIndex != -1: #i.e. if the first quote was found
-                    endIndex = indexpart.find(',', startIndex + 1)
-                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                        indexid = indexpart[startIndex+1:endIndex]
-                        allamconfignew.append(str(indexid))
-                        namecheck = -1
-                    else:   
-                        endIndex = indexpart.find('}', startIndex + 1)
+                index = describe.find('\"ID\"')
+                if index != -1:
+                    indexpart = describe[index+4:]
+                    startIndex = indexpart.find(':')
+                    if startIndex != -1: #i.e. if the first quote was found
+                        endIndex = indexpart.find(',', startIndex + 1)
                         if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                             indexid = indexpart[startIndex+1:endIndex]
-                            allamconfignew.append(str(indexid))   
+                            allamconfignew.append(str(indexid))
                             namecheck = -1
+                        else:   
+                            endIndex = indexpart.find('}', startIndex + 1)
+                            if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                                indexid = indexpart[startIndex+1:endIndex]
+                                allamconfignew.append(str(indexid))   
+                                namecheck = -1
+                
     print("New AM Config ID")
     print(allamconfignew)
 
@@ -693,9 +698,10 @@ def AmReplaceConfig():
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                     indexid = indexpart[startIndex+1:endIndex]
                     for dirlist in antimalwareconfig:
-                        if indexid == dirlist:
-                            describe = describe[:index+28+startIndex+1] + allamconfignew[count1] + describe[index+28+startIndex+endIndex:]
-                        count1 = count1 + 1    
+                        if int(dirlist) != 0:
+                            if indexid == dirlist:
+                                describe = describe[:index+28+startIndex+1] + allamconfignew[count1] + describe[index+28+startIndex+endIndex:]
+                            count1 = count1 + 1    
         count1 = 0
         index = describe.find('manualScanConfigurationID')
         if index != -1:
@@ -706,9 +712,10 @@ def AmReplaceConfig():
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                     indexid = indexpart[startIndex+1:endIndex]
                     for dirlist in antimalwareconfig:
-                        if indexid == dirlist:
-                            describe = describe[:index+26+startIndex+1] + allamconfignew[count1] + describe[index+26+startIndex+endIndex:]
-                        count1 = count1 + 1          
+                        if int(dirlist) != 0:
+                            if indexid == dirlist:
+                                describe = describe[:index+26+startIndex+1] + allamconfignew[count1] + describe[index+26+startIndex+endIndex:]
+                            count1 = count1 + 1          
         count1 = 0
         index = describe.find('scheduledScanConfigurationID')
         if index != -1:
@@ -719,9 +726,10 @@ def AmReplaceConfig():
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                     indexid = indexpart[startIndex+1:endIndex]
                     for dirlist in antimalwareconfig:
-                        if indexid == dirlist:
-                            describe = describe[:index+29+startIndex+1] + allamconfignew[count1] + describe[index+29+startIndex+endIndex:]
-                        count1 = count1 + 1
+                        if int(dirlist) != 0:
+                            if indexid == dirlist:
+                                describe = describe[:index+29+startIndex+1] + allamconfignew[count1] + describe[index+29+startIndex+endIndex:]
+                            count1 = count1 + 1
 
         allofpolicy[count] = describe
         count = count + 1
@@ -792,7 +800,7 @@ def FirewallDescribe():
             "api-version": "v1",
             "Content-Type": "application/json",
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         allfirewallrule.append(describe)
         index = describe.find('name')
@@ -812,7 +820,7 @@ def FirewallDescribe():
         "api-version": "v1",
         "Content-Type": "application/json",
         }
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         index = describe.find(dirlist)
         if index != -1:
@@ -849,7 +857,7 @@ def FirewallCustom():
             "api-version": "v1",
             "Content-Type": "application/json",
             }
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
             index = describe.find('\"ID\"')
             if index != -1:
@@ -951,7 +959,7 @@ def IPSappDescribe():
             "api-version": "v1",
             "Content-Type": "application/json",
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         allipsapp.append(describe)
         index = describe.find('name')
@@ -971,7 +979,7 @@ def IPSappDescribe():
         "api-version": "v1",
         "Content-Type": "application/json",
         }
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         index = describe.find(dirlist)
         if index != -1:
@@ -1003,7 +1011,7 @@ def IPSappCustom():
             "api-version": "v1",
             "Content-Type": "application/json",
             }
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
             index = describe.find('\"ID\"')
             if index != -1:
@@ -1098,7 +1106,7 @@ def IPSDescribe():
             "api-version": "v1",
             "Content-Type": "application/json",
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         allipsrule.append(describe)
         index = describe.find('name')
@@ -1119,7 +1127,7 @@ def IPSDescribe():
         "api-version": "v1",
         "Content-Type": "application/json",
         }
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         index = describe.find(dirlist)
         if index != -1:
@@ -1157,7 +1165,7 @@ def IPSCustom():
             "api-version": "v1",
             "Content-Type": "application/json",
             }
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
             index = describe.find('\"ID\"')
             if index != -1:
@@ -1258,7 +1266,7 @@ def LIDescribe():
             "api-version": "v1",
             "Content-Type": "application/json",
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         alllirule.append(describe)
         index = describe.find('name')
@@ -1279,7 +1287,7 @@ def LIDescribe():
         "api-version": "v1",
         "Content-Type": "application/json",
         }
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         index = describe.find(dirlist)
         if index != -1:
@@ -1311,7 +1319,7 @@ def LICustom():
             "api-version": "v1",
             "Content-Type": "application/json",
             }
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
             index = describe.find('\"ID\"')
             if index != -1:
@@ -1406,7 +1414,7 @@ def IMDescribe():
             "api-version": "v1",
             "Content-Type": "application/json",
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         allimrule.append(describe)
         index = describe.find('name')
@@ -1427,7 +1435,7 @@ def IMDescribe():
         "api-version": "v1",
         "Content-Type": "application/json",
         }
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text.encode('utf8'))
         describe = describe[:-1]
         describe = describe[2:]
@@ -1461,7 +1469,7 @@ def IMCustom():
             "api-version": "v1",
             "Content-Type": "application/json",
             }
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
             index = describe.find('\"ID\"')
             if index != -1:
@@ -1529,7 +1537,7 @@ def AddPolicy():
             "api-version": "v1",
             "Content-Type": "application/json",
             }
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
             index = describe.find('name already exists')
             if index != -1:
