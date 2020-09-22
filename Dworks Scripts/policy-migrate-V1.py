@@ -14,6 +14,7 @@ url_link = input("Please enter the URL of your DSM (if DSaaS, press ENTER): ")
 tenant1key = input("Input Source Tenant API Key: ")
 tenant2key = input("Input Destination Tenant API Key: ")
 
+
 cert = False
 
 antimalwareconfig = []
@@ -93,9 +94,9 @@ def ListAllPolicyAPI():
             indexpart = describe[index+6:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     oldpolicyname.append(str(indexid))
         index = describe.find('\"ID\"')
         if index != -1:
@@ -322,11 +323,11 @@ def RenameLists():
             indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     newname = indexid + " - Migrated"
-                    alldirectory[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-1:]                  
+                    alldirectory[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-2:]                  
         count = count + 1
     count = 0
     for describe in allfilelist:
@@ -335,11 +336,11 @@ def RenameLists():
             indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     newname = indexid + " - Migrated"
-                    allfilelist[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-1:]
+                    allfilelist[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-2:]
         count = count + 1
     count = 0
     for describe in allfileextention:
@@ -348,11 +349,11 @@ def RenameLists():
             indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     newname = indexid + " - Migrated"
-                    allfileextention[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-1:]  
+                    allfileextention[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-2:]  
         count = count + 1
 
 def DirListTenant2():
@@ -380,19 +381,19 @@ def DirListTenant2():
                     indexpart = describe1[index+5:]
                     startIndex = indexpart.find('\"')
                     if startIndex != -1: #i.e. if the first quote was found
-                        endIndex = indexpart.find('\"', startIndex + 1)
+                        endIndex = indexpart.find(',', startIndex + 1)
                         if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                            indexid = indexpart[startIndex+1:endIndex]
+                            indexid = indexpart[startIndex+1:endIndex-1]
                             startIndex2 = indexid.find('{')
                             if startIndex2 != -1:
                                 endIndex2 = indexid.find('}', startIndex2 + 1)
                                 if startIndex2 != -1 and endIndex2 != -1: #i.e. both quotes were found
                                     indexid = indexid[startIndex2+1:endIndex2]
-                                    dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-1:]
+                                    dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-2:]
                                     rename = rename + 1
                             else:
                                 newname = indexid + " {" + str(rename) + "}"
-                                dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-1:]
+                                dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-2:]
                                 rename = rename + 1
             index = describe.find('\"ID\"')
             if index != -1:
@@ -431,19 +432,19 @@ def FileExtensionListTenant2():
                     indexpart = describe1[index+5:]
                     startIndex = indexpart.find('\"')
                     if startIndex != -1: #i.e. if the first quote was found
-                        endIndex = indexpart.find('\"', startIndex + 1)
+                        endIndex = indexpart.find(',', startIndex + 1)
                         if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                            indexid = indexpart[startIndex+1:endIndex]
+                            indexid = indexpart[startIndex+1:endIndex-1]
                             startIndex2 = indexid.find('{')
                             if startIndex2 != -1:
                                 endIndex2 = indexid.find('}', startIndex2 + 1)
                                 if startIndex2 != -1 and endIndex2 != -1: #i.e. both quotes were found
                                     indexid = indexid[startIndex2+1:endIndex2]
-                                    dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-1:]
+                                    dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-2:]
                                     rename = rename + 1
                             else:
                                 newname = indexid + " {" + str(rename) + "}"
-                                dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-1:]
+                                dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-2:]
                                 rename = rename + 1
             index = describe.find('\"ID\"')
             if index != -1:
@@ -482,19 +483,19 @@ def FileListTenant2():
                     indexpart = describe1[index+5:]
                     startIndex = indexpart.find('\"')
                     if startIndex != -1: #i.e. if the first quote was found
-                        endIndex = indexpart.find('\"', startIndex + 1)
+                        endIndex = indexpart.find(',', startIndex + 1)
                         if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                            indexid = indexpart[startIndex+1:endIndex]
+                            indexid = indexpart[startIndex+1:endIndex-1]
                             startIndex2 = indexid.find('{')
                             if startIndex2 != -1:
                                 endIndex2 = indexid.find('}', startIndex2 + 1)
                                 if startIndex2 != -1 and endIndex2 != -1: #i.e. both quotes were found
                                     indexid = indexid[startIndex2+1:endIndex2]
-                                    dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-1:]
+                                    dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-2:]
                                     rename = rename + 1
                             else:
                                 newname = indexid + " {" + str(rename) + "}"
-                                dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-1:]
+                                dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-2:]
                                 rename = rename + 1
             index = describe.find('\"ID\"')
             if index != -1:
@@ -615,11 +616,11 @@ def RenameAmConfig():
             indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     newname = indexid + " - Migrated"
-                    allamconfig[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-1:]
+                    allamconfig[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-2:]
         count = count + 1
 
 def AmconfigTenant2():
@@ -648,19 +649,19 @@ def AmconfigTenant2():
                         indexpart = describe1[index+5:]
                         startIndex = indexpart.find('\"')
                         if startIndex != -1: #i.e. if the first quote was found
-                            endIndex = indexpart.find('\"', startIndex + 1)
+                            endIndex = indexpart.find(',', startIndex + 1)
                             if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                                indexid = indexpart[startIndex+1:endIndex]
+                                indexid = indexpart[startIndex+1:endIndex-1]
                                 startIndex2 = indexid.find('(')
                                 if startIndex2 != -1:
                                     endIndex2 = indexid.find(')', startIndex2 + 1)
                                     if startIndex2 != -1 and endIndex2 != -1: #i.e. both quotes were found
                                         indexid = indexid[startIndex2+1:endIndex2]
-                                        dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-1:]
+                                        dirlist = describe1[:index+5+startIndex+startIndex2+1] + str(rename) + describe1[index+5+startIndex+startIndex2+endIndex2-2:]
                                         rename = rename + 1
                                 else:
                                     newname = indexid + " (" + str(rename) + ")"
-                                    dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-1:]
+                                    dirlist = describe1[:index+5+startIndex+1] + newname + describe1[index+5+startIndex+endIndex-2:]
                                     rename = rename + 1
                 index = describe.find('\"ID\"')
                 if index != -1:
@@ -742,11 +743,11 @@ def RenamePolicy():
             indexpart = describe[index+6:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     newname = indexid + " - Migrated"
-                    change1 = describe[:index+6+startIndex+1] + newname + describe[index+6+startIndex+endIndex-1:]
+                    change1 = describe[:index+6+startIndex+1] + newname + describe[index+6+startIndex+endIndex-2:]
         index = change1.find('parentID')
         if index != -1:
             indexpart = change1[index+8:]
@@ -773,7 +774,7 @@ def FirewallGet():
                     indexid = indexpart[startIndex+1:endIndex]
                     index = indexid.find('ruleIDs')
                     if index != -1:
-                        indexpart = describe[index+9:]
+                        indexpart = indexid[index+9:]
                         startIndex = indexpart.find('[')
                         if startIndex != -1: #i.e. if the first quote was found
                             endIndex = indexpart.find(']', startIndex + 1)
@@ -790,6 +791,7 @@ def FirewallDescribe():
     global allfirewallruleidnew1
     global allfirewallruleidold
     global allfirewallcustomrule
+    global firewallruleid
 #describe Firewall rules
     print("Searching Firewall rules in Tenant 2...")      
     for dirlist in firewallruleid:
@@ -808,9 +810,9 @@ def FirewallDescribe():
             indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     allfirewallrulename.append(str(indexid))
     for count, dirlist in enumerate(allfirewallrulename):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
@@ -894,7 +896,7 @@ def FirewallReplace():
                     indexid = indexpart[startIndex+1:endIndex]
                     index2 = indexid.find('ruleIDs')
                     if index2 != -1:
-                        indexpart2 = describe[index2+9:]
+                        indexpart2 = indexid[index2+9:]
                         startIndex2 = indexpart2.find('[')
                         if startIndex2 != -1: #i.e. if the first quote was found
                             endIndex2 = indexpart2.find(']', startIndex2 + 1)
@@ -931,7 +933,7 @@ def IPSappGet():
                     indexid = indexpart[startIndex+1:endIndex]
                     index = indexid.find('applicationTypeIDs')
                     if index != -1:
-                        indexpart = describe[index+9:]
+                        indexpart = indexid[index+18:]
                         startIndex = indexpart.find('[')
                         if startIndex != -1: #i.e. if the first quote was found
                             endIndex = indexpart.find(']', startIndex + 1)
@@ -967,9 +969,9 @@ def IPSappDescribe():
             indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     allipsappname.append(str(indexid))
     for count, dirlist in enumerate(allipsappname):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
@@ -1043,7 +1045,7 @@ def IPSappReplace():
                     indexid = indexpart[startIndex+1:endIndex]
                     index2 = indexid.find('applicationTypeIDs')
                     if index2 != -1:
-                        indexpart2 = describe[index2+9:]
+                        indexpart2 = indexid[index2+9:]
                         startIndex2 = indexpart2.find('[')
                         if startIndex2 != -1: #i.e. if the first quote was found
                             endIndex2 = indexpart2.find(']', startIndex2 + 1)
@@ -1080,7 +1082,7 @@ def IPSGet():
                     indexid = indexpart[startIndex+1:endIndex]
                     index = indexid.find('ruleIDs')
                     if index != -1:
-                        indexpart = describe[index+9:]
+                        indexpart = indexid[index+9:]
                         startIndex = indexpart.find('[')
                         if startIndex != -1: #i.e. if the first quote was found
                             endIndex = indexpart.find(']', startIndex + 1)
@@ -1097,6 +1099,7 @@ def IPSDescribe():
     global allipsruleidnew1
     global allipsruleidold
     global allipscustomrule
+    global ipsruleid
     print("Searching IPS rules in Tenant 2...")
     for dirlist in ipsruleid:
         payload  = {}
@@ -1109,18 +1112,18 @@ def IPSDescribe():
         response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         allipsrule.append(describe)
-        index = describe.find('name')
+        index = describe.find('identifier')
         if index != -1:
-            indexpart = describe[index+5:]
+            indexpart = describe[index+11:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     allipsrulename.append(str(indexid))
     
     for count, dirlist in enumerate(allipsrulename):
-        payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
+        payload = "{\"searchCriteria\": [{\"fieldName\": \"identifier\",\"stringValue\": \"" + dirlist + "\"}]}"
         url = url_link_final_2 + 'api/intrusionpreventionrules/search'
         headers = {
         "api-secret-key": tenant2key,
@@ -1202,7 +1205,7 @@ def IPSReplace():
                     indexid = indexpart[startIndex+1:endIndex]
                     index2 = indexid.find('ruleIDs')
                     if index2 != -1:
-                        indexpart2 = describe[index2+9:]
+                        indexpart2 = indexid[index2+9:]
                         startIndex2 = indexpart2.find('[')
                         if startIndex2 != -1: #i.e. if the first quote was found
                             endIndex2 = indexpart2.find(']', startIndex2 + 1)
@@ -1240,7 +1243,7 @@ def LIGet():
                     indexid = indexpart[startIndex+1:endIndex]
                     index = indexid.find('ruleIDs')
                     if index != -1:
-                        indexpart = describe[index+9:]
+                        indexpart = indexid[index+9:]
                         startIndex = indexpart.find('[')
                         if startIndex != -1: #i.e. if the first quote was found
                             endIndex = indexpart.find(']', startIndex + 1)
@@ -1257,6 +1260,7 @@ def LIDescribe():
     global allliruleidnew1
     global allliruleidold
     global alllicustomrule
+    global liruleid
     print("Searching LI rules in Tenant 2...")                  
     for dirlist in liruleid:
         payload  = {}
@@ -1269,18 +1273,18 @@ def LIDescribe():
         response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         alllirule.append(describe)
-        index = describe.find('name')
+        index = describe.find('identifier')
         if index != -1:
-            indexpart = describe[index+5:]
+            indexpart = describe[index+11:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     alllirulename.append(str(indexid))
 
     for count, dirlist in enumerate(alllirulename):
-        payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
+        payload = "{\"searchCriteria\": [{\"fieldName\": \"identifier\",\"stringValue\": \"" + dirlist + "\"}]}"
         url = url_link_final_2 + 'api/loginspectionrules/search'
         headers = {
         "api-secret-key": tenant2key,
@@ -1351,7 +1355,7 @@ def LIReplace():
                     indexid = indexpart[startIndex+1:endIndex]
                     index2 = indexid.find('ruleIDs')
                     if index2 != -1:
-                        indexpart2 = describe[index2+9:]
+                        indexpart2 = indexid[index2+9:]
                         startIndex2 = indexpart2.find('[')
                         if startIndex2 != -1: #i.e. if the first quote was found
                             endIndex2 = indexpart2.find(']', startIndex2 + 1)
@@ -1388,7 +1392,7 @@ def IMGet():
                     indexid = indexpart[startIndex+1:endIndex]
                     index = indexid.find('ruleIDs')
                     if index != -1:
-                        indexpart = describe[index+9:]
+                        indexpart = indexid[index+9:]
                         startIndex = indexpart.find('[')
                         if startIndex != -1: #i.e. if the first quote was found
                             endIndex = indexpart.find(']', startIndex + 1)
@@ -1405,6 +1409,7 @@ def IMDescribe():
     global allimruleidnew1
     global allimruleidold
     global allimcustomrule
+    global imruleid
     print("Searching IM rules in Tenant 2...")                    
     for dirlist in imruleid:
         payload  = {}
@@ -1417,18 +1422,18 @@ def IMDescribe():
         response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         allimrule.append(describe)
-        index = describe.find('name')
+        index = describe.find('identifier')
         if index != -1:
-            indexpart = describe[index+5:]
+            indexpart = describe[index+11:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('\"', startIndex + 1)
+                endIndex = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex]
+                    indexid = indexpart[startIndex+1:endIndex-1]
                     allimrulename.append(str(indexid))
     
     for count, dirlist in enumerate(allimrulename):
-        payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
+        payload = "{\"searchCriteria\": [{\"fieldName\": \"identifier\",\"stringValue\": \"" + dirlist + "%\"}]}"
         url = url_link_final_2 + 'api/integritymonitoringrules/search'
         headers = {
         "api-secret-key": tenant2key,
@@ -1501,7 +1506,7 @@ def IMReplace():
                     indexid = indexpart[startIndex+1:endIndex]
                     index2 = indexid.find('ruleIDs')
                     if index2 != -1:
-                        indexpart2 = describe[index2+9:]
+                        indexpart2 = indexid[index2+7:]
                         startIndex2 = indexpart2.find('[')
                         if startIndex2 != -1: #i.e. if the first quote was found
                             endIndex2 = indexpart2.find(']', startIndex2 + 1)
@@ -1547,24 +1552,23 @@ def AddPolicy():
                     indexpart = describe1[index+6:]
                     startIndex = indexpart.find('\"')
                     if startIndex != -1: #i.e. if the first quote was found
-                        endIndex = indexpart.find('\"', startIndex + 1)
+                        endIndex = indexpart.find(',', startIndex + 1)
                         if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                            indexid = indexpart[startIndex+1:endIndex]
+                            indexid = indexpart[startIndex+1:endIndex-1]
                             startIndex2 = indexid.find('{')
                             if startIndex2 != -1:
                                 endIndex2 = indexid.find('}', startIndex2 + 1)
                                 if startIndex2 != -1 and endIndex2 != -1: #i.e. both quotes were found
                                     indexid = indexid[startIndex2+1:endIndex2]
-                                    dirlist = describe1[:index+6+startIndex+startIndex2+1] + str(rename) + describe1[index+6+startIndex+startIndex2+endIndex2-1:]
+                                    dirlist = describe1[:index+6+startIndex+startIndex2+1] + str(rename) + describe1[index+6+startIndex+startIndex2+endIndex2-2:]
                                     rename = rename + 1
                                     
                             else:
                                 newname = indexid + " {" + str(rename) + "}"
-                                dirlist = describe1[:index+6+startIndex+1] + newname + describe1[index+6+startIndex+endIndex-1:]
+                                dirlist = describe1[:index+6+startIndex+1] + newname + describe1[index+6+startIndex+endIndex-2:]
                                 rename = rename + 1
                                 
-            
-            index = describe.find('\"ID\"')
+            index = dirlist.find('\"ID\"')
             if index != -1:
                 indexpart = describe[index+4:]
                 startIndex = indexpart.find(':')
@@ -1668,6 +1672,6 @@ def Migrate():
         Migrate()
 
 
-#print("Input First Tenant API Key (Not yet working)")
+
 Migrate()
 sys.exit()
