@@ -11,9 +11,10 @@ print("Welcome to Cloud One - Workload Security Policy Migration Tool!")
 print()
 url_link = input("Please enter the URL of your DSM (if DSaaS, press ENTER): ")
 
-tenant1key = input("Input Source Tenant API Key: ")
-tenant2key = input("Input Destination Tenant API Key: ")
-
+#tenant1key = input("Input Source Tenant API Key: ")
+#tenant2key = input("Input Destination Tenant API Key: ")
+tenant1key = '207FC65B-590D-9784-8504-DB36F734F163:0C657782-B3F0-11C2-4DDF-E3B30311BCA5:YJEO8vNuBid+dg1dXXBTzgmWUTh6WfqvoNHHLCs5wXQ='
+tenant2key = "58382F32-4B9F-0C52-4C69-AB0BAC56F0CC:A19F66CE-CD2F-6323-70D7-577CDA3D1E75:vxOtzjgilo/lhRfnyL/m7HktHeNJccndDgdPd+CqMlA="
 
 cert = False
 
@@ -30,6 +31,12 @@ alldirectorynew = []
 allfileextentionnew = []
 allfilelistnew = []
 allamconfignew = []
+t1iplistall = []
+t1iplistname = []
+t1maclistall = []
+t1maclistname = []
+t1portlistall = []
+t1portlistname = []
 firewallruleid = []
 allfirewallrule = []
 allfirewallrulename = []
@@ -83,8 +90,6 @@ def ListAllPolicyAPI():
     }
     response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
     describe = str(response.text)
-    #describe = describe[:-1]
-    #describe = describe[2:]
     index = 0
     oldpolicyname = []
     oldpolicyid = []
@@ -758,6 +763,247 @@ def RenamePolicy():
                     indexid = indexpart[startIndex+1:endIndex]
                     newname = "1"
                     allofpolicy[count] = change1[:index+8+startIndex+1] + newname + change1[index+8+startIndex+endIndex-1:]
+
+def IpListGet():
+    global t1iplistall
+    global t1iplistname
+    print("Getting All IP List...")
+    payload  = {}
+    url = url_link_final + 'api/iplists'
+    headers = {
+        "api-secret-key": tenant1key,
+        "api-version": "v1",
+        "Content-Type": "application/json",
+    }
+    response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
+    describe = str(response.text)
+    describe2 = str(response.text)
+    index = describe.find('\"ipLists\"')
+    if index != -1:
+        indexpart = describe[index+11:]
+        startIndex = 0
+        while startIndex != -1: 
+            startIndex = indexpart.find('{')
+            if startIndex != -1: #i.e. if the first quote was found
+                endIndex = indexpart.find('}', startIndex + 1)
+                if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                    indexid = indexpart[startIndex:endIndex+1]
+                    t1iplistall.append(str(indexid))
+                    indexpart = indexpart[endIndex:]
+    while index != -1:
+            index = describe2.find('\"name\"')
+            if index != -1:
+                indexpart = describe2[index+6:]
+                startIndex = indexpart.find('\"')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex-1]
+                        t1iplistname.append(str(indexid))
+                        describe2 = indexpart[endIndex:]
+
+def IpListCreate():
+    global t1iplistall
+    global t1iplistname
+    print("Transfering All IP List...")
+    for count, dirlist in enumerate(t1iplistname):
+        payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
+        url = url_link_final_2 + 'api/iplists/search'
+        headers = {
+        "api-secret-key": tenant2key,
+        "api-version": "v1",
+        "Content-Type": "application/json",
+        }
+        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+        describe = str(response.text)
+        index = describe.find(dirlist)
+        if index != -1:
+            index = describe.find("\"ID\"")
+            if index != -1:
+                indexpart = describe[index+4:]
+                startIndex = indexpart.find(':')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex]
+                        payload = t1iplistall[count]
+                        url = url_link_final_2 + 'api/iplists/' + str(indexid)
+                        headers = {
+                        "api-secret-key": tenant2key,
+                        "api-version": "v1",
+                        "Content-Type": "application/json",
+                        }
+                        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+        else:
+            payload = t1iplistall[count]
+            url = url_link_final_2 + 'api/iplists'
+            headers = {
+            "api-secret-key": tenant2key,
+            "api-version": "v1",
+            "Content-Type": "application/json",
+            }
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+
+def MacListGet():
+    global t1maclistall
+    global t1maclistname
+    print("Getting All Mac List...")
+    payload  = {}
+    url = url_link_final + 'api/maclists'
+    headers = {
+        "api-secret-key": tenant1key,
+        "api-version": "v1",
+        "Content-Type": "application/json",
+    }
+    response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
+    describe = str(response.text)
+    describe2 = str(response.text)
+    index = describe.find('\"macLists\"')
+    if index != -1:
+        indexpart = describe[index+10:]
+        startIndex = 0
+        while startIndex != -1: 
+            startIndex = indexpart.find('{')
+            if startIndex != -1: #i.e. if the first quote was found
+                endIndex = indexpart.find('}', startIndex + 1)
+                if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                    indexid = indexpart[startIndex:endIndex+1]
+                    t1maclistall.append(str(indexid))
+                    indexpart = indexpart[endIndex:]
+    while index != -1:
+            index = describe2.find('\"name\"')
+            if index != -1:
+                indexpart = describe2[index+6:]
+                startIndex = indexpart.find('\"')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex-1]
+                        t1maclistname.append(str(indexid))
+                        describe2 = indexpart[endIndex:]
+
+def MacListCreate():
+    global t1maclistall
+    global t1maclistname
+    print("Transfering All Mac List...")
+    for count, dirlist in enumerate(t1maclistname):
+        payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
+        url = url_link_final_2 + 'api/maclists/search'
+        headers = {
+        "api-secret-key": tenant2key,
+        "api-version": "v1",
+        "Content-Type": "application/json",
+        }
+        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+        describe = str(response.text)
+        index = describe.find(dirlist)
+        if index != -1:
+            index = describe.find("\"ID\"")
+            if index != -1:
+                indexpart = describe[index+4:]
+                startIndex = indexpart.find(':')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex]
+                        payload = t1maclistall[count]
+                        url = url_link_final_2 + 'api/maclists/' + str(indexid)
+                        headers = {
+                        "api-secret-key": tenant2key,
+                        "api-version": "v1",
+                        "Content-Type": "application/json",
+                        }
+                        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+        else:
+            payload = t1maclistall[count]
+            url = url_link_final_2 + 'api/maclists'
+            headers = {
+            "api-secret-key": tenant2key,
+            "api-version": "v1",
+            "Content-Type": "application/json",
+            }
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+
+def PortListGet():
+    global t1portlistall
+    global t1portlistname
+    print("Getting All Port List...")
+    payload  = {}
+    url = url_link_final + 'api/portlists'
+    headers = {
+        "api-secret-key": tenant1key,
+        "api-version": "v1",
+        "Content-Type": "application/json",
+    }
+    response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
+    describe = str(response.text)
+    describe2 = str(response.text)
+    index = describe.find('\"portLists\"')
+    if index != -1:
+        indexpart = describe[index+10:]
+        startIndex = 0
+        while startIndex != -1: 
+            startIndex = indexpart.find('{')
+            if startIndex != -1: #i.e. if the first quote was found
+                endIndex = indexpart.find('}', startIndex + 1)
+                if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                    indexid = indexpart[startIndex:endIndex+1]
+                    t1portlistall.append(str(indexid))
+                    indexpart = indexpart[endIndex:]
+    while index != -1:
+            index = describe2.find('\"name\"')
+            if index != -1:
+                indexpart = describe2[index+6:]
+                startIndex = indexpart.find('\"')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex-1]
+                        t1portlistname.append(str(indexid))
+                        describe2 = indexpart[endIndex:]
+
+def PortListCreate():
+    global t1portlistall
+    global t1portlistname
+    print("Transfering All Port List...")
+    for count, dirlist in enumerate(t1portlistname):
+        payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
+        url = url_link_final_2 + 'api/portlists/search'
+        headers = {
+        "api-secret-key": tenant2key,
+        "api-version": "v1",
+        "Content-Type": "application/json",
+        }
+        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+        describe = str(response.text)
+        index = describe.find(dirlist)
+        if index != -1:
+            index = describe.find("\"ID\"")
+            if index != -1:
+                indexpart = describe[index+4:]
+                startIndex = indexpart.find(':')
+                if startIndex != -1: #i.e. if the first quote was found
+                    endIndex = indexpart.find(',', startIndex + 1)
+                    if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                        indexid = indexpart[startIndex+1:endIndex]
+                        payload = t1portlistall[count]
+                        url = url_link_final_2 + 'api/portlists/' + str(indexid)
+                        headers = {
+                        "api-secret-key": tenant2key,
+                        "api-version": "v1",
+                        "Content-Type": "application/json",
+                        }
+                        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+        else:
+            payload = t1portlistall[count]
+            url = url_link_final_2 + 'api/portlists'
+            headers = {
+            "api-secret-key": tenant2key,
+            "api-version": "v1",
+            "Content-Type": "application/json",
+            }
+            response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+
 def FirewallGet():
     global allofpolicy
     global firewallruleid
@@ -1616,6 +1862,13 @@ def Migrate():
         AmReplaceConfig()
     #Rename Policy
         RenamePolicy()
+    #IP List tranfer
+        IpListGet()
+        IpListCreate()
+        MacListGet()
+        MacListCreate()
+        PortListGet()
+        PortListCreate()
 #all about Firewall rules
         FirewallGet()
         FirewallDescribe()
@@ -1662,10 +1915,14 @@ def Migrate():
         AddPolicy()
         sys.exit()
     elif Input1 == "2":
+        print("")
         print("Not yet available")
+        print("")
         Migrate()
     elif Input1 == "3":
+        print("")
         print("Not yet available")
+        print("")
         Migrate()
     else:
         print("Please choose a number")
