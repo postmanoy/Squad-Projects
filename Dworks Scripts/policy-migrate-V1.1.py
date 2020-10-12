@@ -16,82 +16,6 @@ tenant2key = input("Input Destination Tenant API Key: ")
 
 cert = False
 
-policystateful = []
-antimalwareconfig = []
-allofpolicy = []
-directorylist = []
-fileextentionlist = []
-filelist = []
-allamconfig = []
-alldirectory = []
-allfileextention = []
-allfilelist = []
-alldirectorynew = []
-allfileextentionnew = []
-allfilelistnew = []
-allamconfignew = []
-t1iplistall = []
-t1iplistname = []
-t1iplistid = []
-t2iplistid = []
-t1maclistall = []
-t1maclistname = []
-t1maclistid = []
-t2maclistid = []
-t1portlistall = []
-t1portlistname = []
-t1portlistid = []
-t2portlistid = []
-t1statefulall = []
-t1statefulname = []
-t1statefulid = []
-t2statefulid = []
-firewallruleid = []
-allfirewallrule = []
-allfirewallrulename = []
-allfirewallruleidnew1 = []
-allfirewallcustomrule = []
-allfirewallruleidold = []
-allfirewallruleidnew2 = []
-allfirewallrulesourceiplist = []
-allfirewallrulesourcemaclist = []
-allfirewallrulesourceportlist = []
-allfirewallruledestiplist = []
-allfirewallruledestmaclist = []
-allfirewallruledestportlist = []
-ipsappid =[]
-allipsapp = []
-allipsappname = []
-allipsappidnew1 = []
-allipscustomapp = []
-allipsappidold = []  
-allipsappidnew2 = []
-ipsruleid =[]
-allipsrule = []
-allipsrulename = [] 
-allipsruleidnew1 = []
-allipscustomrule = []
-allipsruleidold = []
-allipsruleidnew2 = []
-liruleid = []
-alllirule = []
-alllirulename = []  
-allliruleidnew1 = []
-alllicustomrule = []
-allliruleidold = []
-allliruleidnew2 = []
-imruleid =[]
-allimrule = []
-allimrulename = []
-allimruleidnew1 = []
-allimcustomrule = []
-allimruleidold = []
-allimruleidnew2 = []
-allst = []
-namest = []
-allet = []
-nameet = []
-
 if url_link != "":
     url_link_final = url_link
 else:
@@ -147,7 +71,8 @@ def ListAllPolicyAPI():
         print()
 
 def GetPolicy(policyIDs):
-    global antimalwareconfig
+    antimalwareconfig = []
+    allofpolicy = []
     i = 0
     print ("Getting Policy from Tenant 1")
     for part in policyIDs.split():
@@ -197,13 +122,14 @@ def GetPolicy(policyIDs):
                     ssid = spart[startIndex+1:endIndex]
                     antimalwareconfig.append(str(ssid))
     antimalwareconfig = list(dict.fromkeys(antimalwareconfig))
+    return antimalwareconfig, allofpolicy
 
-def AMconfigtenant1():
+def AMconfigtenant1(antimalwareconfig):
 #Describe each AM config from tenant1
-    global directorylist
-    global fileextentionlist
-    global filelist
-    global antimalwareconfig
+    allamconfig = []
+    directorylist = []
+    fileextentionlist = []
+    filelist = []
     print ("Getting Anti-Malware configuration from Tenant 1")
     for amconfig in antimalwareconfig:
         if int(amconfig) != 0:
@@ -277,10 +203,10 @@ def AMconfigtenant1():
     directorylist = list(dict.fromkeys(directorylist))
     fileextentionlist = list(dict.fromkeys(fileextentionlist))
     filelist = list(dict.fromkeys(filelist))
+    return directorylist, fileextentionlist, filelist, allamconfig
 
-def DirListTenant1():
-    global directorylist
-    global alldirectory
+def DirListTenant1(directorylist):
+    alldirectory = []
     print ("Getting lists from Tenant 1, if any.")                
     for dirlist in directorylist:
         payload  = {}
@@ -297,10 +223,10 @@ def DirListTenant1():
         alldirectory.append(describe)
     print("Tenant1 directory list")
     print(directorylist)
+    return alldirectory
 
-def FileExtensionListTenant1():
-    global fileextentionlist
-    global allfileextention
+def FileExtensionListTenant1(fileextentionlist):
+    allfileextention = []
     for dirlist in fileextentionlist:
         payload  = {}
         url = url_link_final + 'api/fileextensionlists/' + str(dirlist)
@@ -316,9 +242,10 @@ def FileExtensionListTenant1():
         allfileextention.append(describe)
     print("Tenant1 file extention list")
     print(fileextentionlist)
-def FileListTenant1():
-    global filelist
-    global allfilelist
+    return allfileextention
+    
+def FileListTenant1(filelist):
+    allfilelist = []
     for dirlist in filelist:
         payload  = {}
         url = url_link_final + 'api/filelists/' + str(dirlist)
@@ -334,12 +261,9 @@ def FileListTenant1():
         allfilelist.append(describe)
     print("Tenant1 file list")
     print(filelist)
+    return allfilelist
 
-def RenameLists():
-#Rename each list
-    global alldirectory
-    global allfilelist
-    global allfileextention
+def RenameLists(alldirectory, allfilelist, allfileextention):
     count = 0
     for describe in alldirectory:
         index = describe.find('name')
@@ -379,10 +303,10 @@ def RenameLists():
                     newname = indexid + " - Migrated"
                     allfileextention[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-2:]  
         count = count + 1
+    return alldirectory, allfilelist, allfileextention
 
-def DirListTenant2():
-    global alldirectory
-    global alldirectorynew
+def DirListTenant2(alldirectory):
+    alldirectorynew = []
     print("Creating list to tenant 2, if any")
     for count, dirlist in enumerate(alldirectory):
         rename = 1
@@ -432,9 +356,10 @@ def DirListTenant2():
             
     print("new directory list")
     print(alldirectorynew)
-def FileExtensionListTenant2():
-    global allfileextention
-    global allfileextentionnew
+    return alldirectorynew
+
+def FileExtensionListTenant2(allfileextention):
+    allfileextentionnew = []
     for count, dirlist in enumerate(allfileextention):
         rename = 1
         namecheck = 1
@@ -482,10 +407,10 @@ def FileExtensionListTenant2():
                         namecheck = -1
     print("new file extention")
     print(allfileextentionnew)
+    return allfileextentionnew
 
-def FileListTenant2():
-    global allfilelist
-    global allfilelistnew
+def FileListTenant2(allfilelist):
+    allfilelistnew = []
     for count, dirlist in enumerate(allfilelist):
         rename = 1
         namecheck = 1
@@ -532,15 +457,10 @@ def FileListTenant2():
                         allfilelistnew.append(str(indexid))
                         namecheck = -1
     print("new file list")
-    print(allfilelistnew)  
-def AmConfigCheck():
-    global allamconfig
-    global directorylist
-    global alldirectorynew
-    global fileextentionlist
-    global allfileextentionnew
-    global filelist
-    global allfilelistnew
+    print(allfilelistnew) 
+    return allfilelistnew
+
+def AmConfigCheck(allamconfig, directorylist, alldirectorynew, fileextentionlist, allfileextentionnew, filelist, allfilelistnew):
 
     count = 0
     for describe in allamconfig:
@@ -630,9 +550,9 @@ def AmConfigCheck():
                         count1 = count1 + 1
         allamconfig[count] = describe
         count = count + 1
+    return allamconfig
 
-def RenameAmConfig():
-    global allamconfig
+def RenameAmConfig(allamconfig):
     count = 0
     for describe in allamconfig:         
         index = describe.find('name')
@@ -646,10 +566,10 @@ def RenameAmConfig():
                     newname = indexid + " - Migrated"
                     allamconfig[count] = describe[:index+5+startIndex+1] + newname + describe[index+5+startIndex+endIndex-2:]
         count = count + 1
+    return allamconfig
 
-def AmconfigTenant2():
-    global allamconfig
-    global allamconfignew
+def AmconfigTenant2(allamconfig):
+    allamconfignew = []
     print("Creating Anti-Malware Configuration to Tenant2")
     for count, dirlist in enumerate(allamconfig):
         rename = 1
@@ -706,11 +626,9 @@ def AmconfigTenant2():
                 
     print("New AM Config ID")
     print(allamconfignew)
+    return allamconfignew
 
-def AmReplaceConfig():
-    global allofpolicy
-    global antimalwareconfig
-    global allamconfignew
+def AmReplaceConfig(allofpolicy, antimalwareconfig, allamconfignew):
     count = 0
     for describe in allofpolicy:
         count1 = 0
@@ -758,9 +676,9 @@ def AmReplaceConfig():
 
         allofpolicy[count] = describe
         count = count + 1
+    return allofpolicy
 
-def RenamePolicy():
-    global allofpolicy
+def RenamePolicy(allofpolicy):
     for count, describe in enumerate(allofpolicy):
         index = describe.find('\"name\"')
         if index != -1:
@@ -782,11 +700,12 @@ def RenamePolicy():
                     indexid = indexpart[startIndex+1:endIndex]
                     newname = "1"
                     allofpolicy[count] = change1[:index+8+startIndex+1] + newname + change1[index+8+startIndex+endIndex-1:]
+    return allofpolicy
 
 def IpListGet():
-    global t1iplistall
-    global t1iplistname
-    global t1iplistid
+    t1iplistall = []
+    t1iplistname = []
+    t1iplistid = []
     print("Getting All IP List...")
     payload  = {}
     url = url_link_final + 'api/iplists'
@@ -833,11 +752,10 @@ def IpListGet():
                                     t1iplistid.append(str(indexid))
                                     describe2 = indexpart[endIndex:]
     print(t1iplistid)
+    return t1iplistall, t1iplistname, t1iplistid
 
-def IpListCreate():
-    global t1iplistall
-    global t1iplistname
-    global t2iplistid
+def IpListCreate(t1iplistall, t1iplistname):
+    t2iplistid = []
     print("Transfering All IP List...")
     for count, dirlist in enumerate(t1iplistname):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
@@ -888,11 +806,12 @@ def IpListCreate():
                         indexid = indexpart[startIndex+1:endIndex]
                         t2iplistid.append(str(indexid))
     print(t2iplistid)
+    return t2iplistid
 
 def MacListGet():
-    global t1maclistall
-    global t1maclistname
-    global t1maclistid
+    t1maclistall = []
+    t1maclistname = []
+    t1maclistid = []
     print("Getting All Mac List...")
     payload  = {}
     url = url_link_final + 'api/maclists'
@@ -938,11 +857,10 @@ def MacListGet():
                                     t1maclistid.append(str(indexid))
                                     describe2 = indexpart[endIndex:]
     print(t1maclistid)
+    return t1maclistall, t1maclistname, t1maclistid
 
-def MacListCreate():
-    global t1maclistall
-    global t1maclistname
-    global t2maclistid
+def MacListCreate(t1maclistall, t1maclistname):
+    t2maclistid = []
     print("Transfering All Mac List...")
     for count, dirlist in enumerate(t1maclistname):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
@@ -993,11 +911,12 @@ def MacListCreate():
                         indexid = indexpart[startIndex+1:endIndex]
                         t2maclistid.append(str(indexid))
     print(t2maclistid)
+    return t2maclistid
 
 def PortListGet():
-    global t1portlistall
-    global t1portlistname
-    global t1portlistid
+    t1portlistall = []
+    t1portlistname = []
+    t1portlistid = []
     print("Getting All Port List...")
     payload  = {}
     url = url_link_final + 'api/portlists'
@@ -1043,11 +962,10 @@ def PortListGet():
                                     t1portlistid.append(str(indexid))
                                     describe2 = indexpart[endIndex:]
     print(t1portlistid)
+    return t1portlistall, t1portlistname, t1portlistid
 
-def PortListCreate():
-    global t1portlistall
-    global t1portlistname
-    global t2portlistid
+def PortListCreate(t1portlistall, t1portlistname):
+    t2portlistid = []
     print("Transfering All Port List...")
     for count, dirlist in enumerate(t1portlistname):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
@@ -1098,11 +1016,12 @@ def PortListCreate():
                         indexid = indexpart[startIndex+1:endIndex]
                         t2portlistid.append(str(indexid))
     print(t2portlistid)
+    return t2portlistid
 
 def StatefulGet():
-    global t1statefulall
-    global t1statefulname
-    global t1statefulid
+    t1statefulall = []
+    t1statefulname = []
+    t1statefulid = []
     print("Getting All Stateful Configuration...")
     payload  = {}
     url = url_link_final + 'api/statefulconfigurations'
@@ -1148,11 +1067,9 @@ def StatefulGet():
                                     t1statefulid.append(str(indexid))
                                     describe2 = indexpart[endIndex:]
     print(t1statefulid)
-
-def StatefulCreate():
-    global t1statefulall
-    global t1statefulname
-    global t2statefulid
+    return t1statefulall, t1statefulname, t1statefulid
+def StatefulCreate(t1statefulall, t1statefulname):
+    t2statefulid = []
     print("Transfering All Stateful Configuration...")
     for count, dirlist in enumerate(t1statefulname):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
@@ -1202,12 +1119,12 @@ def StatefulCreate():
                     if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                         indexid = indexpart[startIndex+1:endIndex]
                         t2statefulid.append(str(indexid))
-    print(t1statefulid)
+    print(t2statefulid)
+    return t2statefulid
 
-def FirewallGet():
-    global allofpolicy
-    global firewallruleid
-    global policystateful
+def FirewallGet(allofpolicy):
+    firewallruleid = []
+    policystateful = []
 #find all Firewall rules
     print ("Firewall rules in Tenant 1")
     for describe in allofpolicy:
@@ -1240,26 +1157,14 @@ def FirewallGet():
                                 firewallruleid.extend(indexid2)
     firewallruleid = list(dict.fromkeys(firewallruleid))
     print(firewallruleid)
+    return firewallruleid, policystateful
 
-def FirewallDescribe():
-    global allfirewallrule
-    global allfirewallrulename
-    global allfirewallruleidnew1
-    global allfirewallruleidold
-    global allfirewallcustomrule
-    global firewallruleid
-    global allfirewallrulesourceiplist
-    global allfirewallrulesourcemaclist
-    global allfirewallrulesourceportlist
-    global allfirewallruledestiplist
-    global allfirewallruledestmaclist
-    global allfirewallruledestportlist
-    global t1iplistid
-    global t2iplistid
-    global t1maclistid
-    global t2maclistid
-    global t1portlistid
-    global t2portlistid
+def FirewallDescribe(firewallruleid, t1iplistid, t2iplistid, t1maclistid, t2maclistid, t1portlistid, t2portlistid):
+    allfirewallrule = []
+    allfirewallrulename = []
+    allfirewallruleidnew1 = []
+    allfirewallruleidold = []
+    allfirewallcustomrule = []
 #describe Firewall rules
     print("Searching and Modifying Firewall rules in Tenant 2...")      
     for dirlist in firewallruleid:
@@ -1413,10 +1318,10 @@ def FirewallDescribe():
 
     print("Tenant 2 default firewall rules")
     print(allfirewallruleidnew1)
-def FirewallCustom():
-    global allfirewallcustomrule
-    global allfirewallrule
-    global allfirewallruleidnew2
+    return allfirewallrule, allfirewallruleidnew1, allfirewallruleidold, allfirewallcustomrule
+
+def FirewallCustom(allfirewallrule, allfirewallcustomrule):
+    allfirewallruleidnew2 = []
     if allfirewallcustomrule:
         for indexnum in allfirewallcustomrule:
             payload = allfirewallrule[indexnum]
@@ -1444,16 +1349,9 @@ def FirewallCustom():
                             allfirewallruleidnew2.append(str(indexid))
     print("all new firewall rule custom rule")
     print(allfirewallruleidnew2)
+    return allfirewallruleidnew2
 
-def FirewallReplace():
-    global allofpolicy
-    global allfirewallruleidnew1
-    global allfirewallruleidnew2
-    global firewallruleid
-    global allfirewallruleidold
-    global allfirewallcustomrule
-    global t1statefulid
-    global t2statefulid
+def FirewallReplace(allofpolicy, allfirewallruleidnew1, allfirewallruleidnew2, firewallruleid, allfirewallruleidold, allfirewallcustomrule, t1statefulid, t2statefulid):
     for count, describe in enumerate(allofpolicy):
         index = describe.find('\"firewall\"')
         if index != -1:
@@ -1498,10 +1396,10 @@ def FirewallReplace():
                                 modulepart = describe[index:index+9+endIndex]
                                 modulepart2 = modulepart.replace(indexid3, indexid2)
                                 allofpolicy[count] = describe.replace(modulepart, modulepart2)
+    return allofpolicy
 
-def IPSappGet():
-    global allofpolicy
-    global ipsappid
+def IPSappGet(allofpolicy):
+    ipsappid = []
     print ("IPS application types in Tenant 1")
     for describe in allofpolicy:
         index = describe.find('\"intrusionPrevention\"')
@@ -1524,14 +1422,14 @@ def IPSappGet():
                                 ipsappid.extend(indexid2)
     ipsappid = list(dict.fromkeys(ipsappid))
     print(ipsappid)
+    return ipsappid
 
-def IPSappDescribe():
-    global ipsappid
-    global allipsapp
-    global allipsappname
-    global allipsappidnew1
-    global allipsappidold
-    global allipscustomapp
+def IPSappDescribe(ipsappid):
+    allipsapp = []
+    allipsappname = []
+    allipsappidnew1 = []
+    allipsappidold = []
+    allipscustomapp = []
 
     print("Searching IPS application types in Tenant 2...")  
     for dirlist in ipsappid:
@@ -1580,11 +1478,10 @@ def IPSappDescribe():
             allipscustomapp.append(count)
     print("Tenant 2 default IPS application type")
     print(allipsappidnew1)
+    return allipsapp, allipsappidnew1, allipsappidold, allipscustomapp
 
-def IPSappCustom():
-    global allipscustomapp
-    global allipsapp
-    global allipsappidnew2
+def IPSappCustom(allipsapp, allipscustomapp):
+    allipsappidnew2 = []
     if allipscustomapp:
         for indexnum in allipscustomapp:
             payload = allipsapp[indexnum]
@@ -1607,14 +1504,9 @@ def IPSappCustom():
                         allipsappidnew2.append(str(indexid))
     print("all new IPS custom application")
     print(allipsappidnew2)
+    return allipsappidnew2
 
-def IPSappReplace():
-    global allofpolicy
-    global allipsappidnew1
-    global allipsappidnew2
-    global ipsappid
-    global allipsappidold
-    global allipscustomapp
+def IPSappReplace(allofpolicy, allipsappidnew1, allipsappidnew2, ipsappid, allipsappidold, allipscustomapp):
     for count, describe in enumerate(allofpolicy):
         index = describe.find('\"intrusionPrevention\"')
         if index != -1:
@@ -1647,10 +1539,10 @@ def IPSappReplace():
                                 modulepart = describe[index:index+20+endIndex]
                                 modulepart2 = modulepart.replace(indexid3, indexid2)
                                 allofpolicy[count] = describe.replace(modulepart, modulepart2)
+    return allofpolicy
 
-def IPSGet():
-    global allofpolicy
-    global ipsruleid
+def IPSGet(allofpolicy):
+    ipsruleid = []
     print ("IPS rules in Tenant 1")
     for describe in allofpolicy:
         index = describe.find('\"intrusionPrevention\"')
@@ -1673,14 +1565,14 @@ def IPSGet():
                                 ipsruleid.extend(indexid2)
     ipsruleid = list(dict.fromkeys(ipsruleid))
     print(ipsruleid)
+    return ipsruleid
 
-def IPSDescribe():
-    global allipsrule
-    global allipsrulename
-    global allipsruleidnew1
-    global allipsruleidold
-    global allipscustomrule
-    global ipsruleid
+def IPSDescribe(ipsruleid):
+    allipsrule = []
+    allipsrulename = []
+    allipsruleidnew1 = []
+    allipsruleidold = []
+    allipscustomrule = []
     print("Searching IPS rules in Tenant 2...")
     for dirlist in ipsruleid:
         payload  = {}
@@ -1735,11 +1627,10 @@ def IPSDescribe():
             allipscustomrule.append(count)
     print("Tenant 2 default IPS rules")
     print(allipsruleidnew1)
+    return allipsrule, allipsruleidnew1, allipsruleidold, allipscustomrule
 
-def IPSCustom():
-    global allipscustomrule
-    global allipsrule
-    global allipsruleidnew2
+def IPSCustom(allipsrule, allipscustomrule):
+    allipsruleidnew2 = []
     if allipscustomrule:
         for indexnum in allipscustomrule:
             payload = allipsrule[indexnum]
@@ -1767,14 +1658,9 @@ def IPSCustom():
                             allipsruleidnew2.append(str(indexid))
     print("all new IPS rule custom rule")
     print(allipsruleidnew2)
+    return allipsruleidnew2
 
-def IPSReplace():
-    global allofpolicy
-    global allipsruleidnew1
-    global allipsruleidnew2
-    global ipsruleid
-    global allipsruleidold
-    global allipscustomrule
+def IPSReplace(allofpolicy, allipsruleidnew1, allipsruleidnew2, ipsruleid, allipsruleidold, allipscustomrule):
     for count, describe in enumerate(allofpolicy):
         index = describe.find('\"intrusionPrevention\"')
         if index != -1:
@@ -1807,11 +1693,10 @@ def IPSReplace():
                                 modulepart = describe[index:index+20+endIndex]
                                 modulepart2 = modulepart.replace(indexid3, indexid2)
                                 allofpolicy[count] = describe.replace(modulepart, modulepart2)
+    return allofpolicy
 
-
-def LIGet():
-    global allofpolicy
-    global liruleid
+def LIGet(allofpolicy):
+    liruleid = []
     print ("Log Inspection rules in Tenant 1")
     for describe in allofpolicy:
         index = describe.find('\"logInspection\"')
@@ -1834,14 +1719,14 @@ def LIGet():
                                 liruleid.extend(indexid2)
     liruleid = list(dict.fromkeys(liruleid))
     print(liruleid) 
+    return liruleid
 
-def LIDescribe():
-    global alllirule
-    global alllirulename
-    global allliruleidnew1
-    global allliruleidold
-    global alllicustomrule
-    global liruleid
+def LIDescribe(liruleid):
+    alllirule = []
+    alllirulename = []
+    allliruleidnew1 = []
+    allliruleidold = []
+    alllicustomrule = []
     print("Searching LI rules in Tenant 2...")                  
     for dirlist in liruleid:
         payload  = {}
@@ -1890,11 +1775,10 @@ def LIDescribe():
             alllicustomrule.append(count)
     print("Tenant 2 default LI rules")
     print(allliruleidnew1)
+    return alllirule, allliruleidnew1, allliruleidold, alllicustomrule
 
-def LICustom():
-    global alllicustomrule
-    global alllirule
-    global allliruleidnew2
+def LICustom(alllirule, alllicustomrule):
+    allliruleidnew2 = []
     if alllicustomrule:
         for indexnum in alllicustomrule:
             payload = alllirule[indexnum]
@@ -1917,14 +1801,9 @@ def LICustom():
                         allliruleidnew2.append(str(indexid))
     print("all new LI rule custom rule")
     print(allliruleidnew2)
+    return allliruleidnew2
 
-def LIReplace():
-    global allofpolicy
-    global allliruleidnew1
-    global allliruleidnew2
-    global liruleid
-    global allliruleidold
-    global alllicustomrule
+def LIReplace(allofpolicy, allliruleidnew1, allliruleidnew2, liruleid, allliruleidold, alllicustomrule):
     for count, describe in enumerate(allofpolicy):
         index = describe.find('\"logInspection\"')
         if index != -1:
@@ -1957,10 +1836,10 @@ def LIReplace():
                                 modulepart = describe[index:index+14+endIndex]
                                 modulepart2 = modulepart.replace(indexid3, indexid2)
                                 allofpolicy[count] = describe.replace(modulepart, modulepart2)
+    return allofpolicy
 
-def IMGet():
-    global allofpolicy
-    global imruleid
+def IMGet(allofpolicy):
+    imruleid = []
     print ("IM rules in Tenant 1")
     for describe in allofpolicy:
         index = describe.find('\"integrityMonitoring\"')
@@ -1983,14 +1862,14 @@ def IMGet():
                                 imruleid.extend(indexid2)
     imruleid = list(dict.fromkeys(imruleid))
     print(imruleid)
+    return imruleid
 
-def IMDescribe():
-    global allimrule
-    global allimrulename
-    global allimruleidnew1
-    global allimruleidold
-    global allimcustomrule
-    global imruleid
+def IMDescribe(imruleid):
+    allimrule = []
+    allimrulename = []
+    allimruleidnew1 =[]
+    allimruleidold = []
+    allimcustomrule =[]
     print("Searching IM rules in Tenant 2...")                    
     for dirlist in imruleid:
         payload  = {}
@@ -2041,11 +1920,10 @@ def IMDescribe():
             allimcustomrule.append(count)
     print("Tenant 2 default IM rules")
     print(allimruleidnew1)
+    return allimrule, allimruleidnew1, allimruleidold, allimcustomrule
 
-def IMCustom():
-    global allimcustomrule
-    global allimrule
-    global allimruleidnew2
+def IMCustom(allimrule, allimcustomrule):
+    allimruleidnew2 = []
     if allimcustomrule:
         for indexnum in allimcustomrule:
             payload = allimrule[indexnum]
@@ -2068,14 +1946,9 @@ def IMCustom():
                         allimruleidnew2.append(str(indexid))
     print("all new im rule custom rule")
     print(allimruleidnew2)
+    return allimruleidnew2
 
-def IMReplace():
-    global allofpolicy
-    global allimruleidnew1
-    global allimruleidnew2
-    global imruleid
-    global allimruleidold
-    global allimcustomrule
+def IMReplace(allofpolicy, allimruleidnew1, allimruleidnew2, imruleid, allimruleidold, allimcustomrule):
     for count, describe in enumerate(allofpolicy):
         index = describe.find('\"integrityMonitoring\"')
         if index != -1:
@@ -2108,9 +1981,9 @@ def IMReplace():
                                 modulepart = describe[index:index+20+endIndex]
                                 modulepart2 = modulepart.replace(indexid3, indexid2)
                                 allofpolicy[count] = describe.replace(modulepart, modulepart2)
+    return allofpolicy
 
-def AddPolicy():
-    global allofpolicy
+def AddPolicy(allofpolicy):
     print ("Creating Policy to Tenant 2 with new ID")  
     for count, dirlist in enumerate(allofpolicy):
         rename = 1
@@ -2214,8 +2087,8 @@ def ListScheduledTask():
 	    print()
 
 def GetScheduledTask(stIDs):
-    global allst
-    global namest
+    allst = []
+    namest = []
     print ('Getting Target Task...')
     for part in stIDs.split():
         payload = {}
@@ -2240,10 +2113,9 @@ def GetScheduledTask(stIDs):
                     describe = indexpart[endIndex:]
     print(allst)
     print(namest)
+    return allst, namest
 
-def CreateScheduledTask():
-    global allst
-    global namest
+def CreateScheduledTask(allst, namest):
     print ('Creating Task to target Account...')
     for count, dirlist in enumerate(namest):
         print(dirlist)
@@ -2335,9 +2207,8 @@ def ListEventTask():
         print()
 
 def GetEventTask(etIDs):
-    global allet
-    global nameet
-
+    allet = []
+    nameet = []
     print ('Getting Target Task...')
     for part in etIDs.split():
         payload = {}
@@ -2362,10 +2233,10 @@ def GetEventTask(etIDs):
                     nameet.append(str(indexid))
                     describe = indexpart[endIndex:]
     print(allet)
+    print(nameet)
+    return allet, nameet
 
-def CreateEventTask():
-    global allet
-    global nameet
+def CreateEventTask(allet, nameet):
     print ('Creating Task to target Account...')
     for count, dirlist in enumerate(nameet):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
@@ -2418,92 +2289,92 @@ def Migrate():
     #save all policy to a text file then find each ID and name
         ListAllPolicyAPI()
         policyIDs = input("Input policy ID/s (if more than one, put space in between each ID): ")
-        GetPolicy(policyIDs)
-        AMconfigtenant1()
-        DirListTenant1()
-        FileExtensionListTenant1()               
-        FileListTenant1()
-        RenameLists()     
+        antimalwareconfig, allofpolicy = GetPolicy(policyIDs)
+        directorylist, fileextentionlist, filelist, allamconfig = AMconfigtenant1(antimalwareconfig)
+        alldirectory = DirListTenant1(directorylist)
+        allfileextention = FileExtensionListTenant1(fileextentionlist)               
+        allfilelist = FileListTenant1(filelist)
+        alldirectory, allfilelist, allfileextention = RenameLists(alldirectory, allfilelist, allfileextention)     
         #create each list to tenant 2                  
-        DirListTenant2()
-        FileExtensionListTenant2()
-        FileListTenant2()
+        alldirectorynew = DirListTenant2(alldirectory)
+        allfileextentionnew = FileExtensionListTenant2(allfileextention)
+        allfilelistnew = FileListTenant2(allfilelist)
     #Check AM Config lists and replace the old one
-        AmConfigCheck()
+        allamconfig = AmConfigCheck(allamconfig, directorylist, alldirectorynew, fileextentionlist, allfileextentionnew, filelist, allfilelistnew)
     #Rename AM Configs
-        RenameAmConfig()
+        allamconfig = RenameAmConfig(allamconfig)
     #create AM Configs to tenant 2
-        AmconfigTenant2()
+        allamconfignew = AmconfigTenant2(allamconfig)
     #Replace old AM config with new AM config
-        AmReplaceConfig()
+        allofpolicy = AmReplaceConfig(allofpolicy, antimalwareconfig, allamconfignew)
     #Rename Policy
-        RenamePolicy()
+        allofpolicy = RenamePolicy(allofpolicy)
     #List tranfer
-        IpListGet()
-        IpListCreate()
-        MacListGet()
-        MacListCreate()
-        PortListGet()
-        PortListCreate()
+        t1iplistall, t1iplistname, t1iplistid = IpListGet()
+        t2iplistid = IpListCreate(t1iplistall, t1iplistname)
+        t1maclistall, t1maclistname, t1maclistid = MacListGet()
+        t2maclistid = MacListCreate(t1maclistall, t1maclistname)
+        t1portlistall, t1portlistname, t1portlistid = PortListGet()
+        t2portlistid = PortListCreate(t1portlistall, t1portlistname)
     #Other transfer
-        StatefulGet()
-        StatefulCreate()
+        t1statefulall, t1statefulname, t1statefulid = StatefulGet()
+        t2statefulid = StatefulCreate(t1statefulall, t1statefulname)
 #all about Firewall rules
-        FirewallGet()
-        FirewallDescribe()
+        firewallruleid, policystateful = FirewallGet(allofpolicy)
+        allfirewallrule, allfirewallruleidnew1, allfirewallruleidold, allfirewallcustomrule = FirewallDescribe(firewallruleid, t1iplistid, t2iplistid, t1maclistid, t2maclistid, t1portlistid, t2portlistid)
     #Create custom Firewall rules
-        FirewallCustom()
+        allfirewallruleidnew2 = FirewallCustom(allfirewallrule, allfirewallcustomrule)
     #replace old firewall rule with tenant 2
-        FirewallReplace()
+        allofpolicy = FirewallReplace(allofpolicy, allfirewallruleidnew1, allfirewallruleidnew2, firewallruleid, allfirewallruleidold, allfirewallcustomrule, t1statefulid, t2statefulid)
 #all about IPS rules
     #find all IPS application ID
-        IPSappGet()
+        ipsappid = IPSappGet(allofpolicy)
     #describe IPS app ID
-        IPSappDescribe()
+        allipsapp, allipsappidnew1, allipsappidold, allipscustomapp = IPSappDescribe(ipsappid)
     #Create custom IPS app
-        IPSappCustom()
+        allipsappidnew2 = IPSappCustom(allipsapp, allipscustomapp)
     #replace old ips app with tenant 2
-        IPSappReplace()
+        allofpolicy = IPSappReplace(allofpolicy, allipsappidnew1, allipsappidnew2, ipsappid, allipsappidold, allipscustomapp)
     #find all ips rules
-        IPSGet()
+        ipsruleid = IPSGet(allofpolicy)
     #describe IPS rule
-        IPSDescribe()
+        allipsrule, allipsruleidnew1, allipsruleidold, allipscustomrule = IPSDescribe(ipsruleid)
     #Create custom IPS rules
-        IPSCustom()
+        allipsruleidnew2 = IPSCustom(allipsrule, allipscustomrule)
     #replace old IPS rule with tenant 2
-        IPSReplace()
+        allofpolicy = IPSReplace(allofpolicy, allipsruleidnew1, allipsruleidnew2, ipsruleid, allipsruleidold, allipscustomrule)
 #all about log rules
     #find all log rules
-        LIGet()
+        liruleid = LIGet(allofpolicy)
     #describe log rule
-        LIDescribe()
+        alllirule, allliruleidnew1, allliruleidold, alllicustomrule = LIDescribe(liruleid)
     #Create custom LI rules
-        LICustom()
+        allliruleidnew2 = LICustom(alllirule, alllicustomrule)
     #replace old LI rule with tenant 2
-        LIReplace()
+        allofpolicy = LIReplace(allofpolicy, allliruleidnew1, allliruleidnew2, liruleid, allliruleidold, alllicustomrule)
 #all about IM rules
     #find all IM rules
-        IMGet()
+        imruleid = IMGet(allofpolicy)
     #describe IM rule
-        IMDescribe()
+        allimrule, allimruleidnew1, allimruleidold, allimcustomrule = IMDescribe(imruleid)
     #Create custom IM rules
-        IMCustom()
+        allimruleidnew2 = IMCustom(allimrule, allimcustomrule)
     #replace old IM rule with tenant 2
-        IMReplace()
+        allofpolicy = IMReplace(allofpolicy, allimruleidnew1, allimruleidnew2, imruleid, allimruleidold, allimcustomrule)
     #create Policy to tenant 2    
-        AddPolicy()
+        AddPolicy(allofpolicy)
         sys.exit()
     elif Input1 == "2":
         ListEventTask()
         etIDs = input("Input Event Based Task ID/s (if more than one, put space between each ID): ")
-        GetEventTask(etIDs)
-        CreateEventTask()
+        allet, nameet = GetEventTask(etIDs)
+        CreateEventTask(allet, nameet)
         sys.exit()
     elif Input1 == "3":
         ListScheduledTask()
         stIDs = input("Input Scheduled Task ID/s (if more than one, put space between each ID): ")
-        GetScheduledTask(stIDs)
-        CreateScheduledTask()
+        allst, namest = GetScheduledTask(stIDs)
+        CreateScheduledTask(allst, namest)
         sys.exit()
     else:
         print("Please choose a number")
