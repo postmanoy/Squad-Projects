@@ -74,7 +74,7 @@ def GetPolicy(policyIDs):
     antimalwareconfig = []
     allofpolicy = []
     i = 0
-    print ("Getting Policy from Tenant 1")
+    print ("Getting Policy ID from Tenant 1...")
     for part in policyIDs.split():
         
         payload  = {}
@@ -122,6 +122,7 @@ def GetPolicy(policyIDs):
                     ssid = spart[startIndex+1:endIndex]
                     antimalwareconfig.append(str(ssid))
     antimalwareconfig = list(dict.fromkeys(antimalwareconfig))
+    print ('Done!')
     return antimalwareconfig, allofpolicy
 
 def AMconfigtenant1(antimalwareconfig):
@@ -130,7 +131,7 @@ def AMconfigtenant1(antimalwareconfig):
     directorylist = []
     fileextentionlist = []
     filelist = []
-    print ("Getting Anti-Malware configuration from Tenant 1")
+    print ("Getting each Anti-Malware configuration ID from Tenant 1...")
     for amconfig in antimalwareconfig:
         if int(amconfig) != 0:
             payload  = {}
@@ -203,11 +204,12 @@ def AMconfigtenant1(antimalwareconfig):
     directorylist = list(dict.fromkeys(directorylist))
     fileextentionlist = list(dict.fromkeys(fileextentionlist))
     filelist = list(dict.fromkeys(filelist))
+    print("Done!")
     return directorylist, fileextentionlist, filelist, allamconfig
 
 def DirListTenant1(directorylist):
     alldirectory = []
-    print ("Getting lists from Tenant 1, if any.")                
+    print ("Getting Exclusion lists from Tenant 1, if any...")                
     for dirlist in directorylist:
         payload  = {}
         url = url_link_final + 'api/directorylists/' + str(dirlist)
@@ -221,7 +223,7 @@ def DirListTenant1(directorylist):
         #describe = describe[:-1]
         #describe = describe[2:]
         alldirectory.append(describe)
-    print("Tenant1 directory list")
+    print("All Tenant 1 directory list")
     print(directorylist)
     return alldirectory
 
@@ -240,7 +242,7 @@ def FileExtensionListTenant1(fileextentionlist):
         #describe = describe[:-1]
         #describe = describe[2:]
         allfileextention.append(describe)
-    print("Tenant1 file extention list")
+    print("All Tenant 1 file extention list")
     print(fileextentionlist)
     return allfileextention
     
@@ -259,7 +261,7 @@ def FileListTenant1(filelist):
         #describe = describe[:-1]
         #describe = describe[2:]
         allfilelist.append(describe)
-    print("Tenant1 file list")
+    print("All Tenant 1 file list")
     print(filelist)
     return allfilelist
 
@@ -307,7 +309,7 @@ def RenameLists(alldirectory, allfilelist, allfileextention):
 
 def DirListTenant2(alldirectory):
     alldirectorynew = []
-    print("Creating list to tenant 2, if any")
+    print("Creating Exclusion list to tenant 2, if any")
     for count, dirlist in enumerate(alldirectory):
         rename = 1
         namecheck = 1
@@ -353,8 +355,8 @@ def DirListTenant2(alldirectory):
                         indexid = indexpart[startIndex+1:endIndex]
                         alldirectorynew.append(str(indexid))
                         namecheck = -1
-            
-    print("new directory list")
+    print("Finished Transfering Directory List")
+    print("New directory list ID")
     print(alldirectorynew)
     return alldirectorynew
 
@@ -405,7 +407,8 @@ def FileExtensionListTenant2(allfileextention):
                         indexid = indexpart[startIndex+1:endIndex]
                         allfileextentionnew.append(str(indexid))  
                         namecheck = -1
-    print("new file extention")
+    print("Finished Transfering File Extention List")
+    print("New file extention ID")
     print(allfileextentionnew)
     return allfileextentionnew
 
@@ -456,12 +459,12 @@ def FileListTenant2(allfilelist):
                         indexid = indexpart[startIndex+1:endIndex]
                         allfilelistnew.append(str(indexid))
                         namecheck = -1
-    print("new file list")
-    print(allfilelistnew) 
+    print("Finished Transfering File List")
+    print("New file list ID")
+    print(allfilelistnew)
     return allfilelistnew
 
 def AmConfigCheck(allamconfig, directorylist, alldirectorynew, fileextentionlist, allfileextentionnew, filelist, allfilelistnew):
-
     count = 0
     for describe in allamconfig:
         count1 = 0
@@ -623,7 +626,7 @@ def AmconfigTenant2(allamconfig):
                                 indexid = indexpart[startIndex+1:endIndex]
                                 allamconfignew.append(str(indexid))   
                                 namecheck = -1
-                
+    print("Finished Transfering Anti-Malware Configuration.")
     print("New AM Config ID")
     print(allamconfignew)
     return allamconfignew
@@ -750,8 +753,11 @@ def IpListGet():
                                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                                     indexid = indexpart[startIndex+1:endIndex]
                                     t1iplistid.append(str(indexid))
+                                    print(indexid)
                                     describe2 = indexpart[endIndex:]
-    print(t1iplistid)
+    #print("All IP List ID...")
+    #print(t1iplistid)
+    print("Done!")
     return t1iplistall, t1iplistname, t1iplistid
 
 def IpListCreate(t1iplistall, t1iplistname):
@@ -805,7 +811,10 @@ def IpListCreate(t1iplistall, t1iplistname):
                     if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                         indexid = indexpart[startIndex+1:endIndex]
                         t2iplistid.append(str(indexid))
-    print(t2iplistid)
+                        print(indexid)
+    #print("Finished Transfering All IP List.")
+    #print(t2iplistid)
+    print("Done!")
     return t2iplistid
 
 def MacListGet():
@@ -855,8 +864,10 @@ def MacListGet():
                                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                                     indexid = indexpart[startIndex+1:endIndex]
                                     t1maclistid.append(str(indexid))
+                                    print(indexid)
                                     describe2 = indexpart[endIndex:]
-    print(t1maclistid)
+    #print(t1maclistid)
+    print("Done!")
     return t1maclistall, t1maclistname, t1maclistid
 
 def MacListCreate(t1maclistall, t1maclistname):
@@ -910,7 +921,10 @@ def MacListCreate(t1maclistall, t1maclistname):
                     if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                         indexid = indexpart[startIndex+1:endIndex]
                         t2maclistid.append(str(indexid))
-    print(t2maclistid)
+                        print(indexid)
+    #print("Finished Transfering All Mac List.")
+    #print(t2maclistid)
+    print("Done!")
     return t2maclistid
 
 def PortListGet():
@@ -960,8 +974,10 @@ def PortListGet():
                                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                                     indexid = indexpart[startIndex+1:endIndex]
                                     t1portlistid.append(str(indexid))
+                                    print(indexid)
                                     describe2 = indexpart[endIndex:]
-    print(t1portlistid)
+    #print(t1portlistid)
+    print("Done!")
     return t1portlistall, t1portlistname, t1portlistid
 
 def PortListCreate(t1portlistall, t1portlistname):
@@ -996,6 +1012,7 @@ def PortListCreate(t1portlistall, t1portlistname):
                         }
                         response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
                         t2portlistid.append(str(indexid))
+                        print(indexid)
         else:
             payload = t1portlistall[count]
             url = url_link_final_2 + 'api/portlists'
@@ -1015,7 +1032,10 @@ def PortListCreate(t1portlistall, t1portlistname):
                     if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                         indexid = indexpart[startIndex+1:endIndex]
                         t2portlistid.append(str(indexid))
-    print(t2portlistid)
+                        print(indexid)
+    #print("Finished Transfering All Port List.")
+    #print(t2portlistid)
+    print("Done!")
     return t2portlistid
 
 def StatefulGet():
@@ -1424,7 +1444,7 @@ def IPSappGet(allofpolicy):
     print(ipsappid)
     return ipsappid
 
-def IPSappDescribe(ipsappid):
+def IPSappDescribe(ipsappid, t1portlistid, t2portlistid):
     allipsapp = []
     allipsappname = []
     allipsappidnew1 = []
@@ -1452,6 +1472,18 @@ def IPSappDescribe(ipsappid):
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                     indexid = indexpart[startIndex+1:endIndex-1]
                     allipsappname.append(str(indexid))
+        index3 = describe.find('portListID')
+        if index3 != -1:
+            indexpart = describe[index3+10:]
+            startIndex = indexpart.find(':')
+            if startIndex != -1: #i.e. if the first quote was found
+                endIndex3 = indexpart.find(',', startIndex + 1)
+                if startIndex != -1 and endIndex3 != -1: #i.e. both quotes were found
+                    indexid1 = indexpart[startIndex+1:endIndex3]
+                    indexid5 = describe[index3:index3+21+endIndex3]
+                    indexnum = t1portlistid.index(indexid1)
+                    listpart = indexid5.replace(indexid1, t2portlistid[indexnum])
+                    describe = describe.replace(indexid5, listpart)
     for count, dirlist in enumerate(allipsappname):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
         url = url_link_final_2 + 'api/applicationtypes/search'
@@ -2330,7 +2362,7 @@ def Migrate():
     #find all IPS application ID
         ipsappid = IPSappGet(allofpolicy)
     #describe IPS app ID
-        allipsapp, allipsappidnew1, allipsappidold, allipscustomapp = IPSappDescribe(ipsappid)
+        allipsapp, allipsappidnew1, allipsappidold, allipscustomapp = IPSappDescribe(ipsappid,t1portlistid,t2portlistid)
     #Create custom IPS app
         allipsappidnew2 = IPSappCustom(allipsapp, allipscustomapp)
     #replace old ips app with tenant 2
