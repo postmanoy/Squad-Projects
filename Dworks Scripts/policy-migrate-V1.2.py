@@ -11,8 +11,10 @@ print("Welcome to Cloud One - Workload Security Policy Migration Tool!")
 print()
 url_link = input("Please enter the URL of your DSM (if DSaaS, press ENTER): ")
 
-tenant1key = input("Input Source Tenant API Key: ")
-tenant2key = input("Input Destination Tenant API Key: ")
+#tenant1key = input("Input Source Tenant API Key: ")
+#tenant2key = input("Input Destination Tenant API Key: ")
+tenant1key = '207FC65B-590D-9784-8504-DB36F734F163:0C657782-B3F0-11C2-4DDF-E3B30311BCA5:YJEO8vNuBid+dg1dXXBTzgmWUTh6WfqvoNHHLCs5wXQ='
+tenant2key = "58382F32-4B9F-0C52-4C69-AB0BAC56F0CC:A19F66CE-CD2F-6323-70D7-577CDA3D1E75:vxOtzjgilo/lhRfnyL/m7HktHeNJccndDgdPd+CqMlA="
 
 cert = False
 
@@ -1633,18 +1635,17 @@ def IPSDescribe(ipsruleid):
         response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         allipsrule.append(describe)
-        index = describe.find('identifier')
+        index = describe.find('name')
         if index != -1:
-            indexpart = describe[index+11:]
+            indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find(',', startIndex + 1)
+                endIndex = indexpart.find('\"description\"', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex-1]
+                    indexid = indexpart[startIndex+1:endIndex-2]
                     allipsrulename.append(str(indexid))
-    
     for count, dirlist in enumerate(allipsrulename):
-        payload = "{\"searchCriteria\": [{\"fieldName\": \"identifier\",\"stringValue\": \"" + dirlist + "\"}]}"
+        payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
         url = url_link_final_2 + 'api/intrusionpreventionrules/search'
         headers = {
         "api-secret-key": tenant2key,
@@ -1792,9 +1793,9 @@ def LIDescribe(liruleid):
             indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('description', startIndex + 1)
+                endIndex = indexpart.find('\"description\"', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex-3]
+                    indexid = indexpart[startIndex+1:endIndex-2]
                     alllirulename.append(str(indexid))
     for count, dirlist in enumerate(alllirulename):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
@@ -1934,9 +1935,9 @@ def IMDescribe(imruleid):
             indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find('description', startIndex + 1)
+                endIndex = indexpart.find('\"description\"', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex-3]
+                    indexid = indexpart[startIndex+1:endIndex-2]
                     allimrulename.append(str(indexid))
                     
     for count, dirlist in enumerate(allimrulename):
@@ -2382,6 +2383,7 @@ def Migrate():
         allipsappidnew2 = IPSappCustom(allipsapp, allipscustomapp)
     #replace old ips app with tenant 2
         allofpolicy = IPSappReplace(allofpolicy, allipsappidnew1, allipsappidnew2, ipsappid, allipsappidold, allipscustomapp)
+
     #find all ips rules
         ipsruleid = IPSGet(allofpolicy)
     #describe IPS rule
