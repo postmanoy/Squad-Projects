@@ -309,7 +309,7 @@ def RenameLists(alldirectory, allfilelist, allfileextention):
 
 def DirListTenant2(alldirectory):
     alldirectorynew = []
-    print("Creating Exclusion list to tenant 2, if any")
+    print("Transfering Exclusion list to tenant 2, if any")
     for count, dirlist in enumerate(alldirectory):
         rename = 1
         namecheck = 1
@@ -709,7 +709,7 @@ def IpListGet():
     t1iplistall = []
     t1iplistname = []
     t1iplistid = []
-    print("Getting All IP List...")
+    print("Getting All IP List ID...")
     payload  = {}
     url = url_link_final + 'api/iplists'
     headers = {
@@ -792,6 +792,7 @@ def IpListCreate(t1iplistall, t1iplistname):
                         }
                         response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
                         t2iplistid.append(str(indexid))
+                        print(indexid)
         else:
             payload = t1iplistall[count]
             url = url_link_final_2 + 'api/iplists'
@@ -821,7 +822,7 @@ def MacListGet():
     t1maclistall = []
     t1maclistname = []
     t1maclistid = []
-    print("Getting All Mac List...")
+    print("Getting All Mac List ID...")
     payload  = {}
     url = url_link_final + 'api/maclists'
     headers = {
@@ -902,6 +903,7 @@ def MacListCreate(t1maclistall, t1maclistname):
                         }
                         response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
                         t2maclistid.append(str(indexid))
+                        print(indexid)
         else:
             payload = t1maclistall[count]
             url = url_link_final_2 + 'api/maclists'
@@ -931,7 +933,7 @@ def PortListGet():
     t1portlistall = []
     t1portlistname = []
     t1portlistid = []
-    print("Getting All Port List...")
+    print("Getting All Port List ID...")
     payload  = {}
     url = url_link_final + 'api/portlists'
     headers = {
@@ -1042,7 +1044,7 @@ def StatefulGet():
     t1statefulall = []
     t1statefulname = []
     t1statefulid = []
-    print("Getting All Stateful Configuration...")
+    print("Getting All Stateful Configuration ID...")
     payload  = {}
     url = url_link_final + 'api/statefulconfigurations'
     headers = {
@@ -1086,7 +1088,10 @@ def StatefulGet():
                                     indexid = indexpart[startIndex+1:endIndex]
                                     t1statefulid.append(str(indexid))
                                     describe2 = indexpart[endIndex:]
-    print(t1statefulid)
+                                    print(indexid)
+
+    #print(t1statefulid)
+    print("Done")
     return t1statefulall, t1statefulname, t1statefulid
 def StatefulCreate(t1statefulall, t1statefulname):
     t2statefulid = []
@@ -1120,6 +1125,7 @@ def StatefulCreate(t1statefulall, t1statefulname):
                         }
                         response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
                         t2statefulid.append(str(indexid))
+                        print(indexid)
         else:
             payload = t1statefulall[count]
             url = url_link_final_2 + 'api/statefulconfigurations'
@@ -1139,6 +1145,7 @@ def StatefulCreate(t1statefulall, t1statefulname):
                     if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                         indexid = indexpart[startIndex+1:endIndex]
                         t2statefulid.append(str(indexid))
+                        print(indexid)
     print(t2statefulid)
     return t2statefulid
 
@@ -1186,7 +1193,7 @@ def FirewallDescribe(firewallruleid, t1iplistid, t2iplistid, t1maclistid, t2macl
     allfirewallruleidold = []
     allfirewallcustomrule = []
 #describe Firewall rules
-    print("Searching and Modifying Firewall rules in Tenant 2...")      
+    print("Gathering Firewall rules in Tenant 1...")      
     for dirlist in firewallruleid:
         payload  = {}
         url = url_link_final + 'api/firewallrules/' + str(dirlist)
@@ -1207,6 +1214,8 @@ def FirewallDescribe(firewallruleid, t1iplistid, t2iplistid, t1maclistid, t2macl
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                     indexid = indexpart[startIndex+1:endIndex-1]
                     allfirewallrulename.append(str(indexid))
+        print(dirlist)
+    print("Done!")
 
     for count, describe in enumerate(allfirewallrule):
         index3 = describe.find('sourceIPListID')
@@ -1283,7 +1292,7 @@ def FirewallDescribe(firewallruleid, t1iplistid, t2iplistid, t1maclistid, t2macl
                     describe = describe.replace(indexid5, listpart)
 
         allfirewallrule[count] = describe
-
+    print("Searching for firewall rule IDs in tenant 2...")
     for count, dirlist in enumerate(allfirewallrulename):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
         url = url_link_final_2 + 'api/firewallrules/search'
@@ -1315,6 +1324,7 @@ def FirewallDescribe(firewallruleid, t1iplistid, t2iplistid, t1maclistid, t2macl
                         "Content-Type": "application/json",
                         }
                         response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+                        print(indexid)
                     else:
                         endIndex = indexpart.find('}', startIndex + 1)
                         if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
@@ -1330,19 +1340,22 @@ def FirewallDescribe(firewallruleid, t1iplistid, t2iplistid, t1maclistid, t2macl
                             "Content-Type": "application/json",
                             }
                             response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
+                            print(indexid)
 
         else:
             allfirewallcustomrule.append(count)
 
 
 
-    print("Tenant 2 default firewall rules")
-    print(allfirewallruleidnew1)
+    #print("Tenant 2 default firewall rules")
+    #print(allfirewallruleidnew1)
+    print("Done!")
     return allfirewallrule, allfirewallruleidnew1, allfirewallruleidold, allfirewallcustomrule
 
 def FirewallCustom(allfirewallrule, allfirewallcustomrule):
     allfirewallruleidnew2 = []
     if allfirewallcustomrule:
+        print("Creating Firewall Custom Rule...")
         for indexnum in allfirewallcustomrule:
             payload = allfirewallrule[indexnum]
             url = url_link_final_2 + 'api/firewallrules'
@@ -1362,13 +1375,16 @@ def FirewallCustom(allfirewallrule, allfirewallcustomrule):
                     if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                         indexid = indexpart[startIndex+1:endIndex]
                         allfirewallruleidnew2.append(str(indexid))
+                        print(indexid)
                     else:
                         endIndex = indexpart.find('}', startIndex + 1)
                         if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                             indexid = indexpart[startIndex+1:endIndex]
                             allfirewallruleidnew2.append(str(indexid))
-    print("all new firewall rule custom rule")
-    print(allfirewallruleidnew2)
+                            print(indexid)
+    #print("all new firewall rule custom rule")
+    #print(allfirewallruleidnew2)
+    print("Done!")
     return allfirewallruleidnew2
 
 def FirewallReplace(allofpolicy, allfirewallruleidnew1, allfirewallruleidnew2, firewallruleid, allfirewallruleidold, allfirewallcustomrule, t1statefulid, t2statefulid):
@@ -1771,18 +1787,17 @@ def LIDescribe(liruleid):
         response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         alllirule.append(describe)
-        index = describe.find('identifier')
+        index = describe.find('name')
         if index != -1:
-            indexpart = describe[index+11:]
+            indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find(',', startIndex + 1)
+                endIndex = indexpart.find('description', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex-1]
+                    indexid = indexpart[startIndex+1:endIndex-3]
                     alllirulename.append(str(indexid))
-
     for count, dirlist in enumerate(alllirulename):
-        payload = "{\"searchCriteria\": [{\"fieldName\": \"identifier\",\"stringValue\": \"" + dirlist + "\"}]}"
+        payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
         url = url_link_final_2 + 'api/loginspectionrules/search'
         headers = {
         "api-secret-key": tenant2key,
@@ -1804,7 +1819,7 @@ def LIDescribe(liruleid):
                         allliruleidnew1.append(str(indexid))
                         allliruleidold.append(count)
         else:
-            alllicustomrule.append(count)
+            alllicustomrule.append(count)    
     print("Tenant 2 default LI rules")
     print(allliruleidnew1)
     return alllirule, allliruleidnew1, allliruleidold, alllicustomrule
@@ -1914,18 +1929,18 @@ def IMDescribe(imruleid):
         response = requests.request("GET", url, headers=headers, data=payload, verify=cert)
         describe = str(response.text)
         allimrule.append(describe)
-        index = describe.find('identifier')
+        index = describe.find('name')
         if index != -1:
-            indexpart = describe[index+11:]
+            indexpart = describe[index+5:]
             startIndex = indexpart.find('\"')
             if startIndex != -1: #i.e. if the first quote was found
-                endIndex = indexpart.find(',', startIndex + 1)
+                endIndex = indexpart.find('description', startIndex + 1)
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                    indexid = indexpart[startIndex+1:endIndex-1]
+                    indexid = indexpart[startIndex+1:endIndex-3]
                     allimrulename.append(str(indexid))
-    
+                    
     for count, dirlist in enumerate(allimrulename):
-        payload = "{\"searchCriteria\": [{\"fieldName\": \"identifier\",\"stringValue\": \"" + dirlist + "%\"}]}"
+        payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
         url = url_link_final_2 + 'api/integritymonitoringrules/search'
         headers = {
         "api-secret-key": tenant2key,
