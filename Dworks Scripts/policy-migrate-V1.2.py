@@ -11,10 +11,8 @@ print("Welcome to Cloud One - Workload Security Policy Migration Tool!")
 print()
 url_link = input("Please enter the URL of your DSM (if DSaaS, press ENTER): ")
 
-#tenant1key = input("Input Source Tenant API Key: ")
-#tenant2key = input("Input Destination Tenant API Key: ")
-tenant1key = '207FC65B-590D-9784-8504-DB36F734F163:0C657782-B3F0-11C2-4DDF-E3B30311BCA5:YJEO8vNuBid+dg1dXXBTzgmWUTh6WfqvoNHHLCs5wXQ='
-tenant2key = "58382F32-4B9F-0C52-4C69-AB0BAC56F0CC:A19F66CE-CD2F-6323-70D7-577CDA3D1E75:vxOtzjgilo/lhRfnyL/m7HktHeNJccndDgdPd+CqMlA="
+tenant1key = input("Input Source Tenant API Key: ")
+tenant2key = input("Input Destination Tenant API Key: ")
 
 cert = False
 
