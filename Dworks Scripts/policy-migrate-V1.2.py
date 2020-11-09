@@ -1384,7 +1384,7 @@ def FirewallCustom(allfirewallrule, allfirewallcustomrule):
                             print(indexid)
     #print("all new firewall rule custom rule")
     #print(allfirewallruleidnew2)
-    print("Done!")
+        print("Done!")
     return allfirewallruleidnew2
 
 def FirewallReplace(allofpolicy, allfirewallruleidnew1, allfirewallruleidnew2, firewallruleid, allfirewallruleidold, allfirewallcustomrule, t1statefulid, t2statefulid):
@@ -1468,7 +1468,7 @@ def IPSappDescribe(ipsappid, t1portlistid, t2portlistid):
     allipscustomapp = []
 
     print("Searching IPS application types in Tenant 2...")  
-    for dirlist in ipsappid:
+    for count, dirlist in enumerate(ipsappid):
         payload  = {}
         url = url_link_final + 'api/applicationtypes/' + str(dirlist)
         headers = {
@@ -1496,10 +1496,10 @@ def IPSappDescribe(ipsappid, t1portlistid, t2portlistid):
                 endIndex3 = indexpart.find(',', startIndex + 1)
                 if startIndex != -1 and endIndex3 != -1: #i.e. both quotes were found
                     indexid1 = indexpart[startIndex+1:endIndex3]
-                    indexid5 = describe[index3:index3+21+endIndex3]
+                    indexid5 = describe[index3:index3+10+endIndex3]
                     indexnum = t1portlistid.index(indexid1)
                     listpart = indexid5.replace(indexid1, t2portlistid[indexnum])
-                    describe = describe.replace(indexid5, listpart)
+                    allipsapp[count] = describe.replace(indexid5, listpart)
     for count, dirlist in enumerate(allipsappname):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
         url = url_link_final_2 + 'api/applicationtypes/search'
@@ -1522,6 +1522,15 @@ def IPSappDescribe(ipsappid, t1portlistid, t2portlistid):
                         indexid = indexpart[startIndex+1:endIndex]
                         allipsappidnew1.append(str(indexid))
                         allipsappidold.append(count)
+
+                        payload = allipsapp[count]
+                        url = url_link_final_2 + 'api/applicationtypes/' + str(indexid)
+                        headers = {
+                        "api-secret-key": tenant2key,
+                        "api-version": "v1",
+                        "Content-Type": "application/json",
+                        }
+                        response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
         else:
             allipscustomapp.append(count)
     print("Tenant 2 default IPS application type")
@@ -1615,14 +1624,14 @@ def IPSGet(allofpolicy):
     print(ipsruleid)
     return ipsruleid
 
-def IPSDescribe(ipsruleid):
+def IPSDescribe(ipsruleid, ipsappid, allipsappidnew1, allipsappidnew2, allipsappidold, allipscustomapp):
     allipsrule = []
     allipsrulename = []
     allipsruleidnew1 = []
     allipsruleidold = []
     allipscustomrule = []
     print("Searching IPS rules in Tenant 2...")
-    for dirlist in ipsruleid:
+    for count, dirlist in enumerate(ipsruleid):
         payload  = {}
         url = url_link_final + 'api/intrusionpreventionrules/' + str(dirlist)
         headers = {
@@ -1642,6 +1651,25 @@ def IPSDescribe(ipsruleid):
                 if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
                     indexid = indexpart[startIndex+1:endIndex-2]
                     allipsrulename.append(str(indexid))
+        index3 = describe.find('applicationTypeID')
+        if index3 != -1:
+            indexpart = describe[index3+17:]
+            startIndex = indexpart.find(':')
+            if startIndex != -1: #i.e. if the first quote was found
+                endIndex3 = indexpart.find(',', startIndex + 1)
+                if startIndex != -1 and endIndex3 != -1: #i.e. both quotes were found
+                    indexid1 = indexpart[startIndex+1:endIndex3]
+                    checkindex = ipsappid.index(indexid1)
+                    if checkindex in allipsappidold:
+                        checkindex1 = allipsappidold.index(checkindex)
+                        replaceid = allipsappidnew1[checkindex1]
+                    elif checkindex in allipscustomapp:
+                        checkindex1 = allipscustomapp.index(checkindex)
+                        replaceid = allipsappidnew2[checkindex1]
+                    indexid5 = describe[index3:index3+17+endIndex3]
+                    listpart = indexid5.replace(indexid1, replaceid)
+                    allipsrule[count] = describe.replace(indexid5, listpart)
+
     for count, dirlist in enumerate(allipsrulename):
         payload = "{\"searchCriteria\": [{\"fieldName\": \"name\",\"stringValue\": \"" + dirlist + "\"}]}"
         url = url_link_final_2 + 'api/intrusionpreventionrules/search'
@@ -2044,31 +2072,8 @@ def AddPolicy(allofpolicy):
             }
             response = requests.request("POST", url, headers=headers, data=payload, verify=cert)
             describe = str(response.text)
-            index = describe.find('name already exists')
-            if index != -1:
-                describe1 = allofpolicy[count]
-                index = describe1.find('\"name\"')
-                if index != -1:
-                    indexpart = describe1[index+6:]
-                    startIndex = indexpart.find('\"')
-                    if startIndex != -1: #i.e. if the first quote was found
-                        endIndex = indexpart.find(',', startIndex + 1)
-                        if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
-                            indexid = indexpart[startIndex+1:endIndex-1]
-                            startIndex2 = indexid.find('{')
-                            if startIndex2 != -1:
-                                endIndex2 = indexid.find('}', startIndex2 + 1)
-                                if startIndex2 != -1 and endIndex2 != -1: #i.e. both quotes were found
-                                    indexid = indexid[startIndex2+1:endIndex2]
-                                    dirlist = describe1[:index+6+startIndex+startIndex2+1] + str(rename) + describe1[index+6+startIndex+startIndex2+endIndex2-2:]
-                                    rename = rename + 1
-                                    
-                            else:
-                                newname = indexid + " {" + str(rename) + "}"
-                                dirlist = describe1[:index+6+startIndex+1] + newname + describe1[index+6+startIndex+endIndex-2:]
-                                rename = rename + 1
-                                
-            index = dirlist.find('\"ID\"')
+                
+            index = describe.find('\"ID\"')
             if index != -1:
                 indexpart = describe[index+4:]
                 startIndex = indexpart.find(':')
@@ -2084,6 +2089,32 @@ def AddPolicy(allofpolicy):
                             indexid = indexpart[startIndex+1:endIndex]
                             print(indexid)
                             namecheck = -1
+            if namecheck != -1:
+                index = describe.find('name already exists')
+                if index != -1:
+                    describe1 = allofpolicy[count]
+                    index = describe1.find('\"name\"')
+                    if index != -1:
+                        indexpart = describe1[index+6:]
+                        startIndex = indexpart.find('\"')
+                        if startIndex != -1: #i.e. if the first quote was found
+                            endIndex = indexpart.find(',', startIndex + 1)
+                            if startIndex != -1 and endIndex != -1: #i.e. both quotes were found
+                                indexid = indexpart[startIndex+1:endIndex-1]
+                                startIndex2 = indexid.find('{')
+                                if startIndex2 != -1:
+                                    endIndex2 = indexid.find('}', startIndex2 + 1)
+                                    if startIndex2 != -1 and endIndex2 != -1: #i.e. both quotes were found
+                                        indexid = indexid[startIndex2+1:endIndex2]
+                                        dirlist = describe1[:index+6+startIndex+startIndex2+1] + str(rename) + describe1[index+6+startIndex+startIndex2+endIndex2-2:]
+                                        rename = rename + 1                      
+                                else:
+                                    newname = indexid + " {" + str(rename) + "}"
+                                    dirlist = describe1[:index+6+startIndex+1] + newname + describe1[index+6+startIndex+endIndex-2:]
+                                    rename = rename + 1   
+                else:
+                    print(describe)
+                    namecheck = -1
 
 def ListScheduledTask():
 	payload = {}
@@ -2385,7 +2416,7 @@ def Migrate():
     #find all ips rules
         ipsruleid = IPSGet(allofpolicy)
     #describe IPS rule
-        allipsrule, allipsruleidnew1, allipsruleidold, allipscustomrule = IPSDescribe(ipsruleid)
+        allipsrule, allipsruleidnew1, allipsruleidold, allipscustomrule = IPSDescribe(ipsruleid, ipsappid, allipsappidnew1, allipsappidnew2, allipsappidold, allipscustomapp)
     #Create custom IPS rules
         allipsruleidnew2 = IPSCustom(allipsrule, allipscustomrule)
     #replace old IPS rule with tenant 2
